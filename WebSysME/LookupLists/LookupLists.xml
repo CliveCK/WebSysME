@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+		Documentation:
+		
+		<ListName> the name of the list. appears in the menu of lookup lists </ListName>
+		<ListDescription> the description of the list. appears in the menu of lookup lists </ListDescription>
+		<SelectQuery>the select query which selects data for the list. columns must be explicitly specified </SelectQuery>
+		<InsertQuery>the insert query to use when adding new data. the VALUES are expressed as %ColNumber%</InsertQuery>
+		<UpdateQuery>the update query to use when updating data. the VALUES are expressed as %ColNumber%</UpdateQuery>
+		<DeleteQuery>the delete query to use when deleting data. the VALUES are expressed as %ColNumber%</DeleteQuery>
+		<HiddenColumns>list of columns that are part of the select query but should really not be visible to the user</HiddenColumns>
+		<NonEditableColumns>list of columns that should not be editable by the user. the columns should not be in the hiddencloumns field</NonEditableColumns>
+		<PermissionID>the associated permisison ID from the database. only users with this permission id will be able to view or edit this list</PermissionID>
+		%ColNumber% FORMAT
+		The %ColNumber% should be the index of the column in the select query. The columns have an array index of 1.
+		The application will replace NonEditable %ColNumber% values with data from the database. This helps in the WHERE clauses
+		In Editable columns, %ColNumber% values are replaced with values supplied for that particluar %ColNumber% column
+		 by the user.
+		Care should be taken to make sure that the %ColNumber% are correct otherwise data will be corrupted. 
+		
+		%ColNumber% example:
+			<SelectQuery>SELECT [ID], [Description] FROM [luList]</SelectQuery>
+			<InsertQuery>INSERT INTO [luList] ([Description]) VALUES (%3%)</InsertQuery>
+			<UpdateQuery>UPDATE [luList] SET [Description]=%3% WHERE [ID]=%2%</UpdateQuery>
+			<DeleteQuery>DELETE FROM [luList] WHERE [ID]=%2%</DeleteQuery>
+		
+-->
+<LookupListCollection>
+  <LookupList>
+    <Display>1</Display>
+    <Editable>1</Editable>
+    <ListName>Activities</ListName>
+    <ListDescription>A list of activities.</ListDescription>
+    <SelectQuery>SELECT [ActivityID],[ActivityNo], [Description] FROM [tblActivities]</SelectQuery>
+    <InsertQuery>INSERT INTO [tblActivities] ([ActivityNo],[Description]) VALUES (%3%,%4%)</InsertQuery>
+    <UpdateQuery>UPDATE [tblActivities] SET [ActivityNo]=%3% ,[Description]=%4% WHERE [ActivityID]=%2%</UpdateQuery>
+    <DeleteQuery>DELETE FROM [tblActivities] WHERE [ActivityID]=%2%</DeleteQuery>
+    <HiddenColumns>ActivityID</HiddenColumns>
+    <NonEditableColumns>ActivityID</NonEditableColumns>
+    <RequiredFields></RequiredFields>
+    <Filter>0</Filter>
+    <PermissionID>0</PermissionID>
+    <DeleteAllowed>1</DeleteAllowed>
+  </LookupList>
+ <LookupList>
+    <Display>1</Display>
+    <Editable>1</Editable>
+    <ListName>Document Object Types</ListName>
+    <ListDescription>A list of document object types.</ListDescription>
+    <SelectQuery>SELECT [ObjectTypeID], [Description] FROM [luDocumentObjectTypes]</SelectQuery>
+    <InsertQuery>INSERT INTO [luDocumentObjectTypes] ([Description]) VALUES (%3%)</InsertQuery>
+    <UpdateQuery>UPDATE [luDocumentObjectTypes] SET [Description]=%3% WHERE [ObjectTypeID]=%2%</UpdateQuery>
+    <DeleteQuery>DELETE FROM [luDocumentObjectTypes] WHERE [ObjectTypeID]=%2%</DeleteQuery>
+    <HiddenColumns>ObjectTypeID</HiddenColumns>
+    <NonEditableColumns>ObjectTypeID</NonEditableColumns>
+    <RequiredFields></RequiredFields>
+    <Filter>0</Filter>
+    <PermissionID>0</PermissionID>
+    <DeleteAllowed>0</DeleteAllowed>
+  </LookupList>
+  <LookupList>
+    <Display>1</Display>
+    <Editable>1</Editable>
+    <ListName>Asset Types</ListName>
+    <ListDescription>A list of asset types.</ListDescription>
+    <SelectQuery>SELECT [AssetTypeID], [Description] FROM [luAssetTypes]</SelectQuery>
+    <InsertQuery>INSERT INTO [luAssetTypes] ([Description]) VALUES (%3%)</InsertQuery>
+    <UpdateQuery>UPDATE [luAssetTypes] SET [Description]=%3% WHERE [AssetTypeID]=%2%</UpdateQuery>
+    <DeleteQuery>DELETE FROM [luAssetTypes] WHERE [AssetTypeID]=%2%</DeleteQuery>
+    <HiddenColumns>AssetTypeID</HiddenColumns>
+    <NonEditableColumns>AssetTypeID</NonEditableColumns>
+    <RequiredFields></RequiredFields>
+    <Filter>0</Filter>
+    <PermissionID>0</PermissionID>
+    <DeleteAllowed>1</DeleteAllowed>
+  </LookupList>
+  <LookupList>
+    <Display>1</Display>
+    <Editable>1</Editable>
+    <ListName>Beneficiary Types</ListName>
+    <ListDescription>A list of Beneficiary types.</ListDescription>
+    <SelectQuery>SELECT [BeneficiaryTypeID], [Description] FROM [luBeneficiaryType]</SelectQuery>
+    <InsertQuery>INSERT INTO [luBeneficiaryType] ([Description]) VALUES (%3%)</InsertQuery>
+    <UpdateQuery>UPDATE [luBeneficiaryType] SET [Description]=%3% WHERE [BeneficiaryTypeID]=%2%</UpdateQuery>
+    <DeleteQuery>DELETE FROM [luBeneficiaryType] WHERE [BeneficiaryTypeID]=%2%</DeleteQuery>
+    <HiddenColumns>BeneficiaryTypeID</HiddenColumns>
+    <NonEditableColumns>BeneficiaryTypeID</NonEditableColumns>
+    <RequiredFields></RequiredFields>
+    <Filter>0</Filter>
+    <PermissionID>0</PermissionID>
+    <DeleteAllowed>1</DeleteAllowed>
+  </LookupList>
+  <LookupList>
+    <Display>1</Display>
+    <Editable>1</Editable>
+    <ListName>Commodities</ListName>
+    <ListDescription>A list of Commodities.</ListDescription>
+    <SelectQuery>SELECT [CommodityID], [Description] FROM [luCommodities]</SelectQuery>
+    <InsertQuery>INSERT INTO [luCommodities] ([Description]) VALUES (%3%)</InsertQuery>
+    <UpdateQuery>UPDATE [luCommodities] SET [Description]=%3% WHERE [CommodityID]=%2%</UpdateQuery>
+    <DeleteQuery>DELETE FROM [luCommodities] WHERE [CommodityID]=%2%</DeleteQuery>
+    <HiddenColumns>CommodityID</HiddenColumns>
+    <NonEditableColumns>CommodityID</NonEditableColumns>
+    <RequiredFields></RequiredFields>
+    <Filter>0</Filter>
+    <PermissionID>0</PermissionID>
+    <DeleteAllowed>1</DeleteAllowed>
+  </LookupList>
+</LookupListCollection>
