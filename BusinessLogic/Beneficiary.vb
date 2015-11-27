@@ -35,6 +35,7 @@ Public Class Beneficiary
     Protected mHouseNo As string
     Protected mSerialNo As String
     Protected mParentID As Long
+    Protected mRelationshipID As Long
 
     Protected db As Database 
     Protected mConnectionName As String 
@@ -73,12 +74,21 @@ Public Class Beneficiary
         End Set
     End Property
 
-    Public  Property Suffix() As long
+    Public Property Suffix() As Long
         Get
-		return mSuffix
+            Return mSuffix
         End Get
-        Set(ByVal value As long)
-		mSuffix = value
+        Set(ByVal value As Long)
+            mSuffix = value
+        End Set
+    End Property
+
+    Public Property RelationshipID() As Long
+        Get
+            Return mRelationshipID
+        End Get
+        Set(ByVal value As Long)
+            mRelationshipID = value
         End Set
     End Property
 
@@ -382,8 +392,9 @@ Public Sub Clear()
     mHouseNo = ""
         mSerialNo = ""
         mParentID = 0
+        mRelationshipID = 0
 
-End Sub
+    End Sub
 
 #Region "Retrieve Overloads" 
 
@@ -515,6 +526,7 @@ End Sub
             mHouseNo = Catchnull(.Item("HouseNo"), "")
             mSerialNo = Catchnull(.Item("SerialNo"), "")
             mParentID = Catchnull(.Item("ParentID"), 0)
+            mRelationshipID = Catchnull(.Item("RelationshipID"), 0)
 
         End With 
 
@@ -551,6 +563,7 @@ End Sub
         db.AddInParameter(cmd, "@HouseNo", DBType.String, mHouseNo) 
         db.AddInParameter(cmd, "@SerialNo", DbType.String, mSerialNo)
         db.AddInParameter(cmd, "@ParentID", DbType.Int32, IIf(mParentID > 0, mParentID, DBNull.Value))
+        db.AddInParameter(cmd, "@RelationshipID", DbType.Int32, mRelationshipID)
 
     End Sub 
 

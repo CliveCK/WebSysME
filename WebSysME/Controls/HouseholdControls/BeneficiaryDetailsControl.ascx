@@ -19,6 +19,12 @@
 		<td >Suffix</td> 
         	<td ><asp:textbox id="txtSuffix" runat="server" Enabled="false" CssClass="form-control"></asp:textbox> </td> 
 	</tr> 
+    <tr> 
+		<td >First Name</td> 
+        	<td ><asp:textbox id="txtFirstName" runat="server"  CssClass="form-control"></asp:textbox> </td> 
+		<td >Surname</td> 
+        	<td ><asp:textbox id="txtSurname" runat="server" CssClass="form-control"></asp:textbox> </td> 
+	</tr> 
 	<tr> 
 		<td >Marital Status</td> 
         	<td ><asp:DropDownList id="cboMaritalStatus" runat="server" CssClass="form-control"></asp:DropDownList> </td> 
@@ -61,13 +67,7 @@
                     <DateInput ID="Dateinput3" runat="server" DateFormat="dd/MMM/yyyy" DisplayDateFormat="dd/MMM/yyyy">
                     </DateInput>
                 </telerik:RadDatePicker> </td> 
-	</tr> 
-	<tr> 
-		<td >First Name</td> 
-        	<td ><asp:textbox id="txtFirstName" runat="server"  CssClass="form-control"></asp:textbox> </td> 
-		<td >Surname</td> 
-        	<td ><asp:textbox id="txtSurname" runat="server" CssClass="form-control"></asp:textbox> </td> 
-	</tr> 
+	</tr> 	
 	<tr> 
 		<td >Sex</td> 
         	<td ><asp:DropDownList id="cboSex" runat="server" CssClass="form-control">
@@ -78,6 +78,10 @@
 		<td >Nationl ID No</td> 
         	<td ><asp:textbox id="txtNationlIDNo" runat="server" CssClass="form-control"></asp:textbox> </td> 
 	</tr> 
+    <tr>
+        <td>Relationship To HouseHold</td>
+        <td><asp:DropDownList runat="server" ID="cboRelationships" CssClass="form-control"></asp:DropDownList></td>
+    </tr>
 	<tr> 
 		<td colspan="4"> 
             		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 

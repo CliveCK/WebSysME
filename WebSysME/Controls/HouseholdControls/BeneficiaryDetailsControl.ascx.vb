@@ -57,6 +57,8 @@ Partial Class BeneficiaryDetailsControl
 
         End If
 
+        'cboRelationships.Enabled = IIf(IsNumeric(txtSuffix.Text.Trim) AndAlso txtSuffix.Text.Trim <> 1, True, False)
+
     End Sub
 
     Private Sub InitializeComponents()
@@ -71,6 +73,7 @@ Partial Class BeneficiaryDetailsControl
         LoadCombo(cboCondition, "tblCondition", "Description", "ObjectID")
         LoadCombo(cboAttendance, "tblAttendance", "Description", "ObjectID")
         LoadCombo(cboDisability, "tblDisability", "Description", "ObjectID")
+        LoadCombo(cboRelationships, "luRelationships", "Description", "RelationshipID")
 
     End Sub
 
@@ -108,6 +111,7 @@ Partial Class BeneficiaryDetailsControl
                     If Not IsNothing(cboRegularity.Items.FindByValue(.Regularity)) Then cboRegularity.SelectedValue = .Regularity
                     If Not IsNothing(cboOpharnhood.Items.FindByValue(.Opharnhood)) Then cboOpharnhood.SelectedValue = .Opharnhood
                     If Not IsNothing(cboMajorSourceIncome.Items.FindByValue(.MajorSourceIncome)) Then cboMajorSourceIncome.SelectedValue = .MajorSourceIncome
+                    If Not IsNothing(cboRelationships.Items.FindByValue(.RelationshipID)) Then cboRelationships.SelectedValue = .RelationshipID
                     txtContactNo.Text = .ContactNo
                     If Not IsNothing(cboCondition.Items.FindByValue(.Condition)) Then cboCondition.SelectedValue = .Condition
                     If Not IsNothing(cboAttendance.Items.FindByValue(.Attendance)) Then cboAttendance.SelectedValue = .Attendance
@@ -164,6 +168,7 @@ Partial Class BeneficiaryDetailsControl
                 If cboRegularity.SelectedIndex > 0 Then .Regularity = cboRegularity.SelectedValue
                 If cboOpharnhood.SelectedIndex > 0 Then .Opharnhood = cboOpharnhood.SelectedValue
                 If cboMajorSourceIncome.SelectedIndex > 0 Then .MajorSourceIncome = cboMajorSourceIncome.SelectedValue
+                If cboRelationships.SelectedIndex > 0 Then .RelationshipID = cboRelationships.SelectedValue
                 .ContactNo = txtContactNo.Text
                 If cboCondition.SelectedIndex > 0 Then .Condition = cboCondition.SelectedValue
                 If cboAttendance.SelectedIndex > 0 Then .Attendance = cboAttendance.SelectedValue
@@ -265,6 +270,13 @@ Partial Class BeneficiaryDetailsControl
             cboHealthStatus.SelectedValue = 0
         Else
             cboHealthStatus.SelectedIndex = -1
+        End If
+        If Not IsNothing(cboRelationships.Items.FindByValue("")) Then
+            cboRelationships.SelectedValue = ""
+        ElseIf Not IsNothing(cboRelationships.Items.FindByValue(0)) Then
+            cboRelationships.SelectedValue = 0
+        Else
+            cboRelationships.SelectedIndex = -1
         End If
         If Not IsNothing(cboDisabilityStatus.Items.FindByValue("")) Then
             cboDisabilityStatus.SelectedValue = ""
@@ -485,6 +497,7 @@ Partial Class BeneficiaryDetailsControl
         End If
 
     End Sub
+
 End Class
 
 
