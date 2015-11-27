@@ -12,7 +12,9 @@
         <td >District</td> 
         	<td ><asp:dropdownlist id="cboDistrict" runat="server" AutoPostBack="true" CssClass="form-control"></asp:dropdownlist> </td>
         <td >Ward</td> 
-        	<td ><asp:dropdownlist id="cboWard" runat="server" CssClass="form-control"></asp:dropdownlist> </td>  
+        	<td ><asp:dropdownlist id="cboWard" runat="server" CssClass="form-control"></asp:dropdownlist> </td> 
+        <td >Village</td> 
+        	<td ><asp:dropdownlist id="cboVillage" runat="server" CssClass="form-control"></asp:dropdownlist> </td> 
 	</tr> 
     <tr> 
 		<td ></td> 
@@ -23,6 +25,8 @@
         	<td ><asp:textbox id="txtDistrict" runat="server" CssClass="form-control"></asp:textbox> </td> 
         <td ></td> 
         	<td ><asp:textbox id="txtWard" runat="server" CssClass="form-control"></asp:textbox> </td> 
+         <td ></td> 
+        	<td ><asp:textbox id="txtVillage" runat="server" CssClass="form-control"></asp:textbox> </td> 
 	</tr> 
 	<tr> 
 		<td colspan="4">
@@ -31,6 +35,7 @@
                 <asp:ListItem Text="Province" Value="Province"></asp:ListItem>
                 <asp:ListItem Text="District" Value="District"></asp:ListItem>
                 <asp:ListItem Text="Ward" Value="Ward"></asp:ListItem>
+                <asp:ListItem Text="Village" Value="Village"></asp:ListItem>
             </asp:RadioButtonList>
 		</td>
 	</tr> 

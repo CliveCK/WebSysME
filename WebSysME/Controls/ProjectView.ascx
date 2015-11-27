@@ -21,16 +21,21 @@
      border: 1px solid white;
 }
     </style>
-<table>
+<table style="margin-left:2%">
     <tr>
-        <td><h4 style="margin-left:2%;font-family:sans-serif">Project View</h4></td>
+        <td><h4 style="font-family:sans-serif">Project View</h4></td>
         <td><asp:TextBox ID="txtProjectID" runat="server" Visible="false"></asp:TextBox></td>
     </tr>
+    <tr>
+        <td>
+            <asp:Label ID="lblProject" runat="server"  Font-Size="11pt" Font-Bold="true"></asp:Label>
+        </td>
+    </tr>
 </table>
-<table cellspacing="4" border="1" > 
+<table cellspacing="4" border="1" style="margin-left:2%"> 
     <tr>
         <td valign="top"> 
-    <telerik:RadTreeView runat="Server" ID="radProjectTree" >
+    <telerik:RadTreeView runat="Server" ID="radProjectTree" BackColor="#cccccc">
                     <Nodes>
                         <telerik:RadTreeNode runat="server" Text="Project Data Portal" AllowDrag="false"
                             AllowDrop="false" Expanded="true">

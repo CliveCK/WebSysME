@@ -47,6 +47,9 @@
 		<td >Description</td> 
         	<td ><asp:textbox id="txtDescription" runat="server" TextMode="MultiLine" Rows="3" Columns="40" CssClass="form-control"></asp:textbox><br /> </td>
      </tr> 
+     <tr>
+        <td colspan="4"><asp:PlaceHolder ID="phCustomFields" runat="server"></asp:PlaceHolder></td>
+    </tr>
 	<tr> 
 		<td colspan="4"> 
             		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 
@@ -62,5 +65,10 @@
 			<asp:TextBox id="txtHealthCenterID" runat="server" CssClass="HiddenControl"></asp:TextBox> 
 		</td> 
 	</tr> 
+    <tr>
+        <td>
+            <asp:LinkButton runat="server" ID="lnkStaff" Text="StaffMembers"></asp:LinkButton>
+        </td>
+    </tr>
 </table> 
     </div>

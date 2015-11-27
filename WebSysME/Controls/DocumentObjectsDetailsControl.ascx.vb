@@ -6,7 +6,7 @@ Partial Class DocumentObjectsDetailsControl
     Inherits System.Web.UI.UserControl
 
     Private dsDocuments As DataSet
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
 #Region "Status Messages"
@@ -73,6 +73,7 @@ Partial Class DocumentObjectsDetailsControl
 
         If Map() Then
 
+            LoadGrid()
             ShowMessage("Document mapped successfully...", MessageTypeEnum.Information)
 
         Else
@@ -86,7 +87,11 @@ Partial Class DocumentObjectsDetailsControl
     Private Sub LoadGrid()
 
         Dim sql As String = DertemineObjectTypeSQL(cboObjectType.SelectedItem.Text)
-        ViewState("Objects") = Nothing
+
+        Dim sql1 As String = "SELECT ObjectID FROM tblFiles F inner join tblDocumentObjects O on F.FileID = O.DocumentID inner join luObjectTypes OT "
+        sql1 &= " on OT.ObjectTypeID = O.ObjectTypeID where O.DocumentID = " & IIf(IsNumeric(cboDocuments.SelectedValue), cboDocuments.SelectedValue, 0) & " AND OT.Description = '" & cboObjectType.SelectedItem.Text & "'"
+
+        dsDocuments = db.ExecuteDataSet(CommandType.Text, sql1)
 
         If sql <> "" Then
 
@@ -134,7 +139,9 @@ Partial Class DocumentObjectsDetailsControl
                 sql = "SELECT BeneficiaryID as ObjectID, ISNULL(FirstName, '') + ' ' + ISNULL(Surname,'') As Name FROM tblBeneficiaries"
 
             Case "Activity"
-                sql = "SELECT ActivityID as ObjectID, Description FROM tblActivities"
+                sql = "SELECT AP.ID as ObjectID,  A.Description As Activity, CAST([Start] AS Date) [Start], CAST([End] AS Date) [End], "
+                sql &= " ISNULL(FirstName, '') + ' ' + ISNULL(Surname, '') As Name ,Completed, AP.Description as [Description] from Appointments AP "
+                sql &= " inner join tblActivities A on AP.ActivityID = A.ActivityID inner join tblStaffMembers S on S.StaffID = AP.UserID"
 
         End Select
 
@@ -146,7 +153,7 @@ Partial Class DocumentObjectsDetailsControl
 
         Try
 
-            Dim objDocumentObjects As New DocumentObjects("Demo", 1)
+            Dim objDocumentObjects As New DocumentObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objDocumentObjects
 
@@ -197,7 +204,7 @@ Partial Class DocumentObjectsDetailsControl
 
             For i As Long = 0 To mObject.Length - 1
 
-                Dim objObjects As New BusinessLogic.DocumentObjects("Demo", 1)
+                Dim objObjects As New BusinessLogic.DocumentObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objObjects
 
@@ -244,11 +251,49 @@ Partial Class DocumentObjectsDetailsControl
 
     End Sub
 
+    Private Sub radObjects_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles radObjects.ItemCommand
+
+        If TypeOf e.Item Is GridDataItem Then
+
+            Dim index As Integer = Convert.ToInt32(e.Item.ItemIndex.ToString)
+            Dim item As GridDataItem = radObjects.Items(index)
+
+            Select Case e.CommandName
+
+                Case "Delete"
+
+                    Dim objDocObjects As New BusinessLogic.DocumentObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+                    With objDocObjects
+
+                        .DocumentID = cboDocuments.SelectedValue
+                        .ObjectTypeID = cboObjectType.SelectedValue
+                        .ObjectID = Server.HtmlDecode(e.CommandArgument)
+
+                        If .DeleteEntries() Then
+
+                            LoadGrid()
+                            ShowMessage("entry deselected successfully...", MessageTypeEnum.Information)
+
+                        End If
+
+                    End With
+
+            End Select
+
+        End If
+
+
+    End Sub
+
+
     Private Sub radObjects_ItemDataBound(sender As Object, e As Telerik.Web.UI.GridItemEventArgs) Handles radObjects.ItemDataBound
 
         If TypeOf e.Item Is GridDataItem Then
 
             Dim gridItem As GridDataItem = e.Item
+
+            Dim btnImage As ImageButton = DirectCast(gridItem.FindControl("imgEdit"), ImageButton)
 
             If dsDocuments.Tables(0).Select("ObjectID = " & gridItem("ObjectID").Text).Length > 0 Then
 
@@ -256,6 +301,7 @@ Partial Class DocumentObjectsDetailsControl
 
                 chkbx.Enabled = False
                 chkbx.ToolTip = "Already mapped..."
+                btnImage.Visible = True
 
             End If
 
@@ -265,6 +311,11 @@ Partial Class DocumentObjectsDetailsControl
 
     Private Sub radObjects_NeedDataSource(sender As Object, e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles radObjects.NeedDataSource
 
+        Dim sql As String = "SELECT ObjectID FROM tblFiles F inner join tblDocumentObjects O on F.FileID = O.DocumentID inner join luObjectTypes OT "
+        sql &= " on OT.ObjectTypeID = O.ObjectTypeID where O.DocumentID = " & IIf(IsNumeric(cboDocuments.SelectedValue), cboDocuments.SelectedValue, 0) & " AND OT.Description = '" & cboObjectType.SelectedItem.Text & "'"
+
+        dsDocuments = db.ExecuteDataSet(CommandType.Text, sql)
+
         radObjects.DataSource = DirectCast(ViewState("Objects"), DataTable)
 
     End Sub
@@ -272,15 +323,6 @@ Partial Class DocumentObjectsDetailsControl
     Private Sub cboObjectType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboObjectType.SelectedIndexChanged
 
         If cboDocuments.SelectedIndex > 0 Then
-
-            If cboObjectType.SelectedIndex > 0 Then
-
-                Dim sql As String = "SELECT ObjectID FROM tblFiles F inner join tblDocumentObjects O on F.FileID = O.DocumentID inner join luObjectTypes OT "
-                sql &= " on OT.ObjectTypeID = O.ObjectTypeID where O.DocumentID = " & cboDocuments.SelectedValue & " AND OT.Description = '" & cboObjectType.SelectedValue & "'"
-
-                dsDocuments = db.ExecuteDataSet(CommandType.Text, sql)
-
-            End If
 
             LoadGrid()
 

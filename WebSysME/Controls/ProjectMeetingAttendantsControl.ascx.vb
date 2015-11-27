@@ -5,7 +5,7 @@ Public Class ProjectMeetingAttendantsControl
     Inherits System.Web.UI.UserControl
 
     Dim ds As DataSet
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
 #Region "Status Messages"
@@ -69,7 +69,7 @@ Public Class ProjectMeetingAttendantsControl
 
             For i As Long = 0 To Staff.Length - 1
 
-                Dim objAttendants As New BusinessLogic.ProjectMeetingAttendants("Demo", 1)
+                Dim objAttendants As New BusinessLogic.ProjectMeetingAttendants(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objAttendants
 
@@ -150,7 +150,7 @@ Public Class ProjectMeetingAttendantsControl
 
                 Case "Delete"
 
-                    Dim objAttendants As New BusinessLogic.ProjectMeetingAttendants("Demo", 1)
+                    Dim objAttendants As New BusinessLogic.ProjectMeetingAttendants(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objAttendants
 

@@ -1,5 +1,6 @@
 ﻿Imports Universal.CommonFunctions
 Imports BusinessLogic
+Imports Telerik.Web.UI
 
 Partial Class SubOfficesDetailsControl
     Inherits System.Web.UI.UserControl
@@ -38,9 +39,10 @@ Partial Class SubOfficesDetailsControl
 
             If Not IsNothing(Request.QueryString("id")) Then
 
-                Dim objOrganization As New BusinessLogic.Organization("Demo", 1)
+                Dim objOrganization As New BusinessLogic.Organization(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 lblOrgName.Text = Catchnull(objOrganization.GetOrganization(objUrlEncoder.Decrypt(Request.QueryString("id"))).Tables(0).Rows(0)("Name"), "No Name")
+                LoadGrid(objUrlEncoder.Decrypt(Request.QueryString("id")))
 
             End If
 
@@ -58,7 +60,7 @@ Partial Class SubOfficesDetailsControl
 
         Try
 
-            Dim objSubOffices As New SubOffices("Demo", 1)
+            Dim objSubOffices As New SubOffices(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objSubOffices
 
@@ -93,18 +95,52 @@ Partial Class SubOfficesDetailsControl
 
     End Function
 
+    Private Sub LoadGrid(OrganizationID)
+
+        Dim objSubOffices As New SubOffices(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+        With radSubListing
+
+            .DataSource = objSubOffices.GetSubOffices("SELECT * FROM tblSubOffices where OrganizationID  = " & OrganizationID).Tables(0)
+            .DataBind()
+
+            ViewState("SubOff") = .DataSource
+
+        End With
+
+    End Sub
+
+    Private Sub radSubListing_ItemCommand(sender As Object, e As Telerik.Web.UI.GridCommandEventArgs) Handles radSubListing.ItemCommand
+
+        If TypeOf e.Item Is GridDataItem Then
+
+            Dim index As Integer = Convert.ToInt32(e.Item.ItemIndex.ToString)
+            Dim item As GridDataItem = radSubListing.Items(index)
+
+            Select Case e.CommandName
+
+                Case "View"
+
+                    LoadSubOffices(objUrlEncoder.Decrypt(Request.QueryString("id")))
+
+            End Select
+
+        End If
+
+    End Sub
+
     Public Function Save() As Boolean
 
         Try
 
-            Dim objSubOffices As New SubOffices("Demo", 1)
+            Dim objSubOffices As New SubOffices(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objSubOffices
 
                 .SubOfficeID = IIf(IsNumeric(txtSubOfficeID.Text), txtSubOfficeID.Text, 0)
                 If Not IsNothing(Request.QueryString("id")) AndAlso IsNumeric(objUrlEncoder.Decrypt(Request.QueryString("id"))) Then .OrganizationID = objUrlEncoder.Decrypt(Request.QueryString("id")) Else ShowMessage("No Organization. Error!", MessageTypeEnum.Error) : Exit Function
-                .ContactNo = txtContactNo.Text
-                .Fax = txtFax.Text
+                .ContactNo = IIf(IsNumeric(txtContactNo.Text), txtContactNo.Text, 0)
+                .Fax = IIf(IsNumeric(txtFax.Text), txtFax.Text, 0)
                 .Name = txtName.Text
                 .Email = txtEmail.Text
                 .PhysicalAddress = txtPhysicalAddress.Text
@@ -112,6 +148,7 @@ Partial Class SubOfficesDetailsControl
                 If .Save Then
 
                     If Not IsNumeric(txtSubOfficeID.Text) OrElse Trim(txtSubOfficeID.Text) = 0 Then txtSubOfficeID.Text = .SubOfficeID
+                    LoadGrid(.OrganizationID)
                     ShowMessage("SubOffices saved successfully...", MessageTypeEnum.Information)
 
                     Return True
@@ -147,5 +184,22 @@ Partial Class SubOfficesDetailsControl
 
     End Sub
 
+    Private Sub lnkBack_Click(sender As Object, e As EventArgs) Handles lnkBack.Click
+
+        Response.Redirect("~/OurOrganization.aspx?id=" & Request.QueryString("id"))
+
+    End Sub
+
+    Private Sub cmdNew_Click(sender As Object, e As EventArgs) Handles cmdNew.Click
+
+        Clear()
+
+    End Sub
+
+    Private Sub radSubListing_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles radSubListing.NeedDataSource
+
+        radSubListing.DataSource = DirectCast(ViewState("SubOff"), DataTable)
+
+    End Sub
 End Class
 

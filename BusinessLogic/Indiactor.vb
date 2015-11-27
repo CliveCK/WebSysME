@@ -9,7 +9,9 @@ Public Class Indiactor
     Protected mIndicatorType As long
     Protected mOutputID As long
     Protected mOutcomeID As long
-    Protected mActivityID As long
+    Protected mActivityID As Long
+    Protected mOrganizationID As Long
+    Protected mDistrictID As Long
     Protected mUnitOfMeasurement As long
     Protected mBaselineValue As long
     Protected mDataSource As long
@@ -70,6 +72,24 @@ Public Class Indiactor
         End Get
         Set(ByVal value As long)
 		mIndicatorType = value
+        End Set
+    End Property
+
+    Public Property OrganizationID() As Long
+        Get
+            Return mOrganizationID
+        End Get
+        Set(ByVal value As Long)
+            mOrganizationID = value
+        End Set
+    End Property
+
+    Public Property DistrictID() As Long
+        Get
+            Return mDistrictID
+        End Get
+        Set(ByVal value As Long)
+            mDistrictID = value
         End Set
     End Property
 
@@ -267,7 +287,9 @@ Public Sub Clear()
     mOutcomeID = 0
     mActivityID = 0
     mUnitOfMeasurement = 0
-    mBaselineValue = 0
+        mBaselineValue = 0
+        mOrganizationID = 0
+        mDistrictID = 0
     mDataSource = 0
     mTool = 0
     mDataCollectionFrequency = 0
@@ -464,7 +486,7 @@ Public Overridable Function Save() As Boolean
 
             Else
 
-                sql = "INSERT INTO tblIndicatorTracking ([IndicatorID],[Year],[Month],[Target]) VALUES (" & mIndicatorID & "," & mYear & "," & mMonth & "," & mTarget & ")"
+                sql = "INSERT INTO tblIndicatorTracking ([IndicatorID],[Year],[Month],[Target],[OrganizationID],[DistrictID]) VALUES (" & mIndicatorID & "," & mYear & "," & mMonth & "," & mTarget & "," & mOrganizationID & "," & mDistrictID & ")"
 
             End If
 

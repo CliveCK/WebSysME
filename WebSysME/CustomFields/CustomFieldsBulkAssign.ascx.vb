@@ -17,7 +17,7 @@ Partial Public Class CustomFieldsBulkAssign
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        db = DatabaseFactory.CreateDatabase("ConnectionString")
+        db = New DatabaseProviderFactory().Create("ConnectionString")
 
         If Not Page.IsPostBack Then
 
@@ -40,7 +40,7 @@ Partial Public Class CustomFieldsBulkAssign
 
     Public Sub LoadUsedFields()
 
-        db = DatabaseFactory.CreateDatabase("ConnectionString")
+        db = New DatabaseProviderFactory().Create("ConnectionString")
 
         Dim sql As String = String.Empty
         sql &= "select distinct isnull(pt.TemplateName + ' > ', '') + pf.FieldName AS Template_FieldName, " & vbCrLf
@@ -105,7 +105,7 @@ Partial Public Class CustomFieldsBulkAssign
 
     Private Sub load_templates()
 
-        Dim objProject As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.UserID)
+        Dim objProject As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
         Dim templateTable As DataTable = objProject.Get_Templates(True)
 
         cboTemplates.Items.Clear()
@@ -132,7 +132,7 @@ Partial Public Class CustomFieldsBulkAssign
         Dim sql As String = String.Empty
         sql &= "declare @UserID int; " & vbCrLf
         sql &= " " & vbCrLf
-        sql &= "select @UserID = " & CookiesWrapper.UserID & ";" & vbCrLf
+        sql &= "select @UserID = " & CookiesWrapper.thisUserID & ";" & vbCrLf
         sql &= " " & vbCrLf
 
         If ObjectType = "D" Then
@@ -239,11 +239,11 @@ Partial Public Class CustomFieldsBulkAssign
             sql &= "insert into [CustomField_ObjectTemplates] (TemplateName, ID, OwnerType)" & vbCrLf
             sql &= "select '" & cboTemplates.Text.Replace("'", "''") & "', p.ID, '" & ObjectType & "'" & vbCrLf
             sql &= "from temp_print p  " & vbCrLf
-            sql &= "where p.UserID = " & CookiesWrapper.UserID & " and not exists (select * from CustomField_ObjectTemplates where TemplateName = '" & cboTemplates.Text.Replace("'", "''") & "' and id = p.id and OwnerType = '" & ObjectType & "')" & vbCrLf
+            sql &= "where p.UserID = " & CookiesWrapper.thisUserID & " and not exists (select * from CustomField_ObjectTemplates where TemplateName = '" & cboTemplates.Text.Replace("'", "''") & "' and id = p.id and OwnerType = '" & ObjectType & "')" & vbCrLf
 
             If BusinessLogic.CustomFields.DataHelper.ExecuteNonQuery(db, sql) Then
 
-                Dim objCF As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.UserID)
+                Dim objCF As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
                 objCF.UpdateObjectsUsingTemplate()
 
                 RaiseEvent Message("Custom field values updated successfully...")

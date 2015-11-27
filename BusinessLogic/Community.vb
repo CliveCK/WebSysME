@@ -6,7 +6,9 @@ Public Class Community
 #region "Variables"
 
     Protected mCommunityID As long
-    Protected mWardID As long
+    Protected mWardID As Long
+    Protected mProvinceID As Long
+    Protected mDistrictID As Long
     Protected mNoOfHouseholds As long
     Protected mNoOfIndividualAdultMales As long
     Protected mNoOfIndividualAdultFemales As long
@@ -65,6 +67,24 @@ Public Class Community
 		mWardID = value
         End Set
     End Property
+
+    Public Property ProvinceID() As Long
+        Get
+            Return mProvinceID
+        End Get
+        Set(ByVal value As Long)
+            mProvinceID = value
+        End Set
+    End Property
+    Public Property DistrictID() As Long
+        Get
+            Return mDistrictID
+        End Get
+        Set(ByVal value As Long)
+            mDistrictID = value
+        End Set
+    End Property
+
 
     Public  Property NoOfHouseholds() As long
         Get
@@ -221,11 +241,13 @@ End Sub
 
         Dim sql As String 
 
-        If CommunityID > 0 Then 
-            sql = "SELECT * FROM tblCommunities WHERE CommunityID = " & CommunityID
-        Else 
+        If CommunityID > 0 Then
+            sql = "SELECT C.*, D.DistrictID, P.ProvinceID FROM tblCommunities C inner join tblWards W on W.WardID = C.WardID "
+            sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
+            sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID  WHERE CommunityID = " & CommunityID
+        Else
             sql = "SELECT * FROM tblCommunities WHERE CommunityID = " & mCommunityID
-        End If 
+        End If
 
         Return Retrieve(sql) 
 
@@ -280,7 +302,9 @@ End Sub
         Dim sql As String 
 
         If CommunityID > 0 Then 
-            sql = "SELECT * FROM tblCommunities WHERE CommunityID = " & CommunityID
+            sql = "SELECT C.*, D.DistrictID, P.ProvinceID FROM tblCommunities C inner join tblWards W on W.WardID = C.WardID "
+            sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
+            sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID  WHERE CommunityID = " & CommunityID
         Else 
             sql = "SELECT * FROM tblCommunities WHERE CommunityID = " & mCommunityID
         End If 
@@ -303,6 +327,8 @@ End Sub
 
             mCommunityID = Catchnull(.Item("CommunityID"), 0)
             mWardID = Catchnull(.Item("WardID"), 0)
+            mProvinceID = Catchnull(.Item("ProvinceID"), 0)
+            mDistrictID = Catchnull(.Item("DistrictID"), 0)
             mNoOfHouseholds = Catchnull(.Item("NoOfHouseholds"), 0)
             mNoOfIndividualAdultMales = Catchnull(.Item("NoOfIndividualAdultMales"), 0)
             mNoOfIndividualAdultFemales = Catchnull(.Item("NoOfIndividualAdultFemales"), 0)

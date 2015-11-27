@@ -29,10 +29,6 @@
                                </telerik:GridButtonColumn> 
                             <telerik:GridBoundColumn DataField="Name" UniqueName="Name" HeaderText="Name">
                             </telerik:GridBoundColumn>
-                             <telerik:GridBoundColumn DataField="Definition" UniqueName="Definition" HeaderText="Definition" >
-                            </telerik:GridBoundColumn>
-                            <telerik:GridBoundColumn DataField="Description" UniqueName="Description" HeaderText="Description">
-                            </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="BaselineValue" UniqueName="BaselineValue" HeaderText="BaselineValue">
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="ProgramTargetValue" UniqueName="ProgramTargetValue" HeaderText="ProgramTargetValue">

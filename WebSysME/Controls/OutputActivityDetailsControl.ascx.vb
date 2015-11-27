@@ -5,7 +5,7 @@ Public Class OutputActivityDetailsControl
     Inherits System.Web.UI.UserControl
 
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private ds As DataSet
 
 #Region "Status Messages"
@@ -57,11 +57,19 @@ Public Class OutputActivityDetailsControl
 
     Private Sub LoadGrid()
 
+        If cboOutputs.SelectedIndex > 0 Then
+
+            Dim sql As String = "SELECT A.ActivityID, A.Description FROM tblOutput O inner join tblOutputActivities OA on OA.OutputID = O.OutputID "
+            sql &= " inner join tblActivities A on OA.ActivityID = A.ActivityID where O.OutputID = " & cboOutputs.SelectedValue
+
+            ds = db.ExecuteDataSet(CommandType.Text, sql)
+
+        End If
+
         Try
-            Dim db As Database = New DatabaseProviderFactory().Create("Demo")
-            Dim sql As String = "select AP.ID AS ActivityID, A.Description As Activity, CAST([Start] AS Date) [Start], CAST([End] AS Date) [End], "
-            sql &= " ISNULL(FirstName, '') + ' ' + ISNULL(Surname, '') As Name ,Completed, AP.Description as [Description] from Appointments AP "
-            sql &= " inner join tblActivities A on AP.ActivityID = A.ActivityID inner join tblStaffMembers S on S.StaffID = AP.UserID"
+            Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
+            Dim sql As String = "select ActivityID, A.ActivityNo,A.Description As Activity FROM"
+            sql &= " tblActivities A "
 
             With radOutputActivity
 
@@ -100,7 +108,7 @@ Public Class OutputActivityDetailsControl
 
             For i As Long = 0 To Activity.Length - 1
 
-                Dim objOutput As New BusinessLogic.OutputActivity("Demo", 1)
+                Dim objOutput As New BusinessLogic.OutputActivity(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objOutput
 
@@ -135,7 +143,7 @@ Public Class OutputActivityDetailsControl
 
                 Case "Delete"
 
-                    Dim objOutputActivity As New BusinessLogic.OutputActivity("Demo", 1)
+                    Dim objOutputActivity As New BusinessLogic.OutputActivity(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objOutputActivity
 
@@ -187,8 +195,8 @@ Public Class OutputActivityDetailsControl
 
         If cboOutputs.SelectedIndex > 0 Then
 
-            Dim sql As String = "SELECT A.ID As ActivityID, A.Description FROM tblOutput O inner join tblOutputActivities OA on OA.OutputID = O.OutputID "
-            sql &= " inner join Appointments A on OA.ActivityID = A.ID where O.OutputID = " & cboOutputs.SelectedValue
+            Dim sql As String = "SELECT A.ActivityID, A.Description FROM tblOutput O inner join tblOutputActivities OA on OA.OutputID = O.OutputID "
+            sql &= " inner join tblActivities A on OA.ActivityID = A.ActivityID where O.OutputID = " & cboOutputs.SelectedValue
 
             ds = db.ExecuteDataSet(CommandType.Text, sql)
 
@@ -214,15 +222,6 @@ Public Class OutputActivityDetailsControl
     End Sub
 
     Private Sub cboOutputs_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboOutputs.SelectedIndexChanged
-
-        If cboOutputs.SelectedIndex > 0 Then
-
-            Dim sql As String = "SELECT A.ID As ActivityID, A.Description FROM tblOutput O inner join tblOutputActivities OA on OA.OutputID = O.OutputID "
-            sql &= " inner join Appointments A on OA.ActivityID = A.ID where O.OutputID = " & cboOutputs.SelectedValue
-
-            ds = db.ExecuteDataSet(CommandType.Text, sql)
-
-        End If
 
         LoadGrid()
 

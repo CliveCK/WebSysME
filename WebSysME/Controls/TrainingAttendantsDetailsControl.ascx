@@ -9,7 +9,7 @@
 	</tr> 
 	<tr> 
 		<td >Beneficiary Type</td> 
-        	<td ><asp:dropdownlist id="cboBeneficiaryType" runat="server" CssClass="form-control" AutoPostBack="true"></asp:dropdownlist> </td> 
+        	<td ><asp:dropdownlist id="cboBeneficiaryType" runat="server" CssClass="form-control" AutoPostBack="true" ></asp:dropdownlist> </td> 
     </tr>
     <tr>
 		<td >Beneficiary<br /> <br /></td>
@@ -17,7 +17,7 @@
     <tr>
         <td colspan="2">
             <telerik:RadGrid ID="radBeneficiaries" runat="server" GridLines="None" Height="100%" 
-                    AllowFilteringByColumn="True" AllowMultiRowSelection="true" CellPadding="0" Width="100%">
+                    AllowFilteringByColumn="True" AllowMultiRowSelection="true" CellPadding="0" Width="80%">
                     <MasterTableView AutoGenerateColumns="True" AllowPaging="True"  PagerStyle-Mode="NextPrevNumericAndAdvanced"
                         AlternatingItemStyle-BackColor="#66ccff">
                         <PagerStyle AlwaysVisible ="true" Position="Top"/>

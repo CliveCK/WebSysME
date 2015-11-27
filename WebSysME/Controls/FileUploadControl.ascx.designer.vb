@@ -77,6 +77,15 @@ Partial Public Class FileUploadControl
     Protected WithEvents txtDescription As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
+    '''cbxApplySecurity control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cbxApplySecurity As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
     '''pnlError control.
     '''</summary>
     '''<remarks>
@@ -95,6 +104,33 @@ Partial Public Class FileUploadControl
     Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''pnlPermissions control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlPermissions As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''cboLevelOfSecurity control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboLevelOfSecurity As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''ucComplementaryListboxes control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ucComplementaryListboxes As Global.WebSysME.ComplementaryListboxes
+
+    '''<summary>
     '''cmdSave control.
     '''</summary>
     '''<remarks>
@@ -111,6 +147,15 @@ Partial Public Class FileUploadControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents cmdClear As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''cmdDelete control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cmdDelete As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''txtFileID control.

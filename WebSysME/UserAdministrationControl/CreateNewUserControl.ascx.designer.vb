@@ -167,15 +167,6 @@ Partial Public Class CreateNewUserControl
     Protected WithEvents chkPasswordExpires As Global.System.Web.UI.WebControls.CheckBox
 
     '''<summary>
-    '''lblAfter control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblAfter As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''txtPasswordValidityPeriod control.
     '''</summary>
     '''<remarks>
@@ -183,15 +174,6 @@ Partial Public Class CreateNewUserControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtPasswordValidityPeriod As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''lblDays control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblDays As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''chkIsLockedOut control.
@@ -282,4 +264,40 @@ Partial Public Class CreateNewUserControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtUserID As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''pnlLinkAccounts control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlLinkAccounts As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''lblLinkStatus control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblLinkStatus As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''lstStaffMembers control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lstStaffMembers As Global.System.Web.UI.WebControls.ListBox
+
+    '''<summary>
+    '''cmdLink control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cmdLink As Global.System.Web.UI.WebControls.Button
 End Class

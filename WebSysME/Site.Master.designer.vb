@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class SiteMaster
 
     '''<summary>
+    '''lblOrg control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblOrg As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''hypUser control.
     '''</summary>
     '''<remarks>
@@ -30,6 +39,15 @@ Partial Public Class SiteMaster
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents cmdLogout As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''lblOrgInfor control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblOrgInfor As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''radmMainMenu control.

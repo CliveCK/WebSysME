@@ -1,9 +1,11 @@
 ﻿Imports Microsoft.Practices.EnterpriseLibrary.Data
+Imports Telerik.Web.UI
+Imports System.IO
 
 Public Class TrainingDocuments
     Inherits System.Web.UI.Page
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
 
@@ -60,9 +62,104 @@ Public Class TrainingDocuments
 
     End Sub
 
+    Private Sub radFileListing_ItemCommand(sender As Object, e As Telerik.Web.UI.GridCommandEventArgs) Handles radFileListing.ItemCommand
+
+        If e.CommandName = "Download" Then
+
+            Dim index As Integer = Convert.ToInt32(e.Item.ItemIndex.ToString)
+            Dim item As GridDataItem = radFileListing.Items(index)
+            Dim FilePath As String
+
+            FilePath = Server.HtmlDecode(item("FilePath").Text)
+
+            With Response
+
+                .Clear()
+                .ClearContent()
+                .ClearHeaders()
+                .BufferOutput = True
+
+            End With
+
+            If File.Exists(Request.PhysicalApplicationPath & FilePath) Or File.Exists(Server.MapPath("~/FileUploads/" & FilePath)) Then
+
+                Dim oFileStream As FileStream
+                Dim fileLen As Long
+
+                Try
+
+                    oFileStream = File.Open(Server.MapPath("~/FileUploads/" & FilePath), FileMode.Open, FileAccess.Read, FileShare.None)
+                    fileLen = oFileStream.Length
+
+                    Dim ByteFile(fileLen - 1) As Byte
+
+                    If fileLen > 0 Then
+                        oFileStream.Read(ByteFile, 0, oFileStream.Length - 1)
+                        oFileStream.Close()
+
+                        With Response
+
+                            .AddHeader("Content-Disposition", "attachment; filename=" & FilePath.Replace(" ", "_"))
+                            .ContentType = "application/octet-stream"
+                            .BinaryWrite(ByteFile)
+                            '.WriteFile(Server.MapPath("~/FileUploads/" & FilePath))
+                            .End()
+                            HttpContext.Current.ApplicationInstance.CompleteRequest()
+
+                        End With
+
+                    Else
+                        log.Error("Empty File...")
+                    End If
+
+                Catch ex As Exception
+
+                End Try
+
+            Else
+
+                ShowMessage("Error: File not found!!!", MessageTypeEnum.Error)
+
+            End If
+        End If
+
+        If e.CommandName = "View" Then
+
+            Dim index1 As Integer = Convert.ToInt32(e.Item.ItemIndex.ToString)
+            Dim item1 As GridDataItem = radFileListing.Items(index1)
+            Dim FileID As Integer
+
+            FileID = Server.HtmlDecode(item1("FileID").Text)
+
+            LoadFile(FileID)
+
+        End If
+
+    End Sub
+
+    Private Sub LoadFile(ByVal FileID As Long)
+
+        Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+        With objFiles
+
+            If .Retrieve(FileID) Then
+
+                txtAuthor.Text = .Author
+                txtDescription.Text = .Description
+                txtTitle.Text = .Title
+                If Not IsNothing(cboOrganization.Items.FindByText(.AuthorOrganization)) Then cboOrganization.SelectedItem.Text = .AuthorOrganization
+
+            End If
+
+        End With
+
+
+    End Sub
+
     Private Sub LoadGrid()
 
-        Dim objFiles As New BusinessLogic.Files("Demo", 1)
+        Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim sql As String = "SELECT * FROM tblFiles F inner join tblDocumentObjects DO on F.FileID = DO.DocumentID inner join luObjectTypes O on"
         sql &= " O.ObjectTypeID = DO.ObjectTypeID WHERE O.Description = 'Training' AND DO.ObjectID = " & IIf(IsNumeric(objUrlEncoder.Decrypt(Request.QueryString("id"))), objUrlEncoder.Decrypt(Request.QueryString("id")), 0)
 
@@ -107,6 +204,8 @@ Public Class TrainingDocuments
 
             End If
 
+            LoadGrid()
+
         Else
 
             ShowMessage("No staff member has been selected/saved yet!...", MessageTypeEnum.Warning)
@@ -119,7 +218,7 @@ Public Class TrainingDocuments
 
         Dim FileType As Long = db.ExecuteScalar(CommandType.Text, "SELECT TOP 1 FileTypeID FROM luFileTypes where Description = 'TrainingUploads'")
 
-        Dim objFiles As New BusinessLogic.Files("Demo", 1)
+        Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objFiles
 
@@ -135,7 +234,7 @@ Public Class TrainingDocuments
 
             If .Save() Then
 
-                Dim objObjects As New BusinessLogic.DocumentObjects("Demo", 1)
+                Dim objObjects As New BusinessLogic.DocumentObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objObjects
 

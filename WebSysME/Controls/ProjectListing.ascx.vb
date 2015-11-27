@@ -30,7 +30,7 @@
 
         Session("Projects") = Nothing
 
-        Dim objProjects As New BusinessLogic.Projects("Demo", 1)
+        Dim objProjects As New BusinessLogic.Projects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objProjects.GetAllProjects(StatusID)
 
         With radProjectListing
@@ -46,7 +46,7 @@
 
     Private Sub LoadContextMenu()
 
-        Dim objMenu As New BusinessLogic.Menu("Demo", 1)
+        Dim objMenu As New BusinessLogic.Menu(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objMenu.GetContextMenu()
         Session("Menu") = ds
 

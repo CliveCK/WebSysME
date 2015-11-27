@@ -23,6 +23,15 @@ Partial Public Class ProjectView
     Protected WithEvents txtProjectID As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
+    '''lblProject control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblProject As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''radProjectTree control.
     '''</summary>
     '''<remarks>

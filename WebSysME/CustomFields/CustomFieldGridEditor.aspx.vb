@@ -6,7 +6,7 @@ Public Class CustomFieldGridEditor
     Inherits System.Web.UI.Page
 
     Dim CustomFieldTemplateID As Long = 3
-    Dim ProjectID As Long = 163, ObjectType As String = "P", UserID As Long = CookiesWrapper.UserID
+    Dim ProjectID As Long = 163, ObjectType As String = "P", UserID As Long = CookiesWrapper.thisUserID
 
     Private db As Microsoft.Practices.EnterpriseLibrary.Data.Database
     Private objCF As BusinessLogic.CustomFields.CustomFieldsManager
@@ -19,8 +19,8 @@ Public Class CustomFieldGridEditor
             CustomFieldTemplateID = Request.QueryString("cftid")
         End If
 
-        db = DatabaseFactory.CreateDatabase("ConnectionString")
-        objCF = New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.UserID)
+        db = New DatabaseProviderFactory().Create("ConnectionString")
+        objCF = New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
 
         'PlaceHolder1.Controls.Add(LoadGridData(CustomFieldTemplateID))
         PlaceHolder1.Controls.Add(objCF.LoadCustomFieldGrid(ObjectID:=0, ObjectType:="D", CFTemplateID:=4, CFTemplateName:="Vehicle Fuel Consumption", DisplayDateFormat:=My.Settings.DisplayDateFormat))

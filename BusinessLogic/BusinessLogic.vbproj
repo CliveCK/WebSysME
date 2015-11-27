@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1BE9822F-54FC-4909-A0D5-AABA70C7DE93}</ProjectGuid>
+    <ProjectGuid>{E8EE1747-609E-4E02-99EF-2F4718DCC9C9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>BusinessLogic</RootNamespace>
     <AssemblyName>BusinessLogic</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>BusinessLogic.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>BusinessLogic.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -57,6 +60,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -78,48 +82,51 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivityAttendants.vb" />
     <Compile Include="ActivityCategory.vb" />
     <Compile Include="Address.vb" />
+    <Compile Include="Appointments.vb" />
     <Compile Include="Beneficiary.vb" />
     <Compile Include="BeneficiaryIntervention.vb" />
+    <Compile Include="Caregiver.vb" />
+    <Compile Include="CashDonation.vb" />
     <Compile Include="CommonFunctions.vb" />
     <Compile Include="Community.vb" />
+    <Compile Include="CookiesWrapper.vb" />
     <Compile Include="DepartmentalPlan.vb" />
+    <Compile Include="DischargeSummary.vb" />
     <Compile Include="DistributionBeneficiaries.vb" />
     <Compile Include="Distributions.vb" />
     <Compile Include="DocumentObjects.vb" />
+    <Compile Include="Eligibility.vb" />
     <Compile Include="Evaluation.vb" />
     <Compile Include="EvaluationObjects.vb" />
     <Compile Include="Files.vb" />
+    <Compile Include="FirstPointOfContact.vb" />
+    <Compile Include="Followups.vb" />
+    <Compile Include="FundRaising.vb" />
+    <Compile Include="GeneralActivity.vb" />
+    <Compile Include="GeneralActivityAttendants.vb" />
+    <Compile Include="GeneralActivityInputs.vb" />
+    <Compile Include="Genogram.vb" />
     <Compile Include="Groups.vb" />
     <Compile Include="HealthCenter.vb" />
+    <Compile Include="HealthCenterStaff.vb" />
     <Compile Include="HouseHoldAssets.vb" />
     <Compile Include="HouseHoldAssetsDetails.vb" />
     <Compile Include="HouseHoldNeeds.vb" />
     <Compile Include="Indiactor.vb" />
+    <Compile Include="IndicatorActivities.vb" />
     <Compile Include="IndicatorCategory.vb" />
     <Compile Include="InterventionImplementingPartner.vb" />
     <Compile Include="InterventionObjects.vb" />
     <Compile Include="Interventions.vb" />
     <Compile Include="KeyChangePromiseDescription.vb" />
     <Compile Include="KeyChangePromises.vb" />
+    <Compile Include="KindDonation.vb" />
     <Compile Include="LocationObjects.vb" />
+    <Compile Include="MedicalHistory.vb" />
     <Compile Include="Menu.vb" />
-    <Compile Include="ObjectiveOutcomes.vb" />
-    <Compile Include="ObjectiveOutputs.vb" />
-    <Compile Include="Organization.vb" />
-    <Compile Include="OrganizationalPlan.vb" />
-    <Compile Include="Output.vb" />
-    <Compile Include="OutputActivity.vb" />
-    <Compile Include="Procument.vb" />
-    <Compile Include="ProjectKeyChangePromise.vb" />
-    <Compile Include="ProjectMeeting.vb" />
-    <Compile Include="ProjectMeetingAgenda.vb" />
-    <Compile Include="ProjectMeetingAttendants.vb" />
-    <Compile Include="ProjectObjective.vb" />
-    <Compile Include="ProjectObjects.vb" />
-    <Compile Include="ProjectOutcome.vb" />
-    <Compile Include="Projects.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -135,18 +142,46 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Notifications.vb" />
+    <Compile Include="NotificationTypes.vb" />
+    <Compile Include="ObjectiveOutcomes.vb" />
+    <Compile Include="ObjectiveOutputs.vb" />
+    <Compile Include="Organization.vb" />
+    <Compile Include="OrganizationalPlan.vb" />
+    <Compile Include="Output.vb" />
+    <Compile Include="OutputActivity.vb" />
+    <Compile Include="Outreach.vb" />
+    <Compile Include="Participants.vb" />
+    <Compile Include="PatientPlan.vb" />
+    <Compile Include="Patients.vb" />
+    <Compile Include="Procument.vb" />
+    <Compile Include="Prognosis.vb" />
+    <Compile Include="ProjectKeyChangePromise.vb" />
+    <Compile Include="ProjectMeeting.vb" />
+    <Compile Include="ProjectMeetingAgenda.vb" />
+    <Compile Include="ProjectMeetingAttendants.vb" />
+    <Compile Include="ProjectObjective.vb" />
+    <Compile Include="ProjectObjects.vb" />
+    <Compile Include="ProjectOutcome.vb" />
+    <Compile Include="Projects.vb" />
     <Compile Include="ProjectStaffIntervention.vb" />
+    <Compile Include="Referrals.vb" />
+    <Compile Include="Report.vb" />
     <Compile Include="ReportSumbissionTracking.vb" />
     <Compile Include="RuralArea.vb" />
     <Compile Include="Schools.vb" />
+    <Compile Include="SchoolStaff.vb" />
     <Compile Include="StaffMember.vb" />
     <Compile Include="StrategicObjectives.vb" />
+    <Compile Include="StrategicPlanDetails.vb" />
+    <Compile Include="StrategicPlans.vb" />
     <Compile Include="SubOffices.vb" />
     <Compile Include="Survey.vb" />
     <Compile Include="SurveyObjects.vb" />
     <Compile Include="Training.vb" />
     <Compile Include="TrainingAttendants.vb" />
     <Compile Include="TrainingInputs.vb" />
+    <Compile Include="TrainingMarks.vb" />
     <Compile Include="TripCosts.vb" />
     <Compile Include="Trips.vb" />
     <Compile Include="TripTravellers.vb" />
@@ -171,7 +206,6 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Components\log4net.dll" />
     <Content Include="Components\Microsoft.Practices.EnterpriseLibrary.Common.dll" />

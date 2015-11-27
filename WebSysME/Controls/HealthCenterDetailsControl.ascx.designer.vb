@@ -122,6 +122,15 @@ Partial Public Class HealthCenterDetailsControl
     Protected WithEvents txtDescription As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
+    '''phCustomFields control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents phCustomFields As Global.System.Web.UI.WebControls.PlaceHolder
+
+    '''<summary>
     '''pnlError control.
     '''</summary>
     '''<remarks>
@@ -156,4 +165,13 @@ Partial Public Class HealthCenterDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtHealthCenterID As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''lnkStaff control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkStaff As Global.System.Web.UI.WebControls.LinkButton
 End Class

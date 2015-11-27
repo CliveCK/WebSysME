@@ -7,11 +7,11 @@
 	</tr>
     <tr> 
 		<td >Province</td> 
-        	<td ><asp:dropdownlist id="cboProvince" runat="server" CssClass="form-control"></asp:dropdownlist> </td> 
+        	<td ><asp:dropdownlist id="cboProvince" runat="server" CssClass="form-control" AutoPostBack="true" ></asp:dropdownlist> </td> 
 	</tr>
     <tr> 
 		<td >District</td> 
-        	<td ><asp:dropdownlist id="cboDistrict" runat="server" CssClass="form-control"></asp:dropdownlist> </td> 
+        	<td ><asp:dropdownlist id="cboDistrict" runat="server" CssClass="form-control" AutoPostBack="true"></asp:dropdownlist> </td> 
 	</tr> 
 	<tr>
 		<td >Ward</td> 

@@ -18,6 +18,7 @@ Public Class Files
     Protected mFileExtension As string
     Protected mAuthorOrganization As String
     Protected mTitle As String
+    Protected mApplySecurity As Long
 
     Protected db As Database 
     Protected mConnectionName As String 
@@ -164,6 +165,15 @@ Public Class Files
         End Set
     End Property
 
+    Public Property ApplySecurity() As Long
+        Get
+            Return mApplySecurity
+        End Get
+        Set(ByVal value As Long)
+            mApplySecurity = value
+        End Set
+    End Property
+
 #end region
 
 #region "Methods"
@@ -194,7 +204,8 @@ Public Sub Clear()
     mDescription = ""
     mFilePath = ""
     mFileExtension = ""
-    mAuthorOrganization = ""
+        mAuthorOrganization = ""
+        mApplySecurity = 0
 
 End Sub
 
@@ -211,9 +222,9 @@ End Sub
         Dim sql As String 
 
         If FileID > 0 Then 
-            sql = "SELECT T.Description AS FileType, F.* FROM tblFiles F INNER JOIN luFileTypes T on F.FileTypeID = T.FileTypeID WHERE FileID = " & FileID
+            sql = "SELECT T.Description AS FileType, F.* FROM tblFiles F LEFT OUTER JOIN luFileTypes T on F.FileTypeID = T.FileTypeID WHERE FileID = " & FileID
         Else 
-            sql = "SELECT T.Description AS FileType, F.* FROM tblFiles F INNER JOIN luFileTypes T on F.FileTypeID = T.FileTypeID WHERE FileID = " & mFileID
+            sql = "SELECT T.Description AS FileType, F.* FROM tblFiles F LEFT OUTER JOIN luFileTypes T on F.FileTypeID = T.FileTypeID WHERE FileID = " & mFileID
         End If 
 
         Return Retrieve(sql) 
@@ -277,9 +288,9 @@ End Sub
         Dim sql As String
 
         If FileID > 0 Then
-            sql = "SELECT * FROM tblFiles WHERE FileID = " & FileID
+            sql = "SELECT * FROM tblFiles WHERE FileID = " & FileID & " AND FileID IN (" & GetPermittedFiles(FileID) & ")"
         Else
-            sql = "SELECT * FROM tblFiles WHERE FileID = " & mFileID
+            sql = "SELECT * FROM tblFiles WHERE FileID = " & mFileID & " AND FileID IN (" & GetPermittedFiles(FileID) & ")"
         End If
 
         Return GetFiles(sql)
@@ -290,9 +301,42 @@ End Sub
 
         Dim sql As String
 
-        sql = "SELECT * FROM tblFiles"
+        sql = "SELECT F.*, O.Description As FileType FROM tblFiles F inner join luFileTypes O on F.FileTypeID = O.FileTypeID "
+        sql &= "WHERE FileID IN (" & GetPermittedFiles() & ")"
 
         Return GetFiles(sql)
+
+    End Function
+
+    Public Function GetPermittedFiles(Optional ByVal FileIDCriteria As String = "0") As String
+
+        Dim ResultDataSet As DataSet
+        Dim sql As String = ""
+        FileIDCriteria = IIf(FileIDCriteria = "0", "", "AND FileID IN (" & FileIDCriteria & ")")
+
+        If CookiesWrapper.thisUserName <> "Admin" Then
+
+            sql = "SELECT FileID FROM tblFiles WHERE ApplySecurity = 0 " & IIf(String.IsNullOrEmpty(FileIDCriteria), "", FileIDCriteria)
+            sql &= " UNION "
+            sql &= "SELECT FileID FROM tblFiles WHERE ApplySecurity = 1 "
+            sql &= "AND FileID IN (SELECT DocumentID FROM tblDocumentPermissions WHERE (ObjectID = " & CookiesWrapper.StaffID & " AND LevelOfSecurityID = 1) "
+            sql &= "OR (ObjectID = " & CookiesWrapper.OrganizationID & " AND LevelOfSecurityID = 2) "
+            sql &= "OR (CreatedBy = " & CookiesWrapper.StaffID & ") " & IIf(String.IsNullOrEmpty(FileIDCriteria), "", FileIDCriteria) & ")"
+
+        Else
+
+            sql = "SELECT FileID FROM tblFiles" 'Admin is not restricted...
+
+        End If
+
+        ResultDataSet = db.ExecuteDataSet(CommandType.Text, sql)
+
+        Dim colBValues = New List(Of String)
+        For Each row As DataRow In ResultDataSet.Tables(0).Rows
+            colBValues.Add(row(0).ToString)
+        Next
+
+        Return IIf(String.Join(",", colBValues.ToArray()) <> "", String.Join(",", colBValues.ToArray()), "0")
 
     End Function
 
@@ -309,17 +353,18 @@ End Sub
         sql = "SELECT F.* FROM tblFiles F inner join luFileTypes T on F.FileTypeID = T.FileTypeID "
         sql &= "INNER JOIN tblDocumentObjects O on O.DocumentID = F.FileID "
         sql &= " INNER JOIN luObjectTypes OT on OT.ObjectTypeID = O.ObjectTypeID "
-        sql &= " where T.Description = '" & FileType & "' AND OT.Description = '" & ObjectType & "' AND O.ObjectID =  " & ProjectID
+        sql &= " where T.Description = '" & FileType & "' AND OT.Description = '" & ObjectType & "' AND O.ObjectID =  " & ProjectID & " AND "
+        sql &= "AND F.FileID IN (" & GetPermittedFiles() & ")"
 
         Return GetFiles(sql)
 
     End Function
 
-#End Region 
+#End Region
 
-    Protected Friend Overridable Sub LoadDataRecord(ByRef Record As Object) 
+    Protected Friend Overridable Sub LoadDataRecord(ByRef Record As Object)
 
-        With Record 
+        With Record
 
             mFileID = Catchnull(.Item("FileID"), 0)
             mCreatedBy = Catchnull(.Item("CreatedBy"), 0)
@@ -334,84 +379,86 @@ End Sub
             mFilePath = Catchnull(.Item("FilePath"), "")
             mFileExtension = Catchnull(.Item("FileExtension"), "")
             mAuthorOrganization = Catchnull(.Item("AuthorOrganization"), "")
+            mApplySecurity = Catchnull(.Item("ApplySecurity"), 0)
 
-        End With 
+        End With
 
-    End Sub 
+    End Sub
 
-#region "Save" 
+#Region "Save"
 
-    Public Overridable Sub GenerateSaveParameters(ByRef db As Database, ByRef cmd As System.Data.Common.DbCommand) 
+    Public Overridable Sub GenerateSaveParameters(ByRef db As Database, ByRef cmd As System.Data.Common.DbCommand)
 
-        db.AddInParameter(cmd, "@FileID", DBType.Int32, mFileID) 
-        db.AddInParameter(cmd, "@UpdatedBy", DBType.Int32, mObjectUserID) 
-        db.AddInParameter(cmd, "@Date", DBType.String, mDate) 
+        db.AddInParameter(cmd, "@FileID", DbType.Int32, mFileID)
+        db.AddInParameter(cmd, "@UpdatedBy", DbType.Int32, mObjectUserID)
+        db.AddInParameter(cmd, "@Date", DbType.String, mDate)
         db.AddInParameter(cmd, "@FileTypeID", DbType.String, mFileTypeID)
         db.AddInParameter(cmd, "@Title", DbType.String, mTitle)
-        db.AddInParameter(cmd, "@Author", DBType.String, mAuthor) 
-        db.AddInParameter(cmd, "@Description", DBType.String, mDescription) 
-        db.AddInParameter(cmd, "@FilePath", DBType.String, mFilePath) 
-        db.AddInParameter(cmd, "@FileExtension", DBType.String, mFileExtension) 
-        db.AddInParameter(cmd, "@AuthorOrganization", DBType.String, mAuthorOrganization) 
+        db.AddInParameter(cmd, "@Author", DbType.String, mAuthor)
+        db.AddInParameter(cmd, "@Description", DbType.String, mDescription)
+        db.AddInParameter(cmd, "@FilePath", DbType.String, mFilePath)
+        db.AddInParameter(cmd, "@FileExtension", DbType.String, mFileExtension)
+        db.AddInParameter(cmd, "@AuthorOrganization", DbType.String, mAuthorOrganization)
+        db.AddInParameter(cmd, "@ApplySecurity", DbType.Int32, mApplySecurity)
 
-    End Sub 
+    End Sub
 
-Public Overridable Function Save() As Boolean 
+    Public Overridable Function Save() As Boolean
 
-        Dim cmd As System.Data.Common.DbCommand = db.GetStoredProcCommand("sp_Save_Files") 
+        Dim cmd As System.Data.Common.DbCommand = db.GetStoredProcCommand("sp_Save_Files")
 
         GenerateSaveParameters(db, cmd)
 
-        Try 
+        Try
 
-            Dim ds As DataSet = db.ExecuteDataSet(cmd) 
+            Dim ds As DataSet = db.ExecuteDataSet(cmd)
 
-            If ds isnot nothing andalso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then 
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
 
-                mFileID = ds.Tables(0).Rows(0)(0) 
+                mFileID = ds.Tables(0).Rows(0)(0)
 
-            End If 
+            End If
 
-            Return True 
+            Return True
 
-        Catch ex As Exception 
+        Catch ex As Exception
 
             log.Error(ex)
-            Return False 
+            Return False
 
-        End Try 
+        End Try
 
-    End Function 
+    End Function
 
-#End Region 
+#End Region
 
-#Region "Delete" 
+#Region "Delete"
 
-    Public Overridable Function Delete() As Boolean 
+    Public Overridable Function Delete() As Boolean
 
         'Return Delete("UPDATE tblFiles SET Deleted = 1 WHERE FileID = " & mFileID) 
-        Return Delete("DELETE FROM tblFiles WHERE FileID = " & mFileID) 
+        Return Delete("DELETE FROM tblFiles WHERE FileID = " & mFileID)
 
-    End Function 
+    End Function
 
-    Protected Overridable Function Delete(ByVal DeleteSQL As String) As Boolean 
+    Protected Overridable Function Delete(ByVal DeleteSQL As String) As Boolean
 
-        Try 
+        Try
 
-            db.ExecuteNonQuery(CommandType.Text, DeleteSQL) 
-            Return True 
+            db.ExecuteNonQuery(CommandType.Text, DeleteSQL)
+            Return True
 
-        Catch e As Exception 
+        Catch e As Exception
 
             log.Error(e)
-            Return False 
+            Return False
 
-        End Try 
+        End Try
 
-    End Function 
+    End Function
 
-#End Region 
+#End Region
 
-#end region
+#End Region
 
 End Class

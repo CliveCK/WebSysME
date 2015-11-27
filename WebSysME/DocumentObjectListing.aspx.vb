@@ -207,24 +207,29 @@ Public Class DocumentObjectListing
 
     Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
 
-        If cboObjects.SelectedValue > 0 Then
+        Try
 
-            Dim objFiles As New BusinessLogic.Files("Demo", 1)
+            If cboObjects.SelectedValue > 0 Then
 
-            Dim sql As String = "SELECT * FROM tblFiles F inner join tblDocumentObjects DO on F.FileID = DO.DocumentID "
-            sql &= "inner join luObjectTypes O on O.ObjectTypeID = DO.ObjectTypeID WHERE DO.ObjectTypeID = " & cboObjects.SelectedValue
-            sql &= " AND DO.ObjectID = " & IIf(IsNumeric(radObjectAutoComplete.Entries.Item(0).Value), radObjectAutoComplete.Entries.Item(0).Value, 0)
+                Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
-            With radFileListing
+                Dim sql As String = "SELECT * FROM tblFiles F inner join tblDocumentObjects DO on F.FileID = DO.DocumentID "
+                sql &= "inner join luObjectTypes O on O.ObjectTypeID = DO.ObjectTypeID WHERE DO.ObjectTypeID = " & cboObjects.SelectedValue
+                sql &= " AND DO.ObjectID = " & IIf(IsNumeric(radObjectAutoComplete.Entries.Item(0).Value), radObjectAutoComplete.Entries.Item(0).Value, 0)
 
-                .DataSource = objFiles.GetFiles(sql).Tables(0)
-                .DataBind()
+                With radFileListing
 
-                ViewState("MyFiles") = .DataSource
+                    .DataSource = objFiles.GetFiles(sql).Tables(0)
+                    .DataBind()
 
-            End With
+                    ViewState("MyFiles") = .DataSource
 
-        End If
+                End With
+
+            End If
+
+        Catch ex As Exception
+        End Try
 
     End Sub
 

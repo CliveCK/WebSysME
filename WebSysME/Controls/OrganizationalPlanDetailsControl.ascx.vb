@@ -61,7 +61,7 @@ Partial Class OrganizationalPlanDetailsControl
 
         Try
 
-            Dim objOrganizationalPlan As New OrganizationalPlan("Demo", 1)
+            Dim objOrganizationalPlan As New OrganizationalPlan(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objOrganizationalPlan
 
@@ -100,7 +100,7 @@ Partial Class OrganizationalPlanDetailsControl
 
         Try
 
-            Dim objOrganizationalPlan As New OrganizationalPlan("Demo", 1)
+            Dim objOrganizationalPlan As New OrganizationalPlan(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objOrganizationalPlan
 

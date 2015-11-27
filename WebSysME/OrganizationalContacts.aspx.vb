@@ -1,9 +1,11 @@
 ﻿Public Class OrganizationalContacts
     Inherits System.Web.UI.Page
 
+    Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        Dim objOrganizationContacts As New BusinessLogic.Organization("Demo", 1)
+        Dim objOrganizationContacts As New BusinessLogic.Organization(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radContacts
 
@@ -26,7 +28,7 @@
     Private Sub radContacts_DetailTableDataBind(sender As Object, e As Telerik.Web.UI.GridDetailTableDataBindEventArgs) Handles radContacts.DetailTableDataBind
 
         Dim dataItem As Telerik.Web.UI.GridDataItem = CType(e.DetailTableView.ParentItem, Telerik.Web.UI.GridDataItem)
-        Dim objSubOffices As New BusinessLogic.SubOffices("Demo", 1)
+        Dim objSubOffices As New BusinessLogic.SubOffices(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         If e.DetailTableView.Name = "dsContacts" Then
 
@@ -36,9 +38,33 @@
 
     End Sub
 
+    Private Sub radContacts_ItemCommand(sender As Object, e As Telerik.Web.UI.GridCommandEventArgs) Handles radContacts.ItemCommand
+
+        If TypeOf e.Item Is Telerik.Web.UI.GridDataItem Then
+
+            If e.CommandName = "View" Then
+
+                Dim index1 As Integer = Convert.ToInt32(e.Item.ItemIndex.ToString)
+                Dim item1 As Telerik.Web.UI.GridDataItem = radContacts.Items(index1)
+                Dim OrganizationID As Integer
+
+                OrganizationID = item1.GetDataKeyValue("OrganizationID")
+
+                Response.Redirect("~/OurOrganization?id=" & objUrlEncoder.Encrypt(OrganizationID))
+
+            End If
+
+        End If
+
+    End Sub
+
     Private Sub radContacts_NeedDataSource(sender As Object, e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles radContacts.NeedDataSource
 
-        radContacts.DataSource = DirectCast(ViewState("OrgContacts"), DataTable)
+        If Not e.IsFromDetailTable Then
+
+            radContacts.DataSource = DirectCast(ViewState("OrgContacts"), DataTable)
+
+        End If
 
     End Sub
 End Class

@@ -6,9 +6,11 @@ Public Class Groups
 #region "Variables"
 
     Protected mGroupID As long
-    Protected mWardID As long
+    Protected mWardID As Long
+    Protected mProvinceID As Long
+    Protected mDistrictID As Long
     Protected mGroupTypeID As long
-    Protected mDescription As long
+    Protected mDescription As String
     Protected mGroupSize As long
     Protected mCreatedBy As long
     Protected mUpdatedBy As long
@@ -62,6 +64,24 @@ Public Class Groups
         End Set
     End Property
 
+    Public Property ProvinceID() As Long
+        Get
+            Return mProvinceID
+        End Get
+        Set(ByVal value As Long)
+            mProvinceID = value
+        End Set
+    End Property
+
+    Public Property DistrictID() As Long
+        Get
+            Return mDistrictID
+        End Get
+        Set(ByVal value As Long)
+            mDistrictID = value
+        End Set
+    End Property
+
     Public  Property GroupTypeID() As long
         Get
 		return mGroupTypeID
@@ -71,12 +91,12 @@ Public Class Groups
         End Set
     End Property
 
-    Public  Property Description() As long
+    Public Property Description() As String
         Get
-		return mDescription
+            Return mDescription
         End Get
-        Set(ByVal value As long)
-		mDescription = value
+        Set(ByVal value As String)
+            mDescription = value
         End Set
     End Property
 
@@ -178,7 +198,9 @@ End Sub
         Dim sql As String 
 
         If GroupID > 0 Then 
-            sql = "SELECT * FROM tblGroups WHERE GroupID = " & GroupID
+            sql = "SELECT C.*, D.DistrictID, P.ProvinceID FROM tblGroups C inner join tblWards W on W.WardID = C.WardID "
+            sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
+            sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID  WHERE GroupID = " & GroupID
         Else 
             sql = "SELECT * FROM tblGroups WHERE GroupID = " & mGroupID
         End If 
@@ -219,7 +241,9 @@ End Sub
 
     Public Function RetrieveAll() As DataSet
 
-        Dim sql As String = "Select * from tblGroups"
+        Dim sql As String = "select G.*, GT.Description As GroupType, D.Name As District from tblGroups G left outer join luGroupTypes GT on G.GroupTypeID = GT.GroupTypeID "
+        sql &= "left outer join tblWards W on W.WardID = G.WardID "
+        sql &= "left outer join tblDistricts D on D.DistrictID = W.DistrictID "
 
         Return GetGroups(sql)
 
@@ -267,8 +291,10 @@ End Sub
 
             mGroupID = Catchnull(.Item("GroupID"), 0)
             mWardID = Catchnull(.Item("WardID"), 0)
+            mProvinceID = Catchnull(.Item("ProvinceID"), 0)
+            mDistrictID = Catchnull(.Item("DistrictID"), 0)
             mGroupTypeID = Catchnull(.Item("GroupTypeID"), 0)
-            mDescription = Catchnull(.Item("Description"), 0)
+            mDescription = Catchnull(.Item("Description"), "")
             mGroupSize = Catchnull(.Item("GroupSize"), 0)
             mCreatedBy = Catchnull(.Item("CreatedBy"), 0)
             mUpdatedBy = Catchnull(.Item("UpdatedBy"), 0)
@@ -287,7 +313,7 @@ End Sub
         db.AddInParameter(cmd, "@GroupID", DbType.Int32, mGroupID)
         db.AddInParameter(cmd, "@WardID", DbType.Int32, mWardID)
         db.AddInParameter(cmd, "@GroupTypeID", DbType.Int32, mGroupTypeID)
-        db.AddInParameter(cmd, "@Description", DbType.Int32, mDescription)
+        db.AddInParameter(cmd, "@Description", DbType.String, mDescription)
         db.AddInParameter(cmd, "@GroupSize", DbType.Int32, mGroupSize)
         db.AddInParameter(cmd, "@UpdatedBy", DbType.Int32, mObjectUserID)
         db.AddInParameter(cmd, "@GroupName", DbType.String, mGroupName)

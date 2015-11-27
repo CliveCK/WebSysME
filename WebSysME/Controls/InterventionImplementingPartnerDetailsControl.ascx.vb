@@ -4,7 +4,7 @@ Imports BusinessLogic
 Partial Class InterventionImplementingPartnerDetailsControl
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
 #Region "Status Messages"
 
@@ -106,7 +106,7 @@ Partial Class InterventionImplementingPartnerDetailsControl
 
         Try
 
-            Dim objInterventionImplementingPartner As New InterventionImplementingPartner("Demo", 1)
+            Dim objInterventionImplementingPartner As New InterventionImplementingPartner(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objInterventionImplementingPartner
 
@@ -144,7 +144,7 @@ Partial Class InterventionImplementingPartnerDetailsControl
 
         Try
 
-            Dim objInterventionImplementingPartner As New InterventionImplementingPartner("Demo", 1)
+            Dim objInterventionImplementingPartner As New InterventionImplementingPartner(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objInterventionImplementingPartner
 

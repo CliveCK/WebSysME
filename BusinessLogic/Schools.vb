@@ -6,7 +6,9 @@ Public Class Schools
 #region "Variables"
 
     Protected mSchoolID As long
-    Protected mWardID As long
+    Protected mWardID As Long
+    Protected mProvinceID As Long
+    Protected mDistrictID As Long
     Protected mSchoolTypeID As long
     Protected mStaffCompliment As long
     Protected mNoOfMaleStudents As long
@@ -62,6 +64,23 @@ Public Class Schools
         End Get
         Set(ByVal value As long)
 		mWardID = value
+        End Set
+    End Property
+
+    Public Property ProvinceID() As Long
+        Get
+            Return mWardID
+        End Get
+        Set(ByVal value As Long)
+            mWardID = value
+        End Set
+    End Property
+    Public Property DistrictID() As Long
+        Get
+            Return mWardID
+        End Get
+        Set(ByVal value As Long)
+            mWardID = value
         End Set
     End Property
 
@@ -192,7 +211,7 @@ Public Class Schools
 Public Sub Clear()  
 
     SchoolID = 0
-    mWardID = 0
+        mWardID = 0
     mSchoolTypeID = 0
     mStaffCompliment = 0
     mNoOfMaleStudents = 0
@@ -221,7 +240,9 @@ End Sub
         Dim sql As String 
 
         If SchoolID > 0 Then 
-            sql = "SELECT * FROM tblSchools WHERE SchoolID = " & SchoolID
+            sql = "SELECT C.*, D.DistrictID, P.ProvinceID FROM tblSchools C inner join tblWards W on W.WardID = C.WardID "
+            sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
+            sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID  WHERE SchoolID = " & SchoolID
         Else 
             sql = "SELECT * FROM tblSchools WHERE SchoolID = " & mSchoolID
         End If 
@@ -262,7 +283,7 @@ End Sub
 
     Public Function RetrieveAll() As DataSet
 
-        Dim sql As String = "SELECT * FROM tblSchools"
+        Dim sql As String = "SELECT S.*, ST.Description As SchoolType FROM tblSchools S inner join luSchoolTypes ST on S.SchoolTypeID = ST.SchoolTypeID"
 
         Return GetSchools(sql)
 
@@ -302,6 +323,8 @@ End Sub
 
             mSchoolID = Catchnull(.Item("SchoolID"), 0)
             mWardID = Catchnull(.Item("WardID"), 0)
+            mProvinceID = Catchnull(.Item("ProvinceID"), 0)
+            mDistrictID = Catchnull(.Item("DistrictID"), 0)
             mSchoolTypeID = Catchnull(.Item("SchoolTypeID"), 0)
             mStaffCompliment = Catchnull(.Item("StaffCompliment"), 0)
             mNoOfMaleStudents = Catchnull(.Item("NoOfMaleStudents"), 0)

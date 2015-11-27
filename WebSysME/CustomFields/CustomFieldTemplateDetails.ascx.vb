@@ -9,7 +9,7 @@ Public Class CustomFieldTemplateDetails
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         TemplateID = Request.QueryString("id")
-        db = DatabaseFactory.CreateDatabase("ConnectionString")
+        db = New DatabaseProviderFactory().Create("ConnectionString")
 
         If Not Page.IsPostBack Then
 
@@ -23,7 +23,7 @@ Public Class CustomFieldTemplateDetails
 
     Private Sub LoadCFTemplate()
 
-        Dim objCFTemplate As New BusinessLogic.CustomFields.CustomFieldTemplate("ConnectionString", CookiesWrapper.UserID)
+        Dim objCFTemplate As New BusinessLogic.CustomFields.CustomFieldTemplate("ConnectionString", CookiesWrapper.thisUserID)
 
         If objCFTemplate.Retrieve(TemplateID) Then
 
@@ -39,7 +39,7 @@ Public Class CustomFieldTemplateDetails
 
     Private Sub SaveCFTemplate()
 
-        Dim objCFTemplate As New BusinessLogic.CustomFields.CustomFieldTemplate("ConnectionString", CookiesWrapper.UserID)
+        Dim objCFTemplate As New BusinessLogic.CustomFields.CustomFieldTemplate("ConnectionString", CookiesWrapper.thisUserID)
 
         objCFTemplate.TemplateID = TemplateID
         objCFTemplate.TemplateName = lblTemplateName.Text
@@ -75,7 +75,7 @@ Public Class CustomFieldTemplateDetails
 
     Private Sub LoadCFSecurity(SecurityType As BusinessLogic.CustomFields.CustomFieldSecurityType)
 
-        Dim objSec As New BusinessLogic.CustomFields.CustomFieldTemplateSecurity("ConnectionString", CookiesWrapper.UserID)
+        Dim objSec As New BusinessLogic.CustomFields.CustomFieldTemplateSecurity("ConnectionString", CookiesWrapper.thisUserID)
 
         With (ucUserSecurity)
 
@@ -129,7 +129,7 @@ Public Class CustomFieldTemplateDetails
 
         SaveCFTemplate()
 
-        Dim objSec As New BusinessLogic.CustomFields.CustomFieldTemplateSecurity("ConnectionString", CookiesWrapper.UserID)
+        Dim objSec As New BusinessLogic.CustomFields.CustomFieldTemplateSecurity("ConnectionString", CookiesWrapper.thisUserID)
 
         Dim SecrityType As BusinessLogic.CustomFields.CustomFieldSecurityType = IIf(cboSecurityType.SelectedValue.ToLower = "read", BusinessLogic.CustomFields.CustomFieldSecurityType.Read, BusinessLogic.CustomFields.CustomFieldSecurityType.Write)
 

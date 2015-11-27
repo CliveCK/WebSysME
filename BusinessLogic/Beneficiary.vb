@@ -21,7 +21,7 @@ Public Class Beneficiary
     Protected mContactNo As long
     Protected mCondition As long
     Protected mAttendance As Long
-    Protected mIsDependant As Int16
+    Protected mIsDependant As Integer
     Protected mDisability As long
     Protected mDateOfBirth As string
     Protected mCreatedDate As string
@@ -163,11 +163,11 @@ Public Class Beneficiary
         End Set
     End Property
 
-    Public Property IsDependant() As Int16
+    Public Property IsDependant() As Integer
         Get
             Return mIsDependant
         End Get
-        Set(ByVal value As Int16)
+        Set(ByVal value As Integer)
             mIsDependant = value
         End Set
     End Property
@@ -465,6 +465,14 @@ End Sub
 
     End Function
 
+    Public Function GetBeneficiaryHousehold(ByVal BeneficiaryID As Long) As DataSet
+
+        Dim sql As String = "SELECT * FROM tblBeneficiaries WHERE ParentID = " & BeneficiaryID & " OR BeneficiaryID = " & BeneficiaryID
+
+        Return GetBeneficiary(sql)
+
+    End Function
+
     Protected Overridable Function GetBeneficiary(ByVal sql As String) As DataSet 
 
         Return db.ExecuteDataSet(CommandType.Text, sql) 
@@ -506,7 +514,7 @@ End Sub
             mNationlIDNo = Catchnull(.Item("NationlIDNo"), "")
             mHouseNo = Catchnull(.Item("HouseNo"), "")
             mSerialNo = Catchnull(.Item("SerialNo"), "")
-            mParentID = Catchnull(.Item("ParentID"), "")
+            mParentID = Catchnull(.Item("ParentID"), 0)
 
         End With 
 
@@ -618,7 +626,7 @@ Public Overridable Function Save() As Boolean
 
             Dim cmd As Common.DbCommand = db.GetStoredProcCommand("sp_GenerateNextSuffix")
 
-            db.AddInParameter(cmd, "@ParentID", DbType.String, mParentID)
+            db.AddInParameter(cmd, "@ParentID", DbType.String, IIf(mIsDependant = 0, mBeneficiaryID, mParentID))
 
             Return db.ExecuteScalar(cmd)
 

@@ -71,7 +71,7 @@ Partial Class ProcumentDetailsControl
 
         Try
 
-            Dim objProcument As New Procument(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+            Dim objProcument As New Procument(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProcument
 
@@ -112,7 +112,7 @@ Partial Class ProcumentDetailsControl
 
         Try
 
-            Dim objProcument As New Procument(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+            Dim objProcument As New Procument(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProcument
 
@@ -183,7 +183,7 @@ Partial Class ProcumentDetailsControl
 
     Public Sub LoadGrid()
 
-        Dim objSurvey As New BusinessLogic.Survey("Demo", 1)
+        Dim objSurvey As New BusinessLogic.Survey(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objSurvey.GetSurvey("SELECT * FROM tblProcument where ProjectID = " & objUrlEncoder.Decrypt(Request.QueryString("id")))
 
         With radProcumentListing

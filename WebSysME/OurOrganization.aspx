@@ -15,7 +15,7 @@
                             </telerik:GridBoundColumn>
                              <telerik:GridBoundColumn DataField="Name" UniqueName="OfficeName" HeaderText="Office Name"  >
                             </telerik:GridBoundColumn>
-                            <telerik:GridBoundColumn DataField="Phone" UniqueName="Phone" HeaderText="Phone">
+                            <telerik:GridBoundColumn DataField="ContactNo" UniqueName="Phone" HeaderText="Phone">
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Fax" UniqueName="Fax" HeaderText="Fax">
                             </telerik:GridBoundColumn>
@@ -60,7 +60,7 @@
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="ContactNo" UniqueName="Address" HeaderText="Phone">
                             </telerik:GridBoundColumn>
-                            <telerik:GridBoundColumn DataField="Email" UniqueName="Email" HeaderText="Email">
+                            <telerik:GridBoundColumn DataField="EmailAddress" UniqueName="Email" HeaderText="Email">
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Office" UniqueName="Office" HeaderText="Office">
                             </telerik:GridBoundColumn>

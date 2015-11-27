@@ -4,7 +4,7 @@ Imports Microsoft.Practices.EnterpriseLibrary.Data
 Partial Class TripCostsDetailsControl
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
 #Region "Status Messages"
 
@@ -69,7 +69,7 @@ Partial Class TripCostsDetailsControl
 
         Try
 
-            Dim objTripCosts As New TripCosts(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+            Dim objTripCosts As New TripCosts(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objTripCosts
 
@@ -107,7 +107,7 @@ Partial Class TripCostsDetailsControl
 
         Try
 
-            Dim objTripCosts As New TripCosts(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+            Dim objTripCosts As New TripCosts(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objTripCosts
 
@@ -191,7 +191,7 @@ Partial Class TripCostsDetailsControl
 
             If e.CommandName = "Delete" Then
 
-                Dim objTripCosts As New TripCosts("Demo", 1)
+                Dim objTripCosts As New TripCosts(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objTripCosts
 

@@ -6,13 +6,14 @@
     <br />
         <asp:Button ID="cmdAddNew" runat="server" Text="Add New" CssClass="btn btn-default"/>
     <telerik:RadGrid ID="radContacts" runat="server" GridLines="None" Height="80%" 
-                    CellPadding="0" Width="100%">
-                    <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" 
-                       AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced" DataKeyNames="OrganizationID">
+                    CellPadding="0" Width="90%" AutoGenerateColumns="false" >
+                    <MasterTableView  AllowFilteringByColumn="True" AllowPaging="True" 
+                       AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced" DataKeyNames="OrganizationID"
+                        HierarchyLoadMode="Client" >
                         <Columns>
-                            <telerik:GridBoundColumn DataField="OrganizationID" UniqueName="OrganizationID" HeaderText="OrganizationID"
-                                Display="false">
-                            </telerik:GridBoundColumn>
+                            <telerik:GridButtonColumn ButtonType="LinkButton" Text="Edit Details" UniqueName="column"
+                                CommandName="View">
+                            </telerik:GridButtonColumn>
                              <telerik:GridBoundColumn DataField="OrganizationType" UniqueName="OrganizationType" HeaderText="Organization Type"  >
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Name" UniqueName="Name" HeaderText="Name">
@@ -23,7 +24,7 @@
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Address" UniqueName="Address" HeaderText="Address">
                             </telerik:GridBoundColumn>
-                            <telerik:GridBoundColumn DataField="Email" UniqueName="Email" HeaderText="Email">
+                            <telerik:GridBoundColumn DataField="EmailAddress" UniqueName="Email" HeaderText="Email">
                             </telerik:GridBoundColumn>
                         </Columns>
                         <DetailTables>

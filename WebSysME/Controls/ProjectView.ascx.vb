@@ -8,7 +8,7 @@ Public Class ProjectView
     Private dsFileTypes As DataSet
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
 
     Private Sub Page_Init(sender As Object, e As EventArgs) Handles Me.Init
@@ -21,9 +21,25 @@ Public Class ProjectView
 
     End Sub
 
+    Private Sub LoadProjectDetails(ByVal nodeText As String)
+
+        Dim objProject As New BusinessLogic.Projects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+        If objProject.Retrieve(objUrlEncoder.Decrypt(Request.QueryString("id"))) Then
+
+            lblProject.Text = objProject.Name & " - " & nodeText
+            lblProject.ForeColor = Drawing.Color.DarkBlue
+
+        End If
+
+
+    End Sub
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not Page.IsPostBack Then
+
+            LoadProjectDetails("")
 
         End If
 
@@ -41,9 +57,11 @@ Public Class ProjectView
         radFileListing.Visible = False
         radListing.Visible = False
 
+        LoadProjectDetails(radProjectTree.SelectedNode.Text)
+
         If CheckFileType(radProjectTree.SelectedNode.Value) Then
 
-            Dim objFiles As New BusinessLogic.Files("Demo", 1)
+            Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With radFileListing
 
@@ -144,7 +162,7 @@ Public Class ProjectView
         If radProjectTree.SelectedNode.Value = "Community" Then
 
             Dim sql As String = "SELECT Name, C.Description, NoOfHouseholds ,NoOfIndividualAdultMales, NoOfIndividualAdultFemales, NoOfMaleYouths "
-            sql &= " ,NoOfFemaleYouths, NoOfChildren FROM tblCommunities C inner join tblProjectObjects PO "
+            sql &= " ,NoOfFemaleYouth, NoOfChildren FROM tblCommunities C inner join tblProjectObjects PO "
             sql &= " on C.CommunityID = PO.ObjectID INNER JOIN luObjectTypes OT on OT.ObjectTypeID = PO.ObjectTypeID "
             sql &= " WHERE PO.ProjectID = " & txtProjectID.Text & " AND OT.Description = 'Community'"
 
@@ -235,7 +253,7 @@ Public Class ProjectView
 
     Public Function CheckFileType(ByVal FileType As String) As Boolean
 
-        Dim objFiles As New BusinessLogic.Files("Demo", 1)
+        Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         dsFileTypes = objFiles.GetFileTypes()
 

@@ -8,7 +8,7 @@ Partial Public Class DataPage
     Private DataLookup As BusinessLogic.CommonFunctions
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        'Dim db As Database = DatabaseFactory.CreateDatabase("ConnectionString")
+        'Dim db As Database = New DatabaseProviderFactory().Create("ConnectionString")
 
         'Select Case Request.QueryString("op")
 
@@ -65,7 +65,7 @@ Partial Public Class DataPage
     '    End If
 
     '    sql &= "SELECT TOP " & count & " LI.CategoryID AS [value], LI.Full_Desc AS [caption] " & vbCrLf
-    '    sql &= "FROM " & IIf(secure, "fnGetAllowedLocations(" & CookiesWrapper.UserID & ")", "Categories") & " LI " & vbCrLf
+    '    sql &= "FROM " & IIf(secure, "fnGetAllowedLocations(" & CookiesWrapper.thisUserID & ")", "Categories") & " LI " & vbCrLf
     '    sql &= "    INNER JOIN luCategoryTypes LT ON LI.[CategoryTypeID] = LT.[CategoryTypeID] " & vbCrLf
     '    If crit <> "" Then sql &= "WHERE " & crit & vbCrLf
     '    If typeCrit <> "" Then sql &= IIf(String.IsNullOrEmpty(crit), "WHERE ", vbTab & "AND ") & typeCrit & vbCrLf
@@ -97,7 +97,7 @@ Partial Public Class DataPage
     '    End If
 
     '    sql &= "SELECT TOP 150 LI.Full_Desc AS [value], LI.Full_Desc AS [caption] " & vbCrLf
-    '    sql &= "FROM " & IIf(secure, "fnGetAllowedLocations(" & CookiesWrapper.UserID & ")", "Categories") & " LI " & vbCrLf
+    '    sql &= "FROM " & IIf(secure, "fnGetAllowedLocations(" & CookiesWrapper.thisUserID & ")", "Categories") & " LI " & vbCrLf
     '    sql &= "    INNER JOIN luCategoryTypes LT ON LI.[CategoryTypeID] = LT.[CategoryTypeID] " & vbCrLf
     '    If crit <> "" Then sql &= "WHERE " & crit & vbCrLf
     '    If typeCrit <> "" Then sql &= IIf(String.IsNullOrEmpty(crit), "WHERE ", vbTab & "AND ") & typeCrit & vbCrLf
@@ -117,7 +117,7 @@ Partial Public Class DataPage
 
     '    Dim sql As String = ""
     '    sql &= "SELECT TOP 30 PrgID AS [value], Full_Desc AS [caption] " & vbCrLf
-    '    sql &= "FROM fnGetAllowedFolders(" & CookiesWrapper.UserID & ") " & vbCrLf
+    '    sql &= "FROM fnGetAllowedFolders(" & CookiesWrapper.thisUserID & ") " & vbCrLf
     '    sql &= "WHERE Full_Desc LIKE N'%" & Query.Replace("'", "''") & "%'" & vbCrLf
     '    sql &= "ORDER BY Full_Desc"
 
@@ -135,7 +135,7 @@ Partial Public Class DataPage
 
     '    Dim sql As String = ""
     '    sql &= "SELECT TOP 30 P.Project_ID AS [value], R1.Root + ' > ' + P.Project_Number AS [caption] " & vbCrLf
-    '    sql &= "FROM fnGetAllowedProjects(" & CookiesWrapper.UserID & ") P " & vbCrLf
+    '    sql &= "FROM fnGetAllowedProjects(" & CookiesWrapper.thisUserID & ") P " & vbCrLf
     '    sql &= "	INNER JOIN Contacts R ON P.Client_ID = R.Root_ID AND R.Parent = '-Root-' " & vbCrLf
     '    sql &= "	INNER JOIN Lookup_Root R1 ON R1.Root_ID = R.Root_ID AND R.Parent = '-Root-' " & vbCrLf
     '    sql &= "WHERE R1.[Root] LIKE N'%" & Query.Replace("'", "''") & "%' OR P.Project_Number LIKE N'%" & Query.Replace("'", "''") & "%' " & vbCrLf

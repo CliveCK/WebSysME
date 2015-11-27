@@ -5,28 +5,28 @@
 <asp:Panel ID="Panel1" runat="server" GroupingText="Search Users" Width="100%">
 <table width="100%">
     <tr>
-        <td colspan="4" rowspan="1">
+        <td rowspan="1">
             <asp:Panel ID="pnlFindUsers" runat="server" Height="100px" Width="100%">
                 <table width="100%">
                     <tr>
                         <td>
                             Username</td>
                         <td>
-                            <asp:TextBox ID="txtUsername" runat="server"></asp:TextBox></td>
+                            <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control"></asp:TextBox></td>
                         <td>
                             Surname</td>
                         <td>
-                            <asp:TextBox ID="txtSurname" runat="server"></asp:TextBox></td>
+                            <asp:TextBox ID="txtSurname" runat="server" CssClass="form-control"></asp:TextBox></td>
                     </tr>
                     <tr>
                         <td>
                             Firstname</td>
                         <td>
-                            <asp:TextBox ID="txtFirstName" runat="server"></asp:TextBox></td>
+                            <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control"></asp:TextBox></td>
                         <td>
                             Email Address</td>
                         <td>
-                            <asp:TextBox ID="txtEmailAddress" runat="server"></asp:TextBox></td>
+                            <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="form-control"></asp:TextBox></td>
                     </tr>
                     <tr>
                         <td>
@@ -40,7 +40,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <asp:Button ID="cmdFind" runat="server" Text="Find User(s)" CssClass="submit" /></td>
+                            <asp:Button ID="cmdFind" runat="server" Text="Find User(s)" CssClass="btn btn-default" /></td>
                         <td>
                         </td>
                         <td>
@@ -49,15 +49,15 @@
                         </td>
                     </tr>
                 </table>
-            </asp:Panel>
-            
+            </asp:Panel><br /><br />
+          </td>   
     </tr>
     <tr>
             <td class="PageTitle" style="width: 100%">
                <asp:Label ID="lblCurrentUser" runat="server"></asp:Label></td>
         </tr>
     <tr>
-        <td colspan="4">
+        <td>
             <telerik:RadGrid ID="rdResults" runat="server" AutoGenerateColumns="False" AllowPaging="True"
                 AllowMultiRowSelection="True" CellSpacing="0" GridLines="None" >
                 <ExportSettings>
@@ -92,6 +92,8 @@
                                 <ModelErrorMessage Text="" />
                             </ColumnValidationSettings>
                         </telerik:GridBoundColumn>
+                        <telerik:GridBoundColumn DataField="Deleted" Display="False" HeaderText="Deleted" UniqueName="Deleted">
+                        </telerik:GridBoundColumn>
                         <telerik:GridButtonColumn CommandArgument="UserID" CommandName="Select" DataTextField="Username" HeaderText="Username" UniqueName="Username">
                         </telerik:GridButtonColumn>
                         <telerik:GridBoundColumn DataField="UserFirstname" HeaderText="Firstname" UniqueName="Firstname">
@@ -109,8 +111,22 @@
                                 <ModelErrorMessage Text="" />
                             </ColumnValidationSettings>
                         </telerik:GridBoundColumn>
-                        <telerik:GridButtonColumn CommandArgument="UserID" CommandName="DeactivateUser" Text="Deactivate" UniqueName="DeactivateUser" FilterControlAltText="Filter DeactivateUser column">
-                        </telerik:GridButtonColumn>
+                             <telerik:GridTemplateColumn UniqueName="ActivateUser">
+                            <ItemTemplate>
+                                <asp:Button ID="btnAct" runat="server" CausesValidation="False" Visible="false"
+                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Deleted")%>' Text="Activate"
+                                    CommandName="ActivateUser" OnClientClick="javascript:return confirm('Are you sure you want to activate user?')"
+                                    CssClass="btn btn-default" />
+                            </ItemTemplate>
+                        </telerik:GridTemplateColumn>  
+                            <telerik:GridTemplateColumn UniqueName="DeactivateUser">
+                            <ItemTemplate>
+                                <asp:Button ID="btnDeact" runat="server"  CausesValidation="False" Visible="false"
+                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Deleted")%>' Text="Deactivate"
+                                    CommandName="DeactivateUser" OnClientClick="javascript:return confirm('Are you sure you want to deactivate user?')"
+                                    ToolTip="Click to deactivate " CssClass="btn btn-default"/>
+                            </ItemTemplate>
+                        </telerik:GridTemplateColumn> 
                     </Columns>
                     <BatchEditingSettings EditType="Cell" />
                     <PagerStyle PageSizeControlType="RadComboBox" />
@@ -122,25 +138,25 @@
             </telerik:RadGrid></td>
     </tr>
     <tr>
-        <td colspan="4">
+        <td>
             <asp:Label ID="lblStatus" runat="server" Height="24px" Width="100%" CssClass="Error"></asp:Label></td>
     </tr>
     <tr>
-        <td colspan="4" >
+        <td >
         </td>
-        <td colspan="3">
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4" align="right">
-            <asp:Button ID="cmdSavePermissions" runat="server" Text="Save Permissions" Display="False" /></td>
-        <td colspan="4">
+        <td>
         </td>
     </tr>
     <tr>
-        <td colspan="4">
+        <td align="right">
+            <asp:Button ID="cmdSavePermissions" runat="server" Text="Save Permissions" Visible="False" /></td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <asp:Label ID="lblMsg" runat="server" CssClass="Error"></asp:Label></td>
-        <td colspan="3">
+        <td>
         </td>
     </tr>
 </table>

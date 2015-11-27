@@ -1,8 +1,8 @@
 <%@ Control Language="vb" AutoEventWireup="false" CodeBehind="CreateNewUserControl.ascx.vb"
     Inherits="WebSysME.CreateNewUserControl" %>
-<asp:Panel ID="Panel1" runat="server" GroupingText="   User Details" Width="100%" >
+<asp:Panel ID="Panel1" runat="server" GroupingText="   User Details" Width="100%" style="margin-left:2%">
 
-    <table width="100%" cellpadding="3" style="margin-left:2%">
+    <table width="100%" cellpadding="3" >
         <tr>
             <td style="height: 21px; width: 131px;">Username
             </td>
@@ -17,14 +17,16 @@
             <td style="height: 21px; width: 131px;">Password
             </td>
             <td colspan="2" style="height: 21px" nowrap="nowrap">
-                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control"></asp:TextBox>
+                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" Width="287px"></asp:TextBox>
                 <asp:CustomValidator ID="cvMinLength" runat="server" ControlToValidate="txtPassword" ValidateEmptyText="True"
                     ClientValidationFunction="clientValidate" Display="Dynamic"></asp:CustomValidator>
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtPassword"
                     ErrorMessage="Enter password"></asp:RequiredFieldValidator>
                  <asp:CompareValidator ID="cvPasswordStrength" runat="server" ValueToCompare="3" Type="Integer"
-                    ControlToValidate="txtPasswordStrength" Operator = "LessThan" ErrorMessage="Passwords to weak"></asp:CompareValidator>
-
+                    ControlToValidate="txtPasswordStrength" Operator = "LessThan" ErrorMessage="Passwords to weak"></asp:CompareValidator><br />
+                <label for="chkShowPassword">
+                <input type="checkbox" id="chkShowPassword" />
+                Show password</label><label style="color:red;font-size:8pt">&nbsp; (please note that this is not recommended)</label>
             </td>
         </tr>
         <tr>
@@ -76,7 +78,7 @@
             <td valign="top" style="width: 131px">User Group
             </td>
             <td colspan="2" valign="top">
-                <asp:CheckBoxList ID="chkUserGroup" runat="server" RepeatDirection="Horizontal" CssClass="form-control">
+                <asp:CheckBoxList ID="chkUserGroup" runat="server" RepeatDirection="Horizontal" >
                 </asp:CheckBoxList>
             </td>
         </tr>
@@ -84,11 +86,9 @@
             <td>
                 <asp:Label ID="lblPasswordExpires" runat="server" Text="Password Expires"></asp:Label>
             </td>
-            <td colspan="2">
-                <asp:CheckBox ID="chkPasswordExpires" runat="server" onclick="enableTextBox()" />
-                <asp:Label ID="lblAfter" runat="server" Text="After"></asp:Label>
-                <asp:TextBox ID="txtPasswordValidityPeriod" runat="server" Width="50px" CssClass="form-control"></asp:TextBox>
-                <asp:Label ID="lblDays" runat="server" Text="Days" ></asp:Label>
+            <td colspan="4">
+                <asp:CheckBox ID="chkPasswordExpires" runat="server" onclick="enableTextBox()" /><label>After</label>
+                <asp:TextBox ID="txtPasswordValidityPeriod" runat="server" Width="50px" CssClass="form-control" Enabled="false"></asp:TextBox><label>Days</label>
             </td>
         </tr>
         <tr>
@@ -116,6 +116,7 @@
                 <asp:Label ID="lblStatus" Width="100%" runat="server" CssClass="Error"></asp:Label>
             </td>
         </tr>
+       
         <tr>
             <td colspan="2">
                 <asp:Button ID="cmdSave" runat="server" Text="Save" CssClass="btn btn-default" Width="56px" />
@@ -127,18 +128,38 @@
             </td>
         </tr>
     </table>
-
+    <br />
+    <asp:Panel runat="server" ID="pnlLinkAccounts" GroupingText="Link Account to Profile" Font-Size="14px" Visible="false">
+        <p style="color:red;font-size:8pt">This sections allows linking of <b>User account</b> to <b>Staff profile</b></p><br />
+        <b>Status:</b><asp:Label runat="server" ID="lblLinkStatus" ></asp:Label><br /><br />
+        Linked to:<br /> <asp:ListBox runat="server" ID="lstStaffMembers" Height="180px" Width="250px"></asp:ListBox><br />
+        <asp:Button runat="server" ID="cmdLink" Text="Link" CssClass="btn btn-default"/>
+    </asp:Panel>
+    <script type="text/javascript">
+        $(function () {
+            $("#chkShowPassword").bind("click", function () {
+                var txtPassword = $("[id*=txtPassword]");
+                if ($(this).is(":checked")) {
+                    txtPassword.after('<input onchange = "PasswordChanged(this);" id = "txt_' + txtPassword.attr("id") + '" width="287px" type = "text" Class="btn btn-default" value = "' + txtPassword.val() + '" /><br />');
+                    txtPassword.hide();
+                } else {
+                    txtPassword.val(txtPassword.next().val());
+                    txtPassword.next().remove();
+                    txtPassword.show();
+                }
+            });
+        });
+        function PasswordChanged(txt) {
+            $(txt).prev().val($(txt).val());
+        }
+</script>
     <script language="javascript" type="text/javascript">
         function enableTextBox() {
             if (document.getElementById('<%= chkPasswordExpires.ClientID %>').checked == false) {
-                document.getElementById('<%= lblAfter.ClientID %>').disabled = true;
                 document.getElementById('<%= txtPasswordValidityPeriod.ClientID %>').disabled = true;
-                document.getElementById('<%= lblDays.ClientID %>').disabled = true;
             }
             else {
-                document.getElementById('<%= lblAfter.ClientID %>').disabled = false;
                 document.getElementById('<%= txtPasswordValidityPeriod.ClientID %>').disabled = false;
-                document.getElementById('<%= lblDays.ClientID %>').disabled = false;
             }
         }
         document.getElementById("strength").style.display = "none";

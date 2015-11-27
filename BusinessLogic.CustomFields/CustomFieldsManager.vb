@@ -46,7 +46,7 @@ Public Class CustomFieldsManager
     Sub New(ByVal ConnectionName As String, UserID As Long)
 
         Me.ConnectionName = ConnectionName
-        db = DatabaseFactory.CreateDatabase(ConnectionName)
+        db = New DatabaseProviderFactory().Create(ConnectionName)
         Me.ObjectUserID = UserID
 
     End Sub
@@ -312,14 +312,18 @@ Public Class CustomFieldsManager
             Dim AutomatorTypeIdentifier As String = String.Empty
 
             Select Case AutomatorType
-                Case AutomatorTypes.ContactStatus
-                    AutomatorTypeIdentifier = "CS"
-                Case AutomatorTypes.ContactType
-                    AutomatorTypeIdentifier = "CT"
-                Case AutomatorTypes.ProjectStatus
-                    AutomatorTypeIdentifier = "PS"
-                Case AutomatorTypes.ProjectType
-                    AutomatorTypeIdentifier = "PT"
+                Case AutomatorTypes.Project
+                    AutomatorTypeIdentifier = "P"
+                Case AutomatorTypes.HealthCenter
+                    AutomatorTypeIdentifier = "H"
+                Case AutomatorTypes.School
+                    AutomatorTypeIdentifier = "S"
+                Case AutomatorTypes.Organization
+                    AutomatorTypeIdentifier = "O"
+                Case AutomatorTypes.Community
+                    AutomatorTypeIdentifier = "C"
+                Case AutomatorTypes.Group
+                    AutomatorTypeIdentifier = "G"
             End Select
 
             sql.AppendLine("INSERT INTO [CustomField_ObjectTemplates] (TemplateID, ObjectID, ObjectType, CreatedBy)")
@@ -372,7 +376,7 @@ Public Class CustomFieldsManager
         'TODOL: Implement ObjectType
 
         Select Case ObjectType.Trim
-            Case "P", "C", "L"
+            Case "P", "C", "S", "H", "O", "G"
                 ObjectType = ObjectType.Trim
             Case Else
                 'invalid entity type. we'll clear and just do for everything
@@ -391,16 +395,16 @@ Public Class CustomFieldsManager
                 sql.AppendLine("	SELECT DISTINCT T.CustomFieldID, CFT.TemplateName, F.ObjectID, F.FieldName, T.FieldType, T.DisplayIndex, F.ObjectType ")
                 sql.AppendLine("	FROM CustomField_ObjectTemplates U")
                 sql.AppendLine("		INNER JOIN CustomField_Templates CFT ON U.TemplateID = CFT.TemplateID AND CFT.TemplateType != 'Grid'")
-                sql.AppendLine("		INNER JOIN Contacts P ON U.ObjectID = P.ContactID AND U.ObjectType = 'C'")
-                sql.AppendLine("		INNER JOIN CustomField_ObjectData F ON F.ObjectID = P.ContactID AND F.ObjectType = 'C'")
+                sql.AppendLine("		INNER JOIN tblCommunities P ON U.ObjectID = P.CommunityID AND U.ObjectType = 'C'")
+                sql.AppendLine("		INNER JOIN CustomField_ObjectData F ON F.ObjectID = P.CommunityID AND F.ObjectType = 'C'")
                 sql.AppendLine("		INNER JOIN CustomField_Fields T ON F.CustomFieldID = T.CustomFieldID AND U.TemplateID = T.TemplateID")
                 sql.AppendLine("	WHERE CFT.TemplateName IS NOT NULL")
-                If ObjectID > 0 Then sql.AppendLine("	AND P.ContactID = " & ObjectID)
+                If ObjectID > 0 Then sql.AppendLine("	AND P.CommunityID = " & ObjectID)
                 sql.AppendLine("")
 
             End If
 
-            If String.IsNullOrEmpty(ObjectType) OrElse ObjectType.Equals("L") Then
+            If String.IsNullOrEmpty(ObjectType) OrElse ObjectType.Equals("H") Then
 
                 If String.IsNullOrEmpty(ObjectType) Then sql.AppendLine("	UNION")
 
@@ -408,11 +412,28 @@ Public Class CustomFieldsManager
                 sql.AppendLine("	SELECT DISTINCT T.CustomFieldID, CFT.TemplateName, F.ObjectID, F.FieldName, T.FieldType, T.DisplayIndex, F.ObjectType ")
                 sql.AppendLine("	FROM CustomField_ObjectTemplates U")
                 sql.AppendLine("		INNER JOIN CustomField_Templates CFT ON U.TemplateID = CFT.TemplateID AND CFT.TemplateType != 'Grid'")
-                sql.AppendLine("		INNER JOIN Categories L ON U.ObjectID = L.CategoryID AND U.ObjectType = 'L'")
-                sql.AppendLine("		INNER JOIN CustomField_ObjectData F ON F.ObjectID = L.CategoryID AND F.ObjectType = 'L'")
+                sql.AppendLine("		INNER JOIN tblHealthCenters L ON U.ObjectID = L.HealthCenterID AND U.ObjectType = 'H'")
+                sql.AppendLine("		INNER JOIN CustomField_ObjectData F ON F.ObjectID = L.HealthCenterID AND F.ObjectType = 'H'")
                 sql.AppendLine("		INNER JOIN CustomField_Fields T ON F.CustomFieldID = T.CustomFieldID AND U.TemplateID = T.TemplateID")
                 sql.AppendLine("	WHERE CFT.TemplateName IS NOT NULL")
-                If ObjectID > 0 Then sql.AppendLine("	AND L.CategoryID = " & ObjectID)
+                If ObjectID > 0 Then sql.AppendLine("	AND L.HealthCenterID = " & ObjectID)
+                sql.AppendLine("")
+
+            End If
+
+            If String.IsNullOrEmpty(ObjectType) OrElse ObjectType.Equals("O") Then
+
+                If String.IsNullOrEmpty(ObjectType) Then sql.AppendLine("	UNION")
+
+                sql.AppendLine("")
+                sql.AppendLine("	SELECT DISTINCT T.CustomFieldID, CFT.TemplateName, F.ObjectID, F.FieldName, T.FieldType, T.DisplayIndex, F.ObjectType ")
+                sql.AppendLine("	FROM CustomField_ObjectTemplates U")
+                sql.AppendLine("		INNER JOIN CustomField_Templates CFT ON U.TemplateID = CFT.TemplateID AND CFT.TemplateType != 'Grid'")
+                sql.AppendLine("		INNER JOIN tblOrganization L ON U.ObjectID = L.OrganizationID AND U.ObjectType = 'O'")
+                sql.AppendLine("		INNER JOIN CustomField_ObjectData F ON F.ObjectID = L.OrganizationID AND F.ObjectType = 'O'")
+                sql.AppendLine("		INNER JOIN CustomField_Fields T ON F.CustomFieldID = T.CustomFieldID AND U.TemplateID = T.TemplateID")
+                sql.AppendLine("	WHERE CFT.TemplateName IS NOT NULL")
+                If ObjectID > 0 Then sql.AppendLine("	AND L.OrganizationID = " & ObjectID)
                 sql.AppendLine("")
 
             End If
@@ -425,11 +446,28 @@ Public Class CustomFieldsManager
                 sql.AppendLine("	SELECT DISTINCT T.CustomFieldID, CFT.TemplateName, F.ObjectID, F.FieldName, T.FieldType, T.DisplayIndex, F.ObjectType ")
                 sql.AppendLine("	FROM CustomField_ObjectTemplates U")
                 sql.AppendLine("		INNER JOIN CustomField_Templates CFT ON U.TemplateID = CFT.TemplateID AND CFT.TemplateType != 'Grid'")
-                sql.AppendLine("		INNER JOIN Projects P ON U.ObjectID = P.ProjectID AND U.ObjectType = 'P'")
-                sql.AppendLine("		LEFT OUTER JOIN CustomField_ObjectData F ON F.ObjectID = P.ProjectID AND F.ObjectType = 'P'")
+                sql.AppendLine("		INNER JOIN tblProjects P ON U.ObjectID = P.Project AND U.ObjectType = 'P'")
+                sql.AppendLine("		LEFT OUTER JOIN CustomField_ObjectData F ON F.ObjectID = P.Project AND F.ObjectType = 'P'")
                 sql.AppendLine("		INNER JOIN CustomField_Fields T ON F.CustomFieldID = T.CustomFieldID AND U.TemplateID = T.TemplateID")
                 sql.AppendLine("	WHERE CFT.TemplateName IS NOT NULL")
-                If ObjectID > 0 Then sql.AppendLine("	AND P.ProjectID = " & ObjectID)
+                If ObjectID > 0 Then sql.AppendLine("	AND P.Project = " & ObjectID)
+                sql.AppendLine("")
+
+            End If
+
+            If String.IsNullOrEmpty(ObjectType) OrElse ObjectType.Equals("S") Then
+
+                If String.IsNullOrEmpty(ObjectType) Then sql.AppendLine("	UNION")
+
+                sql.AppendLine("")
+                sql.AppendLine("	SELECT DISTINCT T.CustomFieldID, CFT.TemplateName, F.ObjectID, F.FieldName, T.FieldType, T.DisplayIndex, F.ObjectType ")
+                sql.AppendLine("	FROM CustomField_ObjectTemplates U")
+                sql.AppendLine("		INNER JOIN CustomField_Templates CFT ON U.TemplateID = CFT.TemplateID AND CFT.TemplateType != 'Grid'")
+                sql.AppendLine("		INNER JOIN tblSchools L ON U.ObjectID = L.SchoolID AND U.ObjectType = 'S'")
+                sql.AppendLine("		INNER JOIN CustomField_ObjectData F ON F.ObjectID = L.SchoolID AND F.ObjectType = 'S'")
+                sql.AppendLine("		INNER JOIN CustomField_Fields T ON F.CustomFieldID = T.CustomFieldID AND U.TemplateID = T.TemplateID")
+                sql.AppendLine("	WHERE CFT.TemplateName IS NOT NULL")
+                If ObjectID > 0 Then sql.AppendLine("	AND L.SchoolID = " & ObjectID)
                 sql.AppendLine("")
 
             End If

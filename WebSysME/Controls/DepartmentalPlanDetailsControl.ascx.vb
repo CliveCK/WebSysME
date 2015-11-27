@@ -37,8 +37,8 @@ Partial Class DepartmentalPlanDetailsControl
 
             With cboStatus
 
-                .DataSource = objLookup.Lookup("tblOrganizationalPlan", "OrganizationalPlanID", "Activity").Tables(0)
-                .DataValueField = "OrganizationalPlanID"
+                .DataSource = objLookup.Lookup("tblOrganizationalPlan", "OrganizationPlanID", "Activity").Tables(0)
+                .DataValueField = "OrganizationPlanID"
                 .DataTextField = "Activity"
                 .DataBind()
 
@@ -73,7 +73,7 @@ Partial Class DepartmentalPlanDetailsControl
 
         Try
 
-            Dim objDepartmentalPlan As New DepartmentalPlan("Demo", 1)
+            Dim objDepartmentalPlan As New DepartmentalPlan(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objDepartmentalPlan
 
@@ -113,7 +113,7 @@ Partial Class DepartmentalPlanDetailsControl
 
         Try
 
-            Dim objDepartmentalPlan As New DepartmentalPlan("Demo", 1)
+            Dim objDepartmentalPlan As New DepartmentalPlan(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objDepartmentalPlan
 

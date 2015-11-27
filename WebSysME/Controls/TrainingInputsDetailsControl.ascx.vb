@@ -5,7 +5,7 @@ Imports Telerik.Web.UI
 Partial Class TrainingInputsDetailsControl
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
 
 #Region "Status Messages"
@@ -78,7 +78,7 @@ Partial Class TrainingInputsDetailsControl
 
         Try
 
-            Dim objTrainingInputs As New TrainingInputs("Demo", 1)
+            Dim objTrainingInputs As New TrainingInputs(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objTrainingInputs
 
@@ -114,7 +114,7 @@ Partial Class TrainingInputsDetailsControl
 
         Try
 
-            Dim objTrainingInputs As New TrainingInputs("Demo", 1)
+            Dim objTrainingInputs As New TrainingInputs(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objTrainingInputs
 
@@ -171,7 +171,7 @@ Partial Class TrainingInputsDetailsControl
 
                 Case "Delete"
 
-                    Dim objTraininInputs As New BusinessLogic.TrainingInputs("Demo", 1)
+                    Dim objTraininInputs As New BusinessLogic.TrainingInputs(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objTraininInputs
 

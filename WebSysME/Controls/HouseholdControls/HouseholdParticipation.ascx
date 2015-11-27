@@ -17,7 +17,9 @@
             <td>
                 <asp:Button runat="server" ID="cmdMapIntervention" Text="Select Intervention" CssClass="btn btn-default"/><br />
                 <telerik:RadGrid ID="radInterventions" runat="server" GridLines="None" Height="100%" 
-                    AllowFilteringByColumn="True" CellPadding="0" Width="100%">
+                    AllowFilteringByColumn="True" CellPadding="0" Width="100%" AllowMultiRowSelection="true" >
+                     <ClientSettings Selecting-AllowRowSelect ="true">
+                        </ClientSettings>
                     <MasterTableView AutoGenerateColumns="False" AllowPaging="True"  PagerStyle-Mode="NextPrevNumericAndAdvanced">
                         <CommandItemSettings ExportToPdfText="Export to Pdf"></CommandItemSettings>
                         <Columns>
@@ -33,8 +35,6 @@
                             </telerik:GridBoundColumn>
                         </Columns>
                     </MasterTableView>
-                    <ClientSettings>
-                    </ClientSettings>
                     <FilterMenu EnableImageSprites="False">
                     </FilterMenu>
                 </telerik:RadGrid>
@@ -61,8 +61,8 @@
                             </telerik:GridBoundColumn>
                         </Columns>
                     </MasterTableView>
-                    <ClientSettings>
-                    </ClientSettings>
+                    <ClientSettings Selecting-AllowRowSelect ="true">
+                        </ClientSettings>
                     <FilterMenu EnableImageSprites="False">
                     </FilterMenu>
                 </telerik:RadGrid>

@@ -14,11 +14,12 @@
                             <telerik:GridBoundColumn DataField="SchoolID" UniqueName="SchoolID" HeaderText="SchoolID"
                                 Display="false">
                             </telerik:GridBoundColumn>
+                             <telerik:GridButtonColumn ButtonType="LinkButton" Text="Edit Details" UniqueName="column"
+                                CommandName="View">
+                            </telerik:GridButtonColumn>
                             <telerik:GridBoundColumn DataField="SchoolType" UniqueName="SchoolType" HeaderText="SchoolType">
                             </telerik:GridBoundColumn> 
                              <telerik:GridBoundColumn DataField="Name" UniqueName="Name" HeaderText="Name"  >
-                            </telerik:GridBoundColumn>
-                             <telerik:GridBoundColumn DataField="Description" UniqueName="Description" HeaderText="Description"  >
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="StaffCompliment" UniqueName="StaffCompliment" HeaderText="StaffCompliment">
                             </telerik:GridBoundColumn>

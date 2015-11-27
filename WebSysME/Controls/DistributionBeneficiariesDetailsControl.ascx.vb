@@ -6,7 +6,7 @@ Partial Class DistributionBeneficiariesDetailsControl
     Inherits System.Web.UI.UserControl
 
     Dim ds As DataSet
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
@@ -115,7 +115,7 @@ Partial Class DistributionBeneficiariesDetailsControl
 
             For i As Long = 0 To Beneficiary.Length - 1
 
-                Dim objDistributionBeneficiaries As New BusinessLogic.DistributionBeneficiaries("Demo", 1)
+                Dim objDistributionBeneficiaries As New BusinessLogic.DistributionBeneficiaries(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objDistributionBeneficiaries
 
@@ -216,7 +216,7 @@ Partial Class DistributionBeneficiariesDetailsControl
 
         Try
 
-            Dim objDistributionBeneficiaries As New DistributionBeneficiaries("Demo", 1)
+            Dim objDistributionBeneficiaries As New DistributionBeneficiaries(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objDistributionBeneficiaries
 
@@ -296,7 +296,7 @@ Partial Class DistributionBeneficiariesDetailsControl
 
                 Case "Delete"
 
-                    Dim objAttendants As New BusinessLogic.DistributionBeneficiaries("Demo", 1)
+                    Dim objAttendants As New BusinessLogic.DistributionBeneficiaries(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objAttendants
 

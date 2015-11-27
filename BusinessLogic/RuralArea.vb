@@ -12,6 +12,8 @@ Public Class RuralArea
     Private mDistrict As String
     Private mWardID As Integer
     Private mWard As String
+    Private mVillageID As Integer
+    Private mVillage As String
     Private mObjectUserID As Integer
     Private mConnectionName As String
 
@@ -49,6 +51,25 @@ Public Class RuralArea
             mProvinceID = value
         End Set
     End Property
+
+    Public Property VillageID As Integer
+        Get
+            Return mVillageID
+        End Get
+        Set(value As Integer)
+            mVillageID = value
+        End Set
+    End Property
+
+    Public Property Village As String
+        Get
+            Return mVillage
+        End Get
+        Set(value As String)
+            mVillage = value
+        End Set
+    End Property
+
 
     Public Property Province As String
         Get
@@ -122,6 +143,9 @@ Public Class RuralArea
 
             Case "Ward"
                 sql = "INSERT INTO tblWards (Name, DistrictID, CreatedBy, CreatedDate) VALUES ('" & mWard & "', " & mDistrictID & ", 1, getdate())"
+
+            Case "Village"
+                sql = "INSERT INTO tblVillages (Name, WardID, CreatedBy, CreatedDate) VALUES ('" & mVillage & "', " & mWardID & ", 1, getdate())"
 
         End Select
 

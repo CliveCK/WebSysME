@@ -11,7 +11,7 @@
                     <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" 
                        AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced">
                         <Columns>
-                            <telerik:GridBoundColumn DataField="TrainingID" UniqueName="FileID" HeaderText="FileID"
+                            <telerik:GridBoundColumn DataField="TrainingID" UniqueName="TrainingID" HeaderText="TrainingID"
                                 Display="false">
                             </telerik:GridBoundColumn>   
                              <telerik:GridButtonColumn ButtonType="LinkButton" Text="Edit Details" UniqueName="column"

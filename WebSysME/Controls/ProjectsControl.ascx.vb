@@ -1,9 +1,13 @@
 ﻿Imports BusinessLogic
+Imports Telerik.Web.UI
+Imports SysPermissionsManager.Functionality
 
 Public Class ProjectsControl
     Inherits System.Web.UI.UserControl
 
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
+    Private objCustomFields As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
+    Private ProjectID As Long
 
 #Region "Status Messages"
 
@@ -30,17 +34,24 @@ Public Class ProjectsControl
 
 #End Region
 
+    Private Sub Page_Init(sender As Object, e As EventArgs) Handles Me.Init
+
+        If Not IsNothing(Request.QueryString("id")) Then
+
+            ProjectID = objUrlEncoder.Decrypt(Request.QueryString("id"))
+            phCustomFields.Controls.Add(objCustomFields.LoadCustomFieldsPanel(Page, ProjectID, "P", My.Settings.DisplayDateFormat))
+
+        End If
+
+    End Sub
+
 
     Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         If Not Page.IsPostBack Then
 
             LoadComboBoxes()
-            If Not IsNothing(Request.QueryString("id")) Then
-
-                LoadProjects(objUrlEncoder.Decrypt(Request.QueryString("id")))
-
-            End If
+            If ProjectID > 0 Then LoadProjects(ProjectID)
 
         End If
 
@@ -48,7 +59,15 @@ Public Class ProjectsControl
 
     Protected Sub cmdSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdSave.Click
 
-        Save()
+        If Not SystemInitialization.EnforceUserFunctionalitySecurity(FunctionalityEnum.AddOrEditProjects) Then
+
+            ShowMessage("You are not authorised to Add/Edit Project details!", MessageTypeEnum.Error)
+
+        Else
+
+            Save()
+
+        End If
 
     End Sub
 
@@ -56,11 +75,11 @@ Public Class ProjectsControl
 
         Dim objLookup As New BusinessLogic.CommonFunctions
 
-        With cboProgram
+        With cboStrategicObjective
 
-            .DataSource = objLookup.Lookup("tblProgrammes", "ProgramID", "Name").Tables(0)
-            .DataValueField = "ProgramID"
-            .DataTextField = "Name"
+            .DataSource = objLookup.Lookup("tblStrategicObjectives", "StrategicObjectiveID", "Code").Tables(0)
+            .DataValueField = "StrategicObjectiveID"
+            .DataTextField = "Code"
             .DataBind()
 
             .Items.Insert(0, New ListItem(String.Empty, String.Empty))
@@ -68,11 +87,11 @@ Public Class ProjectsControl
 
         End With
 
-        With cboSector
+        With cboKeyChangePromise
 
-            .DataSource = objLookup.Lookup("tblSector", "SectorID", "Name").Tables(0)
-            .DataValueField = "SectorID"
-            .DataTextField = "Name"
+            .DataSource = objLookup.Lookup("tblKeyChangePromises", "KeyChangePromiseID", "KeyChangePromiseNo").Tables(0)
+            .DataValueField = "KeyChangePromiseID"
+            .DataTextField = "KeyChangePromiseNo"
             .DataBind()
 
             .Items.Insert(0, New ListItem(String.Empty, String.Empty))
@@ -96,9 +115,9 @@ Public Class ProjectsControl
 
     Private Sub ClearSelection()
 
-        cboProgram.ClearSelection()
+        cboKeyChangePromise.ClearSelection()
         cboProjectManager.ClearSelection()
-        cboSector.ClearSelection()
+        cboStrategicObjective.ClearSelection()
 
     End Sub
 
@@ -106,7 +125,7 @@ Public Class ProjectsControl
 
         Try
 
-            Dim objProjects As New BusinessLogic.Projects("Demo", 1)
+            Dim objProjects As New BusinessLogic.Projects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProjects
 
@@ -116,8 +135,8 @@ Public Class ProjectsControl
 
                     txtProject.Text = .Project
                     txtProjectCode.Text = .ProjectCode
-                    cboSector.Items.FindByValue(.Sector).Selected = True
-                    cboProjectManager.Items.FindByValue(.ProjectManager).Selected = True
+                    If Not IsNothing(cboKeyChangePromise.Items.FindByValue(.KeyChangePromiseID)) Then cboKeyChangePromise.SelectedValue = .KeyChangePromiseID
+                    If Not IsNothing(cboProjectManager.Items.FindByValue(.ProjectManager)) Then cboProjectManager.SelectedValue = .ProjectManager
                     txtTargetedNoOfBeneficiaries.Text = .TargetedNoOfBeneficiaries
                     txtActualBeneficiaries.Text = .ActualBeneficiaries
                     radStartDate.SelectedDate = .StartDate
@@ -125,10 +144,9 @@ Public Class ProjectsControl
                     RadEndDate.SelectedDate = .EndDate
                     txtProjectBudget.Text = .ProjectBudget
                     txtName.Text = .Name
-                    cboProgram.Items.FindByValue(.Program).Selected = True
+                    If Not IsNothing(cboStrategicObjective.Items.FindByValue(.StrategicObjectiveID)) Then cboStrategicObjective.SelectedValue = .StrategicObjectiveID
                     txtAcronym.Text = .Acronym
                     txtFinalGStatement.Text = .FinalGStatement
-                    txtObjective.Text = .Objective
                     txtBenDescription.Text = .BenDescription
                     txtStakeholderDescription.Text = .StakeholderDescription
 
@@ -137,7 +155,7 @@ Public Class ProjectsControl
 
                 Else
 
-                    ShowMessage("Failed to loadProjects: & .ErrorMessage", MessageTypeEnum.Error)
+                    ShowMessage("Failed to load Projects: & .ErrorMessage", MessageTypeEnum.Error)
                     Return False
 
                 End If
@@ -157,29 +175,34 @@ Public Class ProjectsControl
 
         Try
 
-            Dim objProjects As New BusinessLogic.Projects("Demo", 1)
+            Dim objProjects As New BusinessLogic.Projects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProjects
 
                 .Project = IIf(txtProject.Text = "", 0, txtProject.Text)
                 .ProjectCode = txtProjectCode.Text
-                .Sector = cboSector.SelectedValue
-                .ProjectManager = cboProjectManager.SelectedValue
-                .TargetedNoOfBeneficiaries = txtTargetedNoOfBeneficiaries.Text
-                .ActualBeneficiaries = txtActualBeneficiaries.Text
+                If cboKeyChangePromise.SelectedIndex > -1 Then .KeyChangePromiseID = cboKeyChangePromise.SelectedValue
+                If cboProjectManager.SelectedIndex > -1 Then .ProjectManager = cboProjectManager.SelectedValue
+                .TargetedNoOfBeneficiaries = IIf(IsNumeric(txtTargetedNoOfBeneficiaries.Text), txtTargetedNoOfBeneficiaries.Text, 0)
+                .ActualBeneficiaries = IIf(IsNumeric(txtActualBeneficiaries.Text), txtActualBeneficiaries.Text, 0)
                 .StartDate = radStartDate.SelectedDate
                 .FinalEvlDate = radFinalEvlDate.SelectedDate
                 .EndDate = RadEndDate.SelectedDate
-                .ProjectBudget = txtProjectBudget.Text
+                .ProjectBudget = IIf(IsNumeric(txtProjectBudget.Text), txtProjectBudget.Text, 0)
                 .Name = txtName.Text
-                .Program = cboProgram.SelectedValue
+                If cboStrategicObjective.SelectedIndex > -1 Then .StrategicObjectiveID = cboStrategicObjective.SelectedValue
                 .Acronym = txtAcronym.Text
                 .FinalGStatement = txtFinalGStatement.Text
-                .Objective = txtObjective.Text
                 .BenDescription = txtBenDescription.Text
                 .StakeholderDescription = txtStakeholderDescription.Text
 
                 If .Save Then
+
+                    Dim NumberOfNewFields As Integer = UpdateCustomFieldTemplates(.Project)
+
+                    If (phCustomFields.Controls.Count > 0) Then
+                        objCustomFields.SaveCustomFields(DirectCast(phCustomFields.Controls(0), RadPanelBar), .Project, "P")
+                    End If
 
                     If Not IsNumeric(txtProject.Text) OrElse Trim(txtProject.Text) = 0 Then txtProject.Text = .Project
                     ShowMessage("Projects saved successfully...", MessageTypeEnum.Information)
@@ -205,6 +228,30 @@ Public Class ProjectsControl
 
     End Function
 
+    Public Function UpdateCustomFieldTemplates(ByVal ProjectID As Long) As Integer
+
+        'Creating a project: 
+        '   - Now we know the type, and/or the status, so we need to 
+        '     load the relevant custom fields
+        'Updating a project: 
+        '   - We check if the type/status has changed, and if so, we 
+        '     need to load the relevant custom fields for this new 
+        '     project type/status.
+
+        Dim NewStatusTemplates As Long = 0, NewTypeTemplates As Long = 0
+
+        If ProjectID > 0 Then
+
+            Dim objCustomFields As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
+
+            objCustomFields.UpdateObjectWithStatusTemplates(ProjectID, "P", ProjectID, BusinessLogic.CustomFields.AutomatorTypes.Project, RowsAffected:=NewStatusTemplates)
+
+        End If
+
+        Return NewStatusTemplates + NewTypeTemplates
+
+    End Function
+
     Public Sub Clear()
 
         txtProject.Text = 0
@@ -216,14 +263,13 @@ Public Class ProjectsControl
         RadEndDate.SelectedDate = ""
         txtProjectBudget.Text = 0.0
         txtName.Text = ""
-        cboProgram.SelectedValue = 0
+        cboKeyChangePromise.SelectedValue = 0
         txtAcronym.Text = ""
         txtFinalGStatement.Text = ""
-        txtObjective.Text = ""
         txtBenDescription.Text = ""
         txtStakeholderDescription.Text = ""
         cboProjectManager.SelectedValue = 0
-        cboSector.SelectedValue = 0
+        cboStrategicObjective.SelectedValue = 0
 
     End Sub
 
@@ -235,7 +281,7 @@ Public Class ProjectsControl
 
     Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
 
-        Dim objProjects As New BusinessLogic.Projects("Demo", 1)
+        Dim objProjects As New BusinessLogic.Projects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         If IsNumeric(txtProject.Text) Then
 

@@ -55,8 +55,8 @@
                             </telerik:GridBoundColumn>
                             <telerik:GridTemplateColumn HeaderText="Status">
                                 <ItemTemplate>
-                                    <asp:Label ID="lblStatus" Text="<%# IIf(Eval("SubmissionStatus") = 1, "Uploaded", IIf(Eval("ActualSubmissionDate") < Now, "Overdue", "Pending"))%>" runat="server"
-                                        ForeColor="<%# IIf(Eval("ActualSubmissionDate") < Now, Drawing.Color.Red, Drawing.Color.Green)%>"></asp:Label>
+                                    <asp:Label ID="lblStatus" Text='<%# IIf(Eval("SubmissionStatus") = True, "Uploaded", IIf(Eval("ActualSubmissionDate") < Now, "Overdue", "Pending"))%>' runat="server"
+                                        ForeColor='<%# IIf(Eval("ActualSubmissionDate") < IIf(Eval("UpdatedDate") Is Nothing, Now, Eval("UpdatedDate")), Drawing.Color.Red, Drawing.Color.Green)%>'></asp:Label>
                                 </ItemTemplate>
                             </telerik:GridTemplateColumn>
                             <telerik:GridButtonColumn CommandName="Download" UniqueName="cmdDownload" ButtonCssClass="btn btn-default" Text="Download" >

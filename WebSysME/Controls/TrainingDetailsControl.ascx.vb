@@ -35,8 +35,6 @@ Partial Class TrainingDetailsControl
 
         If Not Page.IsPostBack Then
 
-            If Not IsNothing(Request.QueryString("id")) Then
-
                 Dim objLookup As New BusinessLogic.CommonFunctions
 
                 With cboTrainingType
@@ -49,29 +47,27 @@ Partial Class TrainingDetailsControl
                     .Items.Insert(0, New ListItem(String.Empty, String.Empty))
                     .SelectedIndex = 0
 
-                End With
+            End With
 
-                LoadTraining(objUrlEncoder.Decrypt(Request.QueryString("id")))
+            With cboOrganization
 
-            Else
+                .DataSource = objLookup.Lookup("tblOrganization", "OrganizationID", "Name").Tables(0)
+                .DataValueField = "OrganizationID"
+                .DataTextField = "Name"
+                .DataBind()
 
-                Dim objLookup As New BusinessLogic.CommonFunctions
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
-                With cboTrainingType
+            End With
 
-                    .DataSource = objLookup.Lookup("luTrainingTypes", "TrainingTypeID", "Description").Tables(0)
-                    .DataValueField = "TrainingTypeID"
-                    .DataTextField = "Description"
-                    .DataBind()
+                If Not IsNothing(Request.QueryString("id")) Then
 
-                    .Items.Insert(0, New ListItem(String.Empty, String.Empty))
-                    .SelectedIndex = 0
+                    LoadTraining(objUrlEncoder.Decrypt(Request.QueryString("id")))
 
-                End With
+                End If
 
             End If
-
-        End If
 
     End Sub
 
@@ -85,7 +81,7 @@ Partial Class TrainingDetailsControl
 
         Try
 
-            Dim objTraining As New Training("Demo", 1)
+            Dim objTraining As New Training(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objTraining
 
@@ -93,7 +89,10 @@ Partial Class TrainingDetailsControl
 
                     txtTrainingID.Text = .TrainingID
                     If Not IsNothing(cboTrainingType.Items.FindByValue(.TrainingTypeID)) Then cboTrainingType.SelectedValue = .TrainingTypeID
+                    If Not IsNothing(cboOrganization.Items.FindByValue(.OrganizationID)) Then cboOrganization.SelectedValue = .OrganizationID
                     txtName.Text = .Name
+                    If Not .FromDate = "" Then radDate.SelectedDate = .FromDate
+                    If Not .ToDate = "" Then radToDate.SelectedDate = .ToDate
                     txtDescription.Text = .Description
                     txtLocation.Text = .Location
                     txtFacilitator.Text = .Facilitators
@@ -123,13 +122,16 @@ Partial Class TrainingDetailsControl
 
         Try
 
-            Dim objTraining As New Training("Demo", 1)
+            Dim objTraining As New Training(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objTraining
 
                 .TrainingID = IIf(IsNumeric(txtTrainingID.Text), txtTrainingID.Text, 0)
                 If cboTrainingType.SelectedIndex > -1 Then .TrainingTypeID = cboTrainingType.SelectedValue
+                If cboOrganization.SelectedIndex > -1 Then .OrganizationID = cboOrganization.SelectedValue
                 .Name = txtName.Text
+                If radDate.SelectedDate.HasValue Then .FromDate = radDate.SelectedDate
+                If radToDate.SelectedDate.HasValue Then .ToDate = radToDate.SelectedDate
                 .Description = txtDescription.Text
                 .Location = txtLocation.Text
                 .Facilitators = txtFacilitator.Text
@@ -171,7 +173,16 @@ Partial Class TrainingDetailsControl
         Else
             cboTrainingType.SelectedIndex = -1
         End If
+        If Not IsNothing(cboOrganization.Items.FindByValue("")) Then
+            cboOrganization.SelectedValue = ""
+        ElseIf Not IsNothing(cboOrganization.Items.FindByValue(0)) Then
+            cboOrganization.SelectedValue = 0
+        Else
+            cboOrganization.SelectedIndex = -1
+        End If
         txtName.Text = ""
+        radDate.Clear()
+        radToDate.Clear()
         txtDescription.Text = ""
         txtLocation.Text = ""
         txtFacilitator.Text = ""
@@ -211,6 +222,16 @@ Partial Class TrainingDetailsControl
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
 
         Clear()
+
+    End Sub
+
+    Private Sub lnkMarks_Click(sender As Object, e As EventArgs) Handles lnkMarks.Click
+
+        If IsNumeric(txtTrainingID.Text) Then
+
+            Response.Redirect("~/TrainingMarksPage?id=" & objUrlEncoder.Encrypt(txtTrainingID.Text))
+
+        End If
 
     End Sub
 End Class

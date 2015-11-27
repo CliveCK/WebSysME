@@ -67,7 +67,7 @@ Partial Class SurveyDetailsControl
 
         Try
 
-            Dim objSurvey As New Survey("Demo", 1)
+            Dim objSurvey As New Survey(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objSurvey
 
@@ -106,7 +106,7 @@ Partial Class SurveyDetailsControl
 
         Try
 
-            Dim objSurvey As New Survey("Demo", 1)
+            Dim objSurvey As New Survey(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objSurvey
 
@@ -172,7 +172,7 @@ Partial Class SurveyDetailsControl
 
     Public Sub LoadGrid(ByVal sql As String)
 
-        Dim objSurvey As New BusinessLogic.Survey("Demo", 1)
+        Dim objSurvey As New BusinessLogic.Survey(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objSurvey.GetSurvey(sql)
 
         With radSurveyListing

@@ -4,7 +4,7 @@ Imports BusinessLogic
 Partial Class ProjectStaffInterventionDetailsControl
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
 #Region "Status Messages"
 
@@ -76,7 +76,7 @@ Partial Class ProjectStaffInterventionDetailsControl
 
         Try
 
-            Dim objProjectStaffIntervention As New ProjectStaffIntervention("Demo", 1)
+            Dim objProjectStaffIntervention As New ProjectStaffIntervention(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProjectStaffIntervention
 
@@ -110,7 +110,7 @@ Partial Class ProjectStaffInterventionDetailsControl
 
     Private Sub LoadGrid(ByVal InterventionID As Long)
 
-        Dim objStaff As New ProjectStaffIntervention("Demo", 1)
+        Dim objStaff As New ProjectStaffIntervention(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radStaff
 
@@ -125,7 +125,7 @@ Partial Class ProjectStaffInterventionDetailsControl
 
         Try
 
-            Dim objProjectStaffIntervention As New ProjectStaffIntervention("Demo", 1)
+            Dim objProjectStaffIntervention As New ProjectStaffIntervention(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProjectStaffIntervention
 

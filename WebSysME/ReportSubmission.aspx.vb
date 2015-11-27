@@ -45,7 +45,7 @@ Public Class ReportSubmission
 
     Private Sub LoadGrid(ByVal Status As String)
 
-        Dim objReportSubmission As New BusinessLogic.ReportSumbissionTracking("Demo", 1)
+        Dim objReportSubmission As New BusinessLogic.ReportSumbissionTracking(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim sql As String = ""
 
         Select Case Status
@@ -149,7 +149,7 @@ Public Class ReportSubmission
 
                 Case "Download"
 
-                    Dim objFiles As New BusinessLogic.Files("Demo", 1)
+                    Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     If objFiles.Retrieve(FileID) Then
 

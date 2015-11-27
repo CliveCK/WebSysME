@@ -1,4 +1,4 @@
-Imports System.Data.Linq
+Imports System.Xml.Linq
 Imports Universal.CommonFunctions
 Imports Microsoft.Practices.EnterpriseLibrary.Data
 
@@ -14,14 +14,39 @@ Partial Public Class CustomFieldTemplates
 
     Private Shared Log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
+#Region "Status Messages"
+
+    Public Event Message(ByVal Message As String, ByVal MessageType As MessageTypeEnum)
+
+    Public Sub ShowMessage(ByVal Message As String, ByVal MessageType As MessageTypeEnum, Optional ByVal LocalOnly As Boolean = False)
+
+        lblError.Text = Message
+        pnlError.CssClass = "msg" & [Enum].GetName(GetType(MessageTypeEnum), MessageType)
+
+        If Not LocalOnly Then RaiseEvent Message(Message, MessageType)
+
+    End Sub
+
+    Public Sub ShowMessage(ByVal Message As Exception, ByVal MessageType As MessageTypeEnum, Optional ByVal LocalOnly As Boolean = False)
+
+        lblError.Text = Message.Message
+        If Message.InnerException IsNot Nothing Then lblError.Text &= " - " & Message.InnerException.Message
+        If Not LocalOnly Then RaiseEvent Message(Message.Message, MessageType)
+
+        pnlError.CssClass = "msg" & [Enum].GetName(GetType(MessageTypeEnum), MessageType)
+
+    End Sub
+
+#End Region
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        UserID = CookiesWrapper.UserID
+        UserID = CookiesWrapper.thisUserID
 
         ContactID = Request.QueryString("clientID")
 
-        db = DatabaseFactory.CreateDatabase("ConnectionString")
-        objCF = New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.UserID)
+        db = New DatabaseProviderFactory().Create("ConnectionString")
+        objCF = New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
 
         If Not Page.IsPostBack Then
 
@@ -68,7 +93,7 @@ Partial Public Class CustomFieldTemplates
         sql &= "where (FieldName = @FieldName)  " & vbCrLf
         If CustomFieldID > 0 Then sql &= "  and (CustomFieldID is null or (CustomFieldID is not null and CustomFieldID <> @CustomFieldID)) " & vbCrLf
 
-        Dim db = DatabaseFactory.CreateDatabase("ConnectionString")
+        Dim db = New DatabaseProviderFactory().Create("ConnectionString")
         Dim ds As DataSet = BusinessLogic.CustomFields.DataHelper.ExecuteDataset(db, sql, "Fields")
 
         Dim r As New CustomFieldValidationResult
@@ -111,7 +136,7 @@ Partial Public Class CustomFieldTemplates
 
                 With radgTemplates
 
-                    Dim objT As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.UserID)
+                    Dim objT As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
 
                     Dim dt As DataTable = objT.GetTemplateFields(cboTemplates.SelectedItem.Value)
                     If dt IsNot Nothing Then
@@ -167,7 +192,7 @@ Partial Public Class CustomFieldTemplates
 
     Private Sub load_templates()
 
-        Dim objProject As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.UserID)
+        Dim objProject As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
         Dim templateTable As DataTable = objProject.Get_Templates(False)
 
         cboTemplates.Items.Clear()
@@ -200,16 +225,16 @@ Partial Public Class CustomFieldTemplates
             cboTemplates.Items.Add(New ListItem(txtTemplate.Text, txtTemplate.Text, True))
             cboTemplates.SelectedValue = cboTemplates.Items.FindByText(txtTemplate.Text).Value
 
-            Dim objCFT As New BusinessLogic.CustomFields.CustomFieldTemplate("ConnectionString", CookiesWrapper.UserID)
+            Dim objCFT As New BusinessLogic.CustomFields.CustomFieldTemplate("ConnectionString", CookiesWrapper.thisUserID)
 
             objCFT.RetrieveByName(txtTemplate.Text)
             objCFT.TemplateName = txtTemplate.Text
             objCFT.TemplateType = cboTemplateType.Text
 
             If objCFT.Save() Then
-                lblError.SuccessText = "Custom Field Template successfully created..."
+                ShowMessage("Custom Field Template successfully created...", MessageTypeEnum.Information)
             Else
-                lblError.Text = objCFT.ErrorMessage
+                ShowMessage(objCFT.ErrorMessage, MessageTypeEnum.Error)
             End If
 
             txtTemplate.Text = ""
@@ -230,7 +255,7 @@ Partial Public Class CustomFieldTemplates
                     DisplayIndex = radgTemplates.Items.Count
                 End If
 
-                Dim objT As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.UserID)
+                Dim objT As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
 
                 If IsNumeric(r("CustomFieldID").Text) AndAlso CInt(r("CustomFieldID").Text) > 0 AndAlso _
                     r("FieldType2").Text <> CType(r("FieldType").Controls(1), Telerik.Web.UI.RadComboBox).SelectedValue Then
@@ -264,12 +289,12 @@ Partial Public Class CustomFieldTemplates
 
             cboTemplates_SelectedIndexChanged(Nothing, Nothing)
 
-            lblError.SuccessText = "Changes to template fields saved successfully..."
+            ShowMessage("Changes to template fields saved successfully...", MessageTypeEnum.Information)
 
         Catch ex As Exception
 
             Log.Error(ex)
-            lblError.ErrorText = "An error occured: " & ex.Message
+            ShowMessage("An error occured: " & ex.Message, MessageTypeEnum.Error)
 
         End Try
 
@@ -292,10 +317,10 @@ Partial Public Class CustomFieldTemplates
 
 
                     If Not objCF.DeleteTemplate(CFID) Then
-                        lblError.ErrorText = objCF.ErrorMessage
+                        lblError.Text = objCF.ErrorMessage
                     Else
 
-                        lblError.SuccessText = String.Format("Successfully deleted the '{0}' template and all it's related data...", cboTemplates.Text)
+                        ShowMessage(String.Format("Successfully deleted the '{0}' template and all it's related data...", cboTemplates.Text), MessageTypeEnum.Information)
 
                         load_templates()
                         LoadTemplateFields() 'cboTemplates_SelectedIndexChanged(Nothing, Nothing)
@@ -305,7 +330,7 @@ Partial Public Class CustomFieldTemplates
 
                 Else
 
-                    lblError.WarnText = "Please select a template to delete"
+                    ShowMessage("Please select a template to delete", MessageTypeEnum.Warning)
 
                 End If
 
@@ -347,12 +372,12 @@ Partial Public Class CustomFieldTemplates
                     sql.AppendFormat("DELETE FROM CustomField_Fields WHERE CustomFieldID = {0}", CFID)
 
                     If Not BusinessLogic.CustomFields.DataHelper.ExecuteNonQuery(db, sql.ToString) Then
-                        lblError.ErrorText = BusinessLogic.CustomFields.DataHelper.ErrorMessage
+                        ShowMessage(BusinessLogic.CustomFields.DataHelper.ErrorMessage, MessageTypeEnum.Error)
                     Else
 
                         BusinessLogic.CustomFields.DataHelper.ExecuteNonQuery(db, gridSql)
 
-                        lblError.SuccessText = "Custom Field deleted successfully..."
+                        ShowMessage("Custom Field deleted successfully...", MessageTypeEnum.Information)
                         cboTemplates_SelectedIndexChanged(Nothing, Nothing)
 
                     End If
@@ -412,11 +437,11 @@ Partial Public Class CustomFieldTemplates
 
     Protected Sub cmdUpdateMissingTemplateFields_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUpdateMissingTemplateFields.Click
 
-        Dim objT As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.UserID)
+        Dim objT As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
         If objT.UpdateObjectsUsingTemplate Then
-            lblError.SuccessText = "Clients with missing template fields updated successfully..."
+            ShowMessage("Clients with missing template fields updated successfully...", MessageTypeEnum.Information)
         Else
-            lblError.ErrorText = objT.ErrorMessage
+            ShowMessage(objT.ErrorMessage, MessageTypeEnum.Error)
         End If
 
     End Sub
@@ -459,21 +484,29 @@ Partial Public Class CustomFieldTemplates
 
             Select Case cboApplyTo.SelectedValue
 
-                Case "PS" 'Project Status
+                Case "P" 'PROJECT
 
-                    LoadProjectStatus()
+                    LoadObjects("tblProjects", "Project", "Name", "P")
 
-                Case "CS" 'Client Status
+                Case "H" 'HEALTHCENTER
 
-                    LoadContactStatus()
+                    LoadObjects("tblHealthCenters", "HealthCenterID", "Name", "H")
 
-                Case "PT" 'Project Types
+                Case "S" 'SCHOOLS
 
-                    LoadProjectTypes()
+                    LoadObjects("tblSchools", "SchoolID", "Name", "S")
 
-                Case "CT" 'Contact Types
+                Case "O" 'ORGANIZATIONS
 
-                    LoadContactTypes()
+                    LoadObjects("tblOrganization", "OrganizationID", "Name", "O")
+
+                Case "C" 'COMMMUNITIES
+
+                    LoadObjects("tblCommunities", "CommunityID", "Name", "O")
+
+                Case "G" 'GROUPS
+
+                    LoadObjects("tblGroups", "GroupID", "GroupName", "G")
 
             End Select
 
@@ -488,113 +521,21 @@ Partial Public Class CustomFieldTemplates
 
     End Sub
 
-    Private Sub LoadProjectStatus()
+    Private Sub LoadObjects(ByVal TableName As String, ByVal ValueColumn As String, ByVal DescriptionColumn As String, ByVal AutomatorType As String)
 
         With ucAppliesTo
 
             With .AvailableOptions
-                .DataValueField = "ID"
-                .DataTextField = "Description"
-                .DataSource = DataLookup.Lookup("luProjectStatuses PS LEFT OUTER JOIN luProjectTypes PT ON PS.TypeID = PT.TypeID", "PS.StatusID AS [ID]", "PS.Description + ISNULL(' [' + PT.Description + ']','') AS [Description]", "Description", "StatusID NOT IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='PS' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
+                .DataValueField = ValueColumn
+                .DataTextField = DescriptionColumn
+                .DataSource = DataLookup.Lookup(TableName, ValueColumn, DescriptionColumn, DescriptionColumn, ValueColumn & " NOT IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='" & AutomatorType & "' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
                 .DataBind()
             End With
 
             With .SelectedOptions
-                .DataValueField = "ID"
-                .DataTextField = "Description"
-                .DataSource = DataLookup.Lookup("luProjectStatuses PS LEFT OUTER JOIN luProjectTypes PT ON PS.TypeID = PT.TypeID", "PS.StatusID AS [ID]", "PS.Description + ISNULL(' [' + PT.Description + ']','') AS [Description]", "Description", "StatusID IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='PS' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
-                .DataBind()
-            End With
-
-            cmdApplyTemplateToExisting.Enabled = .SelectedValues.Length > 0
-
-        End With
-
-    End Sub
-
-    Private Sub LoadProjectTypes()
-
-        With ucAppliesTo
-
-            With .AvailableOptions
-                .DataValueField = "ID"
-                .DataTextField = "Description"
-                .DataSource = DataLookup.Lookup("luProjectTypes", "[TypeID] AS [ID]", "[Description]", "[Description]", "[TypeID] NOT IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='PT' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
-                .DataBind()
-            End With
-
-            With .SelectedOptions
-                .DataValueField = "ID"
-                .DataTextField = "Description"
-                .DataSource = DataLookup.Lookup("luProjectTypes", "[TypeID] AS [ID]", "[Description]", "[Description]", "[TypeID] IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='PT' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
-                .DataBind()
-            End With
-
-            cmdApplyTemplateToExisting.Enabled = .SelectedValues.Length > 0
-
-        End With
-
-    End Sub
-
-    Private Sub LoadContactTypes()
-
-        With ucAppliesTo
-
-            With .AvailableOptions
-                .DataValueField = "ID"
-                .DataTextField = "Description"
-                .DataSource = DataLookup.Lookup("luContactTypes", "[TypeID] AS [ID]", "[Description]", "[Description]", "[TypeID] NOT IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='CT' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
-                .DataBind()
-            End With
-
-            With .SelectedOptions
-                .DataValueField = "ID"
-                .DataTextField = "Description"
-                .DataSource = DataLookup.Lookup("luContactTypes", "[TypeID] AS [ID]", "[Description]", "[Description]", "[TypeID] IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='CT' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
-                .DataBind()
-            End With
-
-            cmdApplyTemplateToExisting.Enabled = .SelectedValues.Length > 0
-
-        End With
-
-    End Sub
-
-    Private Sub LoadLocationTypes()
-
-        With ucAppliesTo
-
-            With .AvailableOptions
-                .DataValueField = "ID"
-                .DataTextField = "Description"
-                .DataSource = DataLookup.Lookup("luCategoryTypes", "CategoryTypeID AS [ID]", "[Description]", "[Description]", "CategoryTypeID NOT IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='LT' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
-                .DataBind()
-            End With
-
-            With .SelectedOptions
-                .DataValueField = "ID"
-                .DataTextField = "Description"
-                .DataSource = DataLookup.Lookup("luCategoryTypes", "CategoryTypeID AS [ID]", "[Description]", "[Description]", "CategoryTypeID IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='LT' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
-                .DataBind()
-            End With
-
-            cmdApplyTemplateToExisting.Enabled = .SelectedValues.Length > 0
-
-        End With
-
-    End Sub
-
-    Private Sub LoadContactStatus()
-
-        With ucAppliesTo
-
-            With .AvailableOptions
-                .DataSource = DataLookup.Lookup("luContactStatuses", "StatusID AS [ID]", "[Description]", "[Description]", "StatusID NOT IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='CS' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
-                .DataBind()
-            End With
-
-            With .SelectedOptions
-                .DataSource = DataLookup.Lookup("luContactStatuses", "StatusID AS [ID]", "[Description]", "[Description]", "StatusID IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='CS' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
+                .DataValueField = ValueColumn
+                .DataTextField = DescriptionColumn
+                .DataSource = DataLookup.Lookup(TableName, ValueColumn, DescriptionColumn, DescriptionColumn, ValueColumn & " IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='" & AutomatorType & "' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
                 .DataBind()
             End With
 
@@ -615,7 +556,7 @@ Partial Public Class CustomFieldTemplates
             sql &= "DELETE FROM CustomField_Automation WHERE AutomatorID IN (0" & a & ") AND AutomatorType = '" & cboApplyTo.SelectedValue & "' AND TemplateID = " & cboTemplates.SelectedItem.Value & vbCrLf
             sql &= " " & vbCrLf
             sql &= "INSERT INTO CustomField_Automation (AutomatorID, AutomatorType, TemplateID, CreatedBy) " & vbCrLf
-            sql &= "SELECT ID, '" & cboApplyTo.SelectedValue & "', " & cboTemplates.SelectedItem.Value & ", " & CookiesWrapper.UserID & vbCrLf
+            sql &= "SELECT ID, '" & cboApplyTo.SelectedValue & "', " & cboTemplates.SelectedItem.Value & ", " & CookiesWrapper.thisUserID & vbCrLf
             sql &= "FROM (" & vbCrLf
             sql &= "     SELECT {0} AS ID " & vbCrLf
             sql &= "     FROM {1} Data " & vbCrLf
@@ -630,33 +571,41 @@ Partial Public Class CustomFieldTemplates
 
             Select Case cboApplyTo.SelectedValue
 
-                Case "PS" 'Project Status
+                Case "P" 'Project
 
-                    sql = String.Format(sql, "StatusID", "luProjectStatuses")
-                    LoadProjectStatus()
+                    sql = String.Format(sql, "Project", "tblProjects")
+                    LoadObjects("tblProjects", "Project", "Name", "P")
 
-                Case "CS" 'Client Status
+                Case "H" 'Client Status
 
-                    sql = String.Format(sql, "StatusID", "luContactStatuses")
+                    sql = String.Format(sql, "HealthCenterID", "tblHealthCenters")
 
-                Case "CT" 'Client Types
+                Case "S" 'Client Types
 
-                    sql = String.Format(sql, "TypeID", "luContactTypes")
+                    sql = String.Format(sql, "SchoolID", "tblSchools")
 
-                Case "PT" 'Project Types
+                Case "O" 'Project Types
 
-                    sql = String.Format(sql, "TypeID", "luProjectTypes")
+                    sql = String.Format(sql, "OrganizationID", "tblOrganization")
+
+                Case "C" 'Project Types
+
+                    sql = String.Format(sql, "CommunityID", "tblCommunities")
+
+                Case "G" 'Project Types
+
+                    sql = String.Format(sql, "GroupID", "tblGroups")
 
             End Select
 
             If BusinessLogic.CustomFields.DataHelper.ExecuteNonQuery(db, sql) Then
 
-                lblError.SuccessText = cboApplyTo.SelectedItem.Text & " settings updated successfully."
+                ShowMessage(cboApplyTo.SelectedItem.Text & " settings updated successfully.", MessageTypeEnum.Information)
                 cmdApplyTemplateToExisting.Enabled = ucAppliesTo.SelectedValues.Length > 0
 
             Else
 
-                lblError.ErrorText = "Error: " & BusinessLogic.CustomFields.DataHelper.ErrorMessage
+                ShowMessage("Error: " & BusinessLogic.CustomFields.DataHelper.ErrorMessage, MessageTypeEnum.Error)
 
             End If
 
@@ -699,11 +648,11 @@ Partial Public Class CustomFieldTemplates
 
             pnlRenameTemplate.Visible = False
 
-            lblError.SuccessText = "Template renamed successfully..."
+            ShowMessage("Template renamed successfully...", MessageTypeEnum.Information)
 
         Else
 
-            lblError.ErrorText = "Error updating template name: " & objCF.ErrorMessage
+            lblError.Text = "Error updating template name: " & objCF.ErrorMessage
 
         End If
 
@@ -713,16 +662,24 @@ Partial Public Class CustomFieldTemplates
 
         Dim sql As String = String.Empty
 
-        sql &= "delete from CustomField_ObjectData where ObjectType='c' and project_id not in (select ContactID from Contacts) " & vbCrLf
-        sql &= "delete from CustomField_ObjectData where ObjectType='p' and project_id not in (select ProjectID from Projects) " & vbCrLf
+        sql &= "delete from CustomField_ObjectData where ObjectType='h' and ObjectID not in (select HealthCenterID from tblHealthCenters) " & vbCrLf
+        sql &= "delete from CustomField_ObjectData where ObjectType='p' and ObjectID not in (select Project from tblProjects) " & vbCrLf
+        sql &= "delete from CustomField_ObjectData where ObjectType='o' and ObjectID not in (select OrganizationID from tblOrganization) " & vbCrLf
+        sql &= "delete from CustomField_ObjectData where ObjectType='c' and ObjectID not in (select CommunityID from tblCommunities) " & vbCrLf
+        sql &= "delete from CustomField_ObjectData where ObjectType='s' and ObjectID not in (select SchoolID from tblSchools) " & vbCrLf
+        sql &= "delete from CustomField_ObjectData where ObjectType='g' and ObjectID not in (select GroupID from tblGroups) " & vbCrLf
 
-        sql &= "delete from CustomField_ObjectTemplates where OwnerType='c' and id not in (select ContactID from Contacts) " & vbCrLf
-        sql &= "delete from CustomField_ObjectTemplates where OwnerType='p' and id not in (select ProjectID from Projects) " & vbCrLf
+        sql &= "delete from CustomField_ObjectTemplates where ObjectType='h' and ObjectID not in (select HealthCenterID from tblHealthCenters) " & vbCrLf
+        sql &= "delete from CustomField_ObjectTemplates where ObjectType='p' and ObjectID not in (select Project from tblProjects) " & vbCrLf
+        sql &= "delete from CustomField_ObjectTemplates where ObjectType='o' and ObjectID not in (select OrganizationID from tblOrganization) " & vbCrLf
+        sql &= "delete from CustomField_ObjectTemplates where ObjectType='c' and ObjectID not in (select CommunityID from tblCommunities) " & vbCrLf
+        sql &= "delete from CustomField_ObjectTemplates where ObjectType='s' and ObjectID not in (select SchoolID from tblSchools) " & vbCrLf
+        sql &= "delete from CustomField_ObjectTemplates where ObjectType='g' and ObjectID not in (select GroupID from tblGroups) " & vbCrLf
 
         If BusinessLogic.CustomFields.DataHelper.ExecuteNonQuery(db, sql) Then
-            lblError.SuccessText = "Orphan templates successfully deleted..."
+            ShowMessage("Orphan templates successfully deleted...", MessageTypeEnum.Information)
         Else
-            lblError.ErrorText = BusinessLogic.CustomFields.DataHelper.ErrorMessage
+            ShowMessage(BusinessLogic.CustomFields.DataHelper.ErrorMessage, MessageTypeEnum.Error)
         End If
 
     End Sub
@@ -738,9 +695,9 @@ Partial Public Class CustomFieldTemplates
     Protected Sub cmdRefreshCFView_Projects_Click(sender As Object, e As EventArgs) Handles cmdRefreshCFView_Projects.Click
 
         If BusinessLogic.CustomFields.DataHelper.ExecuteNonQuery(db, "Create_Projects_CustomFieldsMatrix") Then
-            lblError.SuccessText = "Successfully create the projects custom field matrix..."
+            ShowMessage("Successfully create the projects custom field matrix...", MessageTypeEnum.Information)
         Else
-            lblError.ErrorText = BusinessLogic.CustomFields.DataHelper.ErrorMessage
+            ShowMessage(BusinessLogic.CustomFields.DataHelper.ErrorMessage, MessageTypeEnum.Error)
         End If
 
     End Sub
@@ -748,9 +705,9 @@ Partial Public Class CustomFieldTemplates
     Protected Sub cmdRefreshCFView_Documents_Click(sender As Object, e As EventArgs) Handles cmdRefreshCFView_Documents.Click
 
         If BusinessLogic.CustomFields.DataHelper.ExecuteNonQuery(db, "Create_Documents_CustomFieldsMatrix") Then
-            lblError.SuccessText = "Successfully create the documents custom field matrix..."
+            ShowMessage("Successfully create the documents custom field matrix...", MessageTypeEnum.Information)
         Else
-            lblError.ErrorText = BusinessLogic.CustomFields.DataHelper.ErrorMessage
+            ShowMessage(BusinessLogic.CustomFields.DataHelper.ErrorMessage, MessageTypeEnum.Error)
         End If
 
     End Sub
@@ -758,9 +715,9 @@ Partial Public Class CustomFieldTemplates
     Protected Sub cmdRefreshCFView_Contacts_Click(sender As Object, e As EventArgs) Handles cmdRefreshCFView_Contacts.Click
 
         If BusinessLogic.CustomFields.DataHelper.ExecuteNonQuery(db, "Create_Contacts_CustomFieldsMatrix") Then
-            lblError.SuccessText = "Successfully create the contacts custom field matrix..."
+            ShowMessage("Successfully create the contacts custom field matrix...", MessageTypeEnum.Information)
         Else
-            lblError.ErrorText = BusinessLogic.CustomFields.DataHelper.ErrorMessage
+            ShowMessage(BusinessLogic.CustomFields.DataHelper.ErrorMessage, MessageTypeEnum.Error)
         End If
 
     End Sub
@@ -776,40 +733,47 @@ Partial Public Class CustomFieldTemplates
 
             Select Case cboApplyTo.SelectedValue
 
-                Case "PS" 'Project Status
+                Case "P" 'Project 
 
                     ObjectType = "P"
-                    TableName = "Projects"
-                    FilterColumn = "ProjectStatusID"
-                    TableIDColumn = "ProjectID"
+                    TableName = "tblProjects"
+                    FilterColumn = "Project"
+                    TableIDColumn = "Project"
 
-                Case "CS" 'Client Status
+                Case "H" 'HealthCenter
+
+                    ObjectType = "H"
+                    TableName = "tblHealthCenters"
+                    FilterColumn = "HealthCenterID"
+                    TableIDColumn = "HealthCenterID"
+
+                Case "S" 'Schools
+
+                    ObjectType = "S"
+                    TableName = "tblSchools"
+                    FilterColumn = "SchoolID"
+                    TableIDColumn = "SchoolID"
+
+                Case "O" 'Organizations
+
+                    ObjectType = "O"
+                    TableName = "tblOrganizations"
+                    FilterColumn = "OrganizationID"
+                    TableIDColumn = "OrganizationID"
+
+                Case "C" 'Communities
 
                     ObjectType = "C"
-                    TableName = "Contacts"
-                    FilterColumn = "StatusID"
-                    TableIDColumn = "ContactID"
+                    TableName = "tblCommunities"
+                    FilterColumn = "CommunityID"
+                    TableIDColumn = "CommunityID"
 
-                Case "LT" 'Location Index Types
+                Case "G" 'Project Types
 
-                    ObjectType = "L"
-                    TableName = "Categories"
-                    FilterColumn = "CategoryTypeID"
-                    TableIDColumn = "CategoryID"
-
-                Case "CT" 'Client Types
-
-                    ObjectType = "C"
-                    TableName = "Contacts"
-                    FilterColumn = "TypeID"
-                    TableIDColumn = "ContactID"
-
-                Case "PT" 'Project Types
-
-                    ObjectType = "P"
-                    TableName = "Projects"
-                    FilterColumn = "ProjectTypeID"
-                    TableIDColumn = "ProjectID"
+                    ObjectType = "G"
+                    TableName = "tblGroups"
+                    FilterColumn = "GroupID"
+                    TableIDColumn = "GroupID"
 
             End Select
 
@@ -822,7 +786,7 @@ Partial Public Class CustomFieldTemplates
             sql &= "	@ObjectType = '" & ObjectType.ToUpper.Trim & "' " & vbCrLf
             sql &= vbCrLf
             sql &= "INSERT INTO CustomField_ObjectTemplates(ObjectID, TemplateID, ObjectType, CreatedBy) " & vbCrLf
-            sql &= "SELECT DISTINCT Data." & TableIDColumn & ", TemplateID, @ObjectType AS ObjectType, " & CookiesWrapper.UserID & vbCrLf
+            sql &= "SELECT DISTINCT Data." & TableIDColumn & ", TemplateID, @ObjectType AS ObjectType, " & CookiesWrapper.thisUserID & vbCrLf
             sql &= "FROM " & TableName & " Data " & vbCrLf
             sql &= "	CROSS JOIN CustomField_Fields PT " & vbCrLf
             sql &= "WHERE  " & vbCrLf
@@ -847,11 +811,11 @@ Partial Public Class CustomFieldTemplates
 
             If result IsNot Nothing Then
 
-                lblError.SuccessText = String.Format("{0} settings updated successfully - {1} items affected...", cboApplyTo.SelectedItem.Text, result.ToString)
+                lblError.Text = String.Format("{0} settings updated successfully - {1} items affected...", cboApplyTo.SelectedItem.Text, result.ToString)
 
             Else
 
-                lblError.ErrorText = "Error: " & BusinessLogic.CustomFields.DataHelper.ErrorMessage
+                ShowMessage("Error: " & BusinessLogic.CustomFields.DataHelper.ErrorMessage, MessageTypeEnum.Error)
                 Log.Error(BusinessLogic.CustomFields.DataHelper.ErrorMessage & vbCrLf & sql)
 
             End If
@@ -863,9 +827,9 @@ Partial Public Class CustomFieldTemplates
     Protected Sub cmdClearAutoApplyRules_Click(sender As Object, e As EventArgs) Handles cmdClearAutoApplyRules.Click
 
         If objCF.RemoveAllAutoApplyRules(cboTemplates.Text) Then
-            lblError.SuccessText = String.Format("Successfully cleared all automatic application rules for the '{0}' template...", cboTemplates.Text)
+            ShowMessage(String.Format("Successfully cleared all automatic application rules for the '{0}' template...", cboTemplates.Text), MessageTypeEnum.Information)
         Else
-            lblError.ErrorText = BusinessLogic.CustomFields.DataHelper.ErrorMessage
+            ShowMessage(BusinessLogic.CustomFields.DataHelper.ErrorMessage, MessageTypeEnum.Error)
         End If
 
     End Sub
@@ -878,14 +842,14 @@ Partial Public Class CustomFieldTemplates
             IsNumeric(CFID) Then
 
             If objCF.RemoveTemplateFromAllObjects(cboTemplates.Text) Then
-                lblError.SuccessText = String.Format("Successfully removed the '{0}' template from all items that were using it...", cboTemplates.Text)
+                ShowMessage(String.Format("Successfully removed the '{0}' template from all items that were using it...", cboTemplates.Text), MessageTypeEnum.Information)
             Else
-                lblError.ErrorText = BusinessLogic.CustomFields.DataHelper.ErrorMessage
+                ShowMessage(BusinessLogic.CustomFields.DataHelper.ErrorMessage, MessageTypeEnum.Error)
             End If
 
         Else
 
-            lblError.WarnText = "Please select a template first..."
+            ShowMessage("Please select a template first...", MessageTypeEnum.Error)
 
         End If
 

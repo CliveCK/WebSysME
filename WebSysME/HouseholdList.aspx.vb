@@ -16,7 +16,7 @@ Public Class HouseholdList
     End Sub
     Private Sub LoadGrid()
 
-        Dim objBeneficiaries As New BusinessLogic.Beneficiary("Demo", 1)
+        Dim objBeneficiaries As New BusinessLogic.Beneficiary(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radBenListing
 
@@ -39,6 +39,8 @@ Public Class HouseholdList
 
             BeneficiaryID = Server.HtmlDecode(item("BeneficiaryID").Text)
 
+            CookiesWrapper.BeneficiaryID = BeneficiaryID
+
             Response.Redirect("~/Beneficiary.aspx?id=" & objUrlEncoder.Encrypt(BeneficiaryID))
 
         End If
@@ -53,6 +55,7 @@ Public Class HouseholdList
 
     Private Sub cmdNew_Click(sender As Object, e As EventArgs) Handles cmdNew.Click
 
+        CookiesWrapper.BeneficiaryID = 0
         Response.Redirect("~/Beneficiary.aspx")
 
     End Sub

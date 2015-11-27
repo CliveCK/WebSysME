@@ -6,9 +6,12 @@ Public Class Training
 #region "Variables"
 
     Protected mTrainingID As long
-    Protected mTrainingTypeID As long
+    Protected mTrainingTypeID As Long
+    Protected mFromDate As String
+    Protected mToDate As String
     Protected mCreatedBy As long
-    Protected mUpdatedBy As long
+    Protected mUpdatedBy As Long
+    Protected mOrganizationID As Long
     Protected mCreatedDate As string
     Protected mUpdatedDate As string
     Protected mName As string
@@ -71,12 +74,39 @@ Public Class Training
         End Set
     End Property
 
+    Public Property OrganizationID() As Long
+        Get
+            Return mOrganizationID
+        End Get
+        Set(ByVal value As Long)
+            mOrganizationID = value
+        End Set
+    End Property
+
     Public  Property UpdatedBy() As long
         Get
 		return mUpdatedBy
         End Get
         Set(ByVal value As long)
 		mUpdatedBy = value
+        End Set
+    End Property
+
+    Public Property FromDate() As String
+        Get
+            Return mFromDate
+        End Get
+        Set(ByVal value As String)
+            mFromDate = value
+        End Set
+    End Property
+
+    Public Property ToDate() As String
+        Get
+            Return mToDate
+        End Get
+        Set(ByVal value As String)
+            mToDate = value
         End Set
     End Property
 
@@ -155,10 +185,13 @@ Public Sub Clear()
     TrainingID = 0
     mTrainingTypeID = 0
     mCreatedBy = mObjectUserID
-    mUpdatedBy = 0
+        mUpdatedBy = 0
+        mOrganizationID = 0
     mCreatedDate = ""
     mUpdatedDate = ""
-    mName = ""
+        mName = ""
+        mFromDate = ""
+        mToDate = ""
     mDescription = ""
         mLocation = ""
         mFacilitators = ""
@@ -261,9 +294,12 @@ End Sub
             mTrainingTypeID = Catchnull(.Item("TrainingTypeID"), 0)
             mCreatedBy = Catchnull(.Item("CreatedBy"), 0)
             mUpdatedBy = Catchnull(.Item("UpdatedBy"), 0)
+            mOrganizationID = Catchnull(.Item("OrganizationID"), 0)
             mCreatedDate = Catchnull(.Item("CreatedDate"), "")
             mUpdatedDate = Catchnull(.Item("UpdatedDate"), "")
             mName = Catchnull(.Item("Name"), "")
+            mFromDate = Catchnull(.Item("FromDate"), "")
+            mToDate = Catchnull(.Item("ToDate"), "")
             mDescription = Catchnull(.Item("Description"), "")
             mLocation = Catchnull(.Item("Location"), "")
             mFacilitators = Catchnull(.Item("Facilitator"), "")
@@ -278,8 +314,11 @@ End Sub
 
         db.AddInParameter(cmd, "@TrainingID", DBType.Int32, mTrainingID)
         db.AddInParameter(cmd, "@TrainingTypeID", DBType.Int32, mTrainingTypeID)
-        db.AddInParameter(cmd, "@UpdatedBy", DBType.Int32, mObjectUserID)
-        db.AddInParameter(cmd, "@Name", DBType.String, mName)
+        db.AddInParameter(cmd, "@UpdatedBy", DbType.Int32, mObjectUserID)
+        db.AddInParameter(cmd, "@OrganizationID", DbType.Int32, mOrganizationID)
+        db.AddInParameter(cmd, "@Name", DbType.String, mName)
+        db.AddInParameter(cmd, "@FromDate", DbType.String, mFromDate)
+        db.AddInParameter(cmd, "@ToDate", DbType.String, mToDate)
         db.AddInParameter(cmd, "@Description", DBType.String, mDescription)
         db.AddInParameter(cmd, "@Location", DbType.String, mLocation)
         db.AddInParameter(cmd, "@Facilitator", DbType.String, mFacilitators)

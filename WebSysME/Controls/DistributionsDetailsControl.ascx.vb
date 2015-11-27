@@ -47,13 +47,25 @@ Partial Class DistributionsDetailsControl
                 .Items.Insert(0, New ListItem(String.Empty, String.Empty))
                 .SelectedIndex = 0
 
-                If Not IsNothing(Request.QueryString("id")) Then
+            End With
 
-                    LoadDistributions(objUrlEncoder.Decrypt(Request.QueryString("id")))
+            With cboOrganization
 
-                End If
+                .DataSource = objLookup.Lookup("tblOrganization", "OrganizationID", "Name").Tables(0)
+                .DataValueField = "OrganizationID"
+                .DataTextField = "Name"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
             End With
+
+            If Not IsNothing(Request.QueryString("id")) Then
+
+                LoadDistributions(objUrlEncoder.Decrypt(Request.QueryString("id")))
+
+            End If
 
         End If
 
@@ -69,7 +81,7 @@ Partial Class DistributionsDetailsControl
 
         Try
 
-            Dim objDistributions As New Distributions("Demo", 1)
+            Dim objDistributions As New Distributions(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objDistributions
 
@@ -77,7 +89,9 @@ Partial Class DistributionsDetailsControl
 
                     txtDistributionID1.Text = .DistributionID
                     If Not IsNothing(cboDistributionType.Items.FindByValue(.DistributionTypeID)) Then cboDistributionType.SelectedValue = .DistributionTypeID
+                    If Not IsNothing(cboOrganization.Items.FindByValue(.OrganizationID)) Then cboOrganization.SelectedValue = .OrganizationID
                     txtName.Text = .Name
+                    If Not .DistributionDate = "" Then radDate.SelectedDate = .DistributionDate
                     txtDescription.Text = .Description
                     txtLocation.Text = .Location
 
@@ -106,13 +120,15 @@ Partial Class DistributionsDetailsControl
 
         Try
 
-            Dim objDistributions As New Distributions("Demo", 1)
+            Dim objDistributions As New Distributions(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objDistributions
 
                 .DistributionID = IIf(IsNumeric(txtDistributionID1.Text), txtDistributionID1.Text, 0)
                 If cboDistributionType.SelectedIndex > -1 Then .DistributionTypeID = cboDistributionType.SelectedValue
+                If cboOrganization.SelectedIndex > -1 Then .OrganizationID = cboOrganization.SelectedValue
                 .Name = txtName.Text
+                If radDate.SelectedDate.HasValue Then .DistributionDate = radDate.SelectedDate
                 .Description = txtDescription.Text
                 .Location = txtLocation.Text
 
@@ -153,7 +169,15 @@ Partial Class DistributionsDetailsControl
         Else
             cboDistributionType.SelectedIndex = -1
         End If
+        If Not IsNothing(cboOrganization.Items.FindByValue("")) Then
+            cboOrganization.SelectedValue = ""
+        ElseIf Not IsNothing(cboOrganization.Items.FindByValue(0)) Then
+            cboOrganization.SelectedValue = 0
+        Else
+            cboOrganization.SelectedIndex = -1
+        End If
         txtName.Text = ""
+        radDate.Clear()
         txtDescription.Text = ""
         txtLocation.Text = ""
 

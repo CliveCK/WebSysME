@@ -1,13 +1,13 @@
 <%@ Control Language="vb" AutoEventWireup="false" CodeBehind="MyInFoControl.ascx.vb"
     Inherits="WebSysME.MyInFoControl" %>
 
-<table border="0" cellpadding="0" cellspacing="2" width="100%">
+<table border="0" cellpadding="3" cellspacing="2" width="70%" >
     <tr>
-        <td class="DetailsSection" colspan="2">Login Details
+        <td class="DetailsSection"><b>Login Details</b>
         </td>
     </tr>
     <tr>
-        <td style="width: 160px">
+        <td>
             <asp:Label ID="lblUserName" runat="server" Text="User Name"></asp:Label>
         </td>
         <td>
@@ -15,28 +15,28 @@
         </td>
     </tr>
     <tr>
-        <td class="DetailsSection" colspan="2">Other details
+        <td class="DetailsSection" colspan="2"><b>Other details</b>
         </td>
     </tr>
     <tr>
-        <td style="height: 24px; width: 160px;">
-            <asp:Label ID="lblFirstName" runat="server" Text="First Name" CssClass="form-control"></asp:Label>
+        <td>
+            <asp:Label ID="lblFirstName" runat="server" Text="First Name"></asp:Label>
         </td>
-        <td style="height: 24px">
+        <td>
             <asp:TextBox ID="txtFirstname" runat="server" Width="250px" CssClass="form-control"></asp:TextBox>
         </td>
     </tr>
     <tr>
-        <td style="width: 160px">
-            <asp:Label ID="lblSurname" runat="server" Text="Surname" CssClass="form-control"></asp:Label>
+        <td>
+            <asp:Label ID="lblSurname" runat="server" Text="Surname"></asp:Label>
         </td>
         <td>
             <asp:TextBox ID="txtSurname" runat="server" Width="250px" CssClass="form-control"></asp:TextBox>
         </td>
     </tr>
     <tr>
-        <td style="width: 160px">
-            <asp:Label ID="lblEmail" runat="server" Text="Email Address" CssClass="form-control"></asp:Label>
+        <td>
+            <asp:Label ID="lblEmail" runat="server" Text="Email Address" ></asp:Label>
         </td>
         <td>
             <asp:TextBox ID="txtEmail" runat="server" Width="250px" CssClass="form-control"></asp:TextBox>
@@ -45,39 +45,40 @@
         </td>
     </tr>
     <tr>
-        <td style="width: 160px">Mobile No
+        <td>Mobile No
         </td>
         <td>
             <asp:TextBox ID="txtMobileNo" runat="server" Width="250px" CssClass="form-control"></asp:TextBox>
         </td>
     </tr>
     <tr>
-        <td style="height: 22px; width: 160px;">
+        <td>
             <asp:Label ID="lblCompany" runat="server" Text="Company" CssClass="HiddenControl" ></asp:Label>
         </td>
-        <td style="height: 22px">
+        <td >
             <asp:DropDownList ID="cboCompany" runat="server" Width="250px" CssClass="HiddenControl">
             </asp:DropDownList>
         </td>
     </tr>
     <tr>
-        <td style="height: 22px; width: 160px;">
-            <asp:Button ID="cmdSave" runat="server" Text="Save" Width="103px" CssClass="submit" />
+        <td>
+            <asp:Button ID="cmdSave" runat="server" Text="Save" Width="103px" CssClass="btn btn-default" />
         </td>
         <td style="height: 22px"></td>
     </tr>
 
     </table>
-<table border="0" cellpadding="0" cellspacing="2" width="100%">
+<br />
+<table border="0" cellpadding="3" cellspacing="3" width="50%" style="border:1px solid darkblue;">
     <tr>
-        <td class="DetailsSection" colspan="3" style="height: 22px">Change Password
+        <td class="DetailsSection"style="height: 22px"><b>Change Password</b>
         </td>
     </tr>
     <tr>
         <td style="width: 160px; height: 22px">Old Password
         </td>
         <td style="height: 22px">
-            <asp:TextBox ID="txtOldPassword" runat="server" Width="250px" TextMode="Password"></asp:TextBox>
+            <asp:TextBox ID="txtOldPassword" runat="server" Width="250px" TextMode="Password" CssClass="form-control"></asp:TextBox>
         </td>
     </tr>
     <tr>
@@ -85,7 +86,7 @@
             New Password
         </td>
         <td style="height: 22px">
-            <asp:TextBox ID="txtPassword" runat="server" TextMode="Password"
+            <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control"
                 Width="250px"></asp:TextBox>
             <asp:Label ID="lblmsg" runat="server" ></asp:Label> 
             <asp:Label ID="lblPasswordPolicyMsg" Width="100%" runat="server" CssClass="HiddenControl"></asp:Label>
@@ -96,14 +97,14 @@
             <asp:Label ID="lblConfirmPassword" runat="server" Text="Confirm Password"></asp:Label>
         </td>
         <td style="height: 22px">
-            <asp:TextBox ID="txtConfirmPassword" runat="server" TextMode="Password" Width="250px"></asp:TextBox><asp:CompareValidator
+            <asp:TextBox ID="txtConfirmPassword" runat="server" TextMode="Password" Width="250px" CssClass="form-control"></asp:TextBox><asp:CompareValidator
                 ID="CompareValidator1" runat="server" ErrorMessage="Passwords Do Not Match!"
                 ControlToCompare="txtConfirmPassword" ControlToValidate="txtPassword" ForeColor="#cc0000"></asp:CompareValidator>
         </td>
     </tr>
     <tr>
         <td colspan="2">
-            <asp:Button ID="cmdChangePassword" runat="server" Text="Change Password" CssClass="submit" />
+            <asp:Button ID="cmdChangePassword" runat="server" Text="Change Password" CssClass="btn btn-default" />
         </td>
     </tr>
     <tr>

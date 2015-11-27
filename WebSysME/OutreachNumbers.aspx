@@ -4,21 +4,25 @@
     <div style="margin-left:2%">
     <h4>Outreach In Numbers</h4>
     <br />
+     <asp:Button ID="cmdNew" runat="server" Text="New" CssClass="btn btn-default"/>
     <telerik:RadGrid ID="radOutreach" runat="server" GridLines="None" Height="80%" 
                     CellPadding="0" Width="100%">
                     <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" 
                        AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced">
                         <Columns>
-                            <telerik:GridBoundColumn DataField="FileID" UniqueName="FileID" HeaderText="FileID"
+                            <telerik:GridBoundColumn DataField="OutreachID" UniqueName="OutreachID" HeaderText="OutreachID"
                                 Display="false">
                             </telerik:GridBoundColumn>
+                             <telerik:GridButtonColumn Display="True" HeaderText="" Text="View" UniqueName="Procument"
+                                    CommandName="View">
+                               </telerik:GridButtonColumn> 
                              <telerik:GridBoundColumn DataField="Project" UniqueName="Project" HeaderText="Project"  >
                             </telerik:GridBoundColumn>
                              <telerik:GridBoundColumn DataField="Partner" UniqueName="Partner" HeaderText="Partner"  >
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="District" UniqueName="District" HeaderText="District">
                             </telerik:GridBoundColumn>
-                            <telerik:GridBoundColumn DataField="TypeOfBeneficiaries" UniqueName="TypeOfBeneficiaries" HeaderText="TypeOfBeneficiaries">
+                            <telerik:GridBoundColumn DataField="BeneficiaryType" UniqueName="TypeOfBeneficiaries" HeaderText="TypeOfBeneficiaries">
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Total" UniqueName="Total" HeaderText="Total">
                                 </telerik:GridBoundColumn> 

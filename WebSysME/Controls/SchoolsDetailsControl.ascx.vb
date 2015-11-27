@@ -3,6 +3,8 @@
 Partial Class SchoolsDetailsControl
     Inherits System.Web.UI.UserControl
 
+    Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
+
 #Region "Status Messages"
 
     Public Event Message(ByVal Message As String, ByVal MessageType As MessageTypeEnum)
@@ -59,7 +61,43 @@ Partial Class SchoolsDetailsControl
                 .SelectedIndex = 0
 
             End With
+            If Not IsNothing(Request.QueryString("id")) Then
+
+                LoadSchools(objUrlEncoder.Decrypt(Request.QueryString("id")))
+
+            End If
+
         End If
+
+    End Sub
+
+    Private Sub LoadCombo()
+
+        Dim objLookup As New BusinessLogic.CommonFunctions
+
+        With cboDistrict
+
+            .DataSource = objLookup.Lookup("tblDistricts", "DistrictID", "Name").Tables(0)
+            .DataValueField = "DistrictID"
+            .DataTextField = "Name"
+            .DataBind()
+
+            .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+            .SelectedIndex = 0
+
+        End With
+
+        With cboWard
+
+            .DataSource = objLookup.Lookup("tblWards", "WardID", "Name").Tables(0)
+            .DataValueField = "WardID"
+            .DataTextField = "Name"
+            .DataBind()
+
+            .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+            .SelectedIndex = 0
+
+        End With
 
     End Sub
 
@@ -73,13 +111,17 @@ Partial Class SchoolsDetailsControl
 
         Try
 
-            Dim objSchools As New Schools("Demo", 1)
+            Dim objSchools As New Schools(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objSchools
 
                 If .Retrieve(SchoolID) Then
 
+                    LoadCombo()
+
                     txtSchoolID.Text = .SchoolID
+                    If Not IsNothing(cboProvince.Items.FindByValue(.ProvinceID)) Then cboProvince.SelectedValue = .ProvinceID
+                    If Not IsNothing(cboDistrict.Items.FindByValue(.DistrictID)) Then cboDistrict.SelectedValue = .DistrictID
                     If Not IsNothing(cboWard.Items.FindByValue(.WardID)) Then cboWard.SelectedValue = .WardID
                     If Not IsNothing(cboSchoolType.Items.FindByValue(.SchoolTypeID)) Then cboSchoolType.SelectedValue = .SchoolTypeID
                     txtStaffCompliment.Text = .StaffCompliment
@@ -115,19 +157,19 @@ Partial Class SchoolsDetailsControl
 
         Try
 
-            Dim objSchools As New Schools("Demo", 1)
+            Dim objSchools As New Schools(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objSchools
 
                 .SchoolID = IIf(IsNumeric(txtSchoolID.Text), txtSchoolID.Text, 0)
                 If cboWard.SelectedIndex > -1 Then .WardID = cboWard.SelectedValue
                 If cboSchoolType.SelectedIndex > -1 Then .SchoolTypeID = cboSchoolType.SelectedValue
-                .StaffCompliment = txtStaffCompliment.Text
-                .NoOfMaleStudents = txtNoOfMaleStudents.Text
-                .NoOfFemaleStudents = txtNoOfFemaleStudents.Text
-                .TotalEnrollment = txtTotalEnrollment.Text
-                .Longitude = txtLongitude.Text
-                .Latitude = txtLatitude.Text
+                .StaffCompliment = IIf(IsNumeric(txtStaffCompliment.Text), txtStaffCompliment.Text, 0)
+                .NoOfMaleStudents = IIf(IsNumeric(txtNoOfMaleStudents.Text), txtNoOfMaleStudents, 0)
+                .NoOfFemaleStudents = IIf(IsNumeric(txtNoOfFemaleStudents.Text), txtNoOfFemaleStudents.Text, 0)
+                .TotalEnrollment = IIf(IsNumeric(txtTotalEnrollment.Text), txtTotalEnrollment.Text, 0)
+                .Longitude = IIf(IsNumeric(txtLongitude.Text), txtLongitude.Text, 0)
+                .Latitude = IIf(IsNumeric(txtLatitude.Text), txtLatitude.Text, 0)
                 .Name = txtName.Text
 
                 If .Save Then
@@ -196,6 +238,9 @@ Partial Class SchoolsDetailsControl
                 .DataTextField = "Name"
                 .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
             End With
 
         End If
@@ -210,10 +255,13 @@ Partial Class SchoolsDetailsControl
 
             With cboWard
 
-                .DataSource = objLookup.Lookup("tblWards", "WardID", "Name", , "DestrictID = " & cboDistrict.SelectedValue).Tables(0)
+                .DataSource = objLookup.Lookup("tblWards", "WardID", "Name", , "DistrictID = " & cboDistrict.SelectedValue).Tables(0)
                 .DataValueField = "WardID"
                 .DataTextField = "Name"
                 .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
             End With
 

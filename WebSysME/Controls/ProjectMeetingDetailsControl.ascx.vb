@@ -58,7 +58,7 @@ Partial Class ProjectMeetingDetailsControl
 
         Try
 
-            Dim objProjectMeeting As New ProjectMeeting("Demo", 1)
+            Dim objProjectMeeting As New ProjectMeeting(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProjectMeeting
 
@@ -99,7 +99,7 @@ Partial Class ProjectMeetingDetailsControl
 
         Try
 
-            Dim objProjectMeeting As New ProjectMeeting("Demo", 1)
+            Dim objProjectMeeting As New ProjectMeeting(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProjectMeeting
 
@@ -151,7 +151,7 @@ Partial Class ProjectMeetingDetailsControl
 
         If IsNumeric(txtProjectID.Text) Then
 
-            Dim objMeeting As New BusinessLogic.ProjectMeeting("Demo", 1)
+            Dim objMeeting As New BusinessLogic.ProjectMeeting(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
             Dim ds As DataSet = objMeeting.GetProjectMeeting("SELECT * FROM tblProjectMeetings WHERE ProjectID = " & txtProjectID.Text)
 
             With radMeetingListing

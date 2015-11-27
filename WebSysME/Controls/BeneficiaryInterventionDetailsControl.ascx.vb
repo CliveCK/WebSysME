@@ -4,7 +4,7 @@ Imports BusinessLogic
 Partial Class BeneficiaryInterventionDetailsControl
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
 #Region "Status Messages"
@@ -146,7 +146,7 @@ Partial Class BeneficiaryInterventionDetailsControl
 
             For i As Long = 0 To mObject.Length - 1
 
-                Dim objObjects As New BusinessLogic.BeneficiaryIntervention("Demo", 1)
+                Dim objObjects As New BusinessLogic.BeneficiaryIntervention(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objObjects
 
@@ -184,7 +184,7 @@ Partial Class BeneficiaryInterventionDetailsControl
 
     '       Try 
 
-    '	Dim objBeneficiaryIntervention As New BeneficiaryIntervention("Demo", 1) 
+    '	Dim objBeneficiaryIntervention As New BeneficiaryIntervention(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID) 
 
     '	With objBeneficiaryIntervention 
 

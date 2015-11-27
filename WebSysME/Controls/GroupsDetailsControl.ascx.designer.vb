@@ -104,6 +104,15 @@ Partial Public Class GroupsDetailsControl
     Protected WithEvents cmdSave As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''cmdDelete control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cmdDelete As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
     '''txtGroupID control.
     '''</summary>
     '''<remarks>

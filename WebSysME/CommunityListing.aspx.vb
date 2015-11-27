@@ -3,6 +3,8 @@
 Public Class CommunityListing
     Inherits System.Web.UI.Page
 
+    Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
+
 #Region "Status Messages"
 
     Public Event Message(ByVal Message As String, ByVal MessageType As MessageTypeEnum)
@@ -40,7 +42,7 @@ Public Class CommunityListing
 
     Private Sub LoadGrid()
 
-        Dim objCommunity As New BusinessLogic.Community("Demo", 1)
+        Dim objCommunity As New BusinessLogic.Community(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radCommunityListing
 
@@ -64,11 +66,11 @@ Public Class CommunityListing
 
                 Case "View"
 
-                    Response.Redirect("~/CommunityPage.aspx?id=" & Server.HtmlDecode(item("CommunityID").Text))
+                    Response.Redirect("~/CommunityPage.aspx?id=" & objUrlEncoder.Encrypt(item("CommunityID").Text))
 
                 Case "Delete"
 
-                    Dim objCommunity As New BusinessLogic.Community("Demo", 1)
+                    Dim objCommunity As New BusinessLogic.Community(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objCommunity
 

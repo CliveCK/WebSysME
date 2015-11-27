@@ -4,8 +4,9 @@ Imports BusinessLogic
 Partial Class StaffMemberDetailsControl
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
+    Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
 
 #Region "Status Messages"
 
@@ -37,41 +38,39 @@ Partial Class StaffMemberDetailsControl
 
         If Not Page.IsPostBack Then
 
+            Dim objLookup As New BusinessLogic.CommonFunctions
+
+            With cboOrganizationType
+
+                .DataSource = objLookup.Lookup("luOrganizationTypes", "OrganizationTypeID", "Description").Tables(0)
+                .DataValueField = "OrganizationTypeID"
+                .DataTextField = "Description"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
+            End With
+
+            With cboPosition
+
+                .DataSource = objLookup.Lookup("luStaffPosition", "PositionID", "Description").Tables(0)
+                .DataValueField = "PositionID"
+                .DataTextField = "Description"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
+            End With
+
             If Not IsNothing(Request.QueryString("id")) Then
 
-                If Not LoadStaffMember(Request.QueryString("id")) Then
+                If Not LoadStaffMember(objUrlEncoder.Decrypt(Request.QueryString("id"))) Then
 
                     ShowMessage("Staff member not found", MessageTypeEnum.Error)
 
                 End If
-
-            Else
-
-                Dim objLookup As New BusinessLogic.CommonFunctions
-
-                With cboOrganizationType
-
-                    .DataSource = objLookup.Lookup("luOrganizationTypes", "OrganizationTypeID", "Description").Tables(0)
-                    .DataValueField = "OrganizationTypeID"
-                    .DataTextField = "Description"
-                    .DataBind()
-
-                    .Items.Insert(0, New ListItem(String.Empty, String.Empty))
-                    .SelectedIndex = 0
-
-                End With
-
-                With cboPosition
-
-                    .DataSource = objLookup.Lookup("luStaffPosition", "PositionID", "Description").Tables(0)
-                    .DataValueField = "PositionID"
-                    .DataTextField = "Description"
-                    .DataBind()
-
-                    .Items.Insert(0, New ListItem(String.Empty, String.Empty))
-                    .SelectedIndex = 0
-
-                End With
 
             End If
 
@@ -89,14 +88,29 @@ Partial Class StaffMemberDetailsControl
 
         Try
 
-            Dim objStaffMember As New StaffMember("Demo", 1)
+            Dim objStaffMember As New StaffMember(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objStaffMember
 
                 If .Retrieve(StaffID) Then
 
+                    Dim objLookup As New BusinessLogic.CommonFunctions
+
+                    With cboOrganization
+
+                        .DataSource = objLookup.Lookup("tblOrganization", "OrganizationID", "Name").Tables(0)
+                        .DataValueField = "OrganizationID"
+                        .DataTextField = "Name"
+                        .DataBind()
+
+                        .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                        .SelectedIndex = 0
+
+                    End With
+
                     txtStaffID.Text = .StaffID
                     If Not IsNothing(cboOrganization.Items.FindByValue(.OrganizationID)) Then cboOrganization.SelectedValue = .OrganizationID
+                    If Not IsNothing(cboOrganizationType.Items.FindByValue(.OrganizationTypeID)) Then cboOrganizationType.SelectedValue = .OrganizationTypeID
                     txtContactNo.Text = .ContactNo
                     txtName.Text = .Name
                     txtFirstName.Text = .FirstName
@@ -131,7 +145,7 @@ Partial Class StaffMemberDetailsControl
 
         Try
 
-            Dim objStaffMember As New StaffMember("Demo", 1)
+            Dim objStaffMember As New StaffMember(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objStaffMember
 
@@ -277,7 +291,7 @@ Partial Class StaffMemberDetailsControl
 
         Dim FileType As Long = db.ExecuteScalar(CommandType.Text, "SELECT TOP 1 FileTypeID FROM luFileTypes where Description = 'CV'")
 
-        Dim objFiles As New BusinessLogic.Files("Demo", 1)
+        Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objFiles
 
@@ -293,7 +307,7 @@ Partial Class StaffMemberDetailsControl
 
             If .Save() Then
 
-                Dim objObjects As New BusinessLogic.DocumentObjects("Demo", 1)
+                Dim objObjects As New BusinessLogic.DocumentObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objObjects
 

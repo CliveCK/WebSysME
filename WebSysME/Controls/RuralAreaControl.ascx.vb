@@ -36,6 +36,8 @@
             txtDistrict.Enabled = False
             cboWard.Enabled = False
             txtWard.Enabled = False
+            cboVillage.Enabled = False
+            txtVillage.Enabled = False
 
             Dim objLookup As New BusinessLogic.CommonFunctions
 
@@ -66,6 +68,8 @@
                 txtDistrict.Enabled = False
                 cboWard.Enabled = False
                 txtWard.Enabled = False
+                cboVillage.Enabled = False
+                txtVillage.Enabled = False
 
             Case "Province"
                 cboProvince.Enabled = True
@@ -74,6 +78,8 @@
                 txtDistrict.Enabled = False
                 cboWard.Enabled = False
                 txtWard.Enabled = False
+                cboVillage.Enabled = False
+                txtVillage.Enabled = False
 
             Case "District"
                 cboProvince.Enabled = True
@@ -82,6 +88,8 @@
                 txtDistrict.Enabled = True
                 cboWard.Enabled = False
                 txtWard.Enabled = False
+                cboVillage.Enabled = False
+                txtVillage.Enabled = False
 
             Case "Ward"
                 cboProvince.Enabled = True
@@ -90,6 +98,18 @@
                 cboDistrict.Enabled = True
                 txtDistrict.Enabled = True
                 txtWard.Enabled = True
+                cboVillage.Enabled = False
+                txtVillage.Enabled = False
+
+            Case "Village"
+                cboProvince.Enabled = True
+                txtProvince.Enabled = True
+                cboWard.Enabled = True
+                cboDistrict.Enabled = True
+                txtDistrict.Enabled = True
+                txtWard.Enabled = True
+                cboVillage.Enabled = True
+                txtVillage.Enabled = True
 
         End Select
 
@@ -107,6 +127,9 @@
                 .DataValueField = "ProvinceID"
                 .DataTextField = "Name"
                 .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
             End With
 
@@ -127,6 +150,9 @@
                 .DataTextField = "Name"
                 .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
             End With
 
         End If
@@ -146,6 +172,9 @@
                 .DataTextField = "Name"
                 .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
             End With
 
         End If
@@ -154,7 +183,7 @@
 
     Private Sub cmdSave_Click(sender As Object, e As EventArgs) Handles cmdSave.Click
 
-        Dim objRuralArea As New BusinessLogic.RuralArea("Demo", 1)
+        Dim objRuralArea As New BusinessLogic.RuralArea(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objRuralArea
 
@@ -179,6 +208,11 @@
                     .Ward = txtWard.Text
                     .DistrictID = cboDistrict.SelectedValue
 
+                Case "Village"
+                    If txtVillage.Text = "" Then Exit Sub
+                    .Village = txtVillage.Text
+                    .WardID = cboWard.SelectedValue
+
             End Select
 
             If .Save(rbLstSaveOption.SelectedValue) Then
@@ -192,6 +226,28 @@
             End If
 
         End With
+
+    End Sub
+
+    Private Sub cboWard_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboWard.SelectedIndexChanged
+
+        Dim objLookup As New BusinessLogic.CommonFunctions
+
+        If cboWard.SelectedIndex > 0 Then
+
+            With cboVillage
+
+                .DataSource = objLookup.Lookup("tblVillages", "VillageID", "Name", , "WardID = " & cboWard.SelectedValue).Tables(0)
+                .DataValueField = "VillageID"
+                .DataTextField = "Name"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
+            End With
+
+        End If
 
     End Sub
 End Class

@@ -124,7 +124,7 @@ Public Class ProjectStaffIntervention
 
         mObjectUserID = ObjectUserID 
         mConnectionName = ConnectionName 
-        db = DatabaseFactory.CreateDatabase(ConnectionName) 
+        db = New DatabaseProviderFactory().Create(ConnectionName) 
 
     End Sub 
 

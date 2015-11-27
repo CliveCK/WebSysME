@@ -56,7 +56,7 @@ Partial Public Class UserAdministration
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents CreateNewUserControl1 As CreateNewUserControl
+    Protected WithEvents CreateNewUserControl1 As Global.WebSysME.CreateNewUserControl
 
     '''<summary>
     '''FindUsers1 control.
@@ -65,5 +65,5 @@ Partial Public Class UserAdministration
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents FindUsers1 As FindUsers
+    Protected WithEvents FindUsers1 As Global.WebSysME.FindUsers
 End Class

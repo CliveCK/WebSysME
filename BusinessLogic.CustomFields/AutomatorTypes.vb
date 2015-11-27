@@ -1,8 +1,10 @@
 ﻿Public Enum AutomatorTypes
-    ProjectType
-    ProjectStatus
-    ContactType
-    ContactStatus
+    Project
+    HealthCenter
+    School
+    Organization
+    Community
+    Group
 End Enum
 
 

@@ -5,7 +5,7 @@ Public Class OutputDetailsControl
     Inherits System.Web.UI.UserControl
 
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private ds As DataSet
 
 #Region "Status Messages"
@@ -58,7 +58,7 @@ Public Class OutputDetailsControl
     Private Sub LoadGrid()
 
         Try
-            Dim db As Database = New DatabaseProviderFactory().Create("Demo")
+            Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
             With radOutputs
 
@@ -97,7 +97,7 @@ Public Class OutputDetailsControl
 
             For i As Long = 0 To Outputs.Length - 1
 
-                Dim objOutput As New BusinessLogic.ObjectiveOutputs("Demo", 1)
+                Dim objOutput As New BusinessLogic.ObjectiveOutputs(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objOutput
 
@@ -132,7 +132,7 @@ Public Class OutputDetailsControl
 
                 Case "Delete"
 
-                    Dim objObjectiveOutput As New BusinessLogic.ObjectiveOutputs("Demo", 1)
+                    Dim objObjectiveOutput As New BusinessLogic.ObjectiveOutputs(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objObjectiveOutput
 
@@ -163,6 +163,11 @@ Public Class OutputDetailsControl
                 Dim gridItem As GridDataItem = e.Item
 
                 Dim btnImage As ImageButton = DirectCast(gridItem.FindControl("imgEdit"), ImageButton)
+
+                Dim sql As String = "SELECT O.OutputID, O.Description FROM tblOutput O inner join tblObjectiveOutputs OO on OO.OutputID = O.OutputID "
+                sql &= " inner join tblObjectives Ob on Ob.ObjectiveID = OO.ObjectiveID where OO.ObjectiveID = " & cboObjectives.SelectedValue
+
+                ds = db.ExecuteDataSet(CommandType.Text, sql)
 
                 If ds.Tables(0).Select("OutputID = " & gridItem("OutputID").Text).Length > 0 Then
 

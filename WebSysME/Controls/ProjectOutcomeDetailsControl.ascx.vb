@@ -6,7 +6,7 @@ Public Class ProjectOutcomeDetailsControl
     Inherits System.Web.UI.UserControl
 
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private ds As DataSet
 
 #Region "Status Messages"
@@ -60,7 +60,7 @@ Public Class ProjectOutcomeDetailsControl
     Private Sub LoadGrid()
 
         Try
-            Dim db As Database = New DatabaseProviderFactory().Create("Demo")
+            Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
             With radOutcomes
 
@@ -99,7 +99,7 @@ Public Class ProjectOutcomeDetailsControl
 
             For i As Long = 0 To Outcome.Length - 1
 
-                Dim objOutput As New BusinessLogic.ProjectOutcome("Demo", 1)
+                Dim objOutput As New BusinessLogic.ProjectOutcome(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objOutput
 

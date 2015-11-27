@@ -20,7 +20,7 @@ Public Class SurveyListing
 
         ViewState("Survey") = Nothing
 
-        Dim objSurvey As New BusinessLogic.Survey("Demo", 1)
+        Dim objSurvey As New BusinessLogic.Survey(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objSurvey.GetSurvey("SELECT * FROM tblSurveys")
 
         With radSurveyListing

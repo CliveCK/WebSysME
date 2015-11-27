@@ -7,7 +7,7 @@ Public Class Projects
 
     Protected mProject As Long
     Protected mProjectCode As String
-    Protected mSector As Long
+    Protected mKeyChangePromiseID As Long
     Protected mProjectManager As Long
     Protected mTargetedNoOfBeneficiaries As Long
     Protected mActualBeneficiaries As Long
@@ -20,7 +20,7 @@ Public Class Projects
     Protected mUpdatedDate As String
     Protected mProjectBudget As Decimal
     Protected mName As String
-    Protected mProgram As Long
+    Protected mStrategicObjectiveID As Long
     Protected mAcronym As String
     Protected mProjectDocument As String
     Protected mFinalGStatement As String
@@ -72,12 +72,12 @@ Public Class Projects
         End Set
     End Property
 
-    Public Property Sector() As Long
+    Public Property KeyChangePromiseID() As Long
         Get
-            Return mSector
+            Return mKeyChangePromiseID
         End Get
         Set(ByVal value As Long)
-            mSector = value
+            mKeyChangePromiseID = value
         End Set
     End Property
 
@@ -189,12 +189,12 @@ Public Class Projects
         End Set
     End Property
 
-    Public Property Program() As Long
+    Public Property StrategicObjectiveID() As Long
         Get
-            Return mProgram
+            Return mStrategicObjectiveID
         End Get
         Set(ByVal value As Long)
-            mProgram = value
+            mStrategicObjectiveID = value
         End Set
     End Property
 
@@ -274,7 +274,7 @@ Public Class Projects
 
         Project = 0
         mProjectCode = ""
-        mSector = 0
+        mKeyChangePromiseID = 0
         mProjectManager = 0
         mTargetedNoOfBeneficiaries = 0
         mActualBeneficiaries = 0
@@ -287,7 +287,7 @@ Public Class Projects
         mUpdatedDate = ""
         mProjectBudget = 0.0
         mName = ""
-        mProgram = 0
+        mStrategicObjectiveID = 0
         mAcronym = ""
         mProjectDocument = ""
         mFinalGStatement = ""
@@ -389,7 +389,7 @@ Public Class Projects
 
             mProject = Catchnull(.Item("Project"), 0)
             mProjectCode = Catchnull(.Item("ProjectCode"), "")
-            mSector = Catchnull(.Item("Sector"), 0)
+            mKeyChangePromiseID = Catchnull(.Item("KeyChangePromiseID"), 0)
             mProjectManager = Catchnull(.Item("ProjectManager"), 0)
             mTargetedNoOfBeneficiaries = Catchnull(.Item("TargetedNoOfBeneficiaries"), 0)
             mActualBeneficiaries = Catchnull(.Item("ActualBeneficiaries"), 0)
@@ -402,7 +402,7 @@ Public Class Projects
             mUpdatedDate = Catchnull(.Item("UpdatedDate"), "")
             mProjectBudget = Catchnull(.Item("ProjectBudget"), 0.0)
             mName = Catchnull(.Item("Name"), "")
-            mProgram = Catchnull(.Item("Program"), "")
+            mStrategicObjectiveID = Catchnull(.Item("StrategicObjectiveID"), 0)
             mAcronym = Catchnull(.Item("Acronym"), "")
             mProjectDocument = Catchnull(.Item("ProjectDocument"), "")
             mFinalGStatement = Catchnull(.Item("FinalGStatement"), "")
@@ -420,7 +420,7 @@ Public Class Projects
 
         db.AddInParameter(cmd, "@Project", DbType.Int32, mProject)
         db.AddInParameter(cmd, "@ProjectCode", DbType.String, mProjectCode)
-        db.AddInParameter(cmd, "@Sector", DbType.Int32, mSector)
+        db.AddInParameter(cmd, "@KeyChangePromiseID", DbType.Int32, mKeyChangePromiseID)
         db.AddInParameter(cmd, "@ProjectManager", DbType.Int32, mProjectManager)
         db.AddInParameter(cmd, "@TargetedNoOfBeneficiaries", DbType.Int32, mTargetedNoOfBeneficiaries)
         db.AddInParameter(cmd, "@ActualBeneficiaries", DbType.Int32, mActualBeneficiaries)
@@ -430,7 +430,7 @@ Public Class Projects
         db.AddInParameter(cmd, "@EndDate", DbType.String, mEndDate)
         db.AddInParameter(cmd, "@ProjectBudget", DbType.Decimal, mProjectBudget)
         db.AddInParameter(cmd, "@Name", DbType.String, mName)
-        db.AddInParameter(cmd, "@Program", DbType.Int32, mProgram)
+        db.AddInParameter(cmd, "@StrategicObjectiveID", DbType.Int32, mStrategicObjectiveID)
         db.AddInParameter(cmd, "@Acronym", DbType.String, mAcronym)
         db.AddInParameter(cmd, "@ProjectDocument", DbType.String, mProjectDocument)
         db.AddInParameter(cmd, "@FinalGStatement", DbType.String, mFinalGStatement)

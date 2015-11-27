@@ -6,7 +6,7 @@ Public Class MapLocationsPage
     Inherits System.Web.UI.Page
 
     Private dsDocuments As DataSet
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
 #Region "Status Messages"
@@ -167,7 +167,7 @@ Public Class MapLocationsPage
 
                 For i As Long = 0 To mObject.Length - 1
 
-                    Dim objObjects As New BusinessLogic.LocationObjects("Demo", 1)
+                    Dim objObjects As New BusinessLogic.LocationObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objObjects
 
@@ -363,7 +363,7 @@ Public Class MapLocationsPage
         If cboObjectType.SelectedIndex > 0 Then
 
             Dim sql As String = "SELECT ObjectID FROM tblLocationObjects O inner join luObjectTypes OT "
-            sql &= " on OT.ObjectTypeID = O.ObjectTypeID where OT.Description = " & cboObjectType.SelectedValue
+            sql &= " on OT.ObjectTypeID = O.ObjectTypeID where OT.ObjectTypeID = " & cboObjectType.SelectedValue
 
             dsDocuments = db.ExecuteDataSet(CommandType.Text, sql)
 
@@ -373,11 +373,19 @@ Public Class MapLocationsPage
 
     End Sub
 
+    Private Sub radObjects_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles radObjects.ItemCommand
+
+        
+
+    End Sub
+
     Private Sub radObjects_ItemDataBound(sender As Object, e As GridItemEventArgs) Handles radObjects.ItemDataBound
 
         If TypeOf e.Item Is GridDataItem Then
 
             Dim gridItem As GridDataItem = e.Item
+
+            Dim btnImage As ImageButton = DirectCast(gridItem.FindControl("imgEdit"), ImageButton)
 
             If dsDocuments.Tables(0).Select("ObjectID = " & gridItem("ObjectID").Text).Length > 0 Then
 
@@ -385,6 +393,7 @@ Public Class MapLocationsPage
 
                 chkbx.Enabled = False
                 chkbx.ToolTip = "Already mapped..."
+                btnImage.Visible = True
 
             End If
 
@@ -396,6 +405,7 @@ Public Class MapLocationsPage
 
         If Map() Then
 
+            LoadGrid()
             ShowMessage("Mapped successfully...", MessageTypeEnum.Information)
 
         Else

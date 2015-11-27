@@ -6,7 +6,7 @@ Partial Class TrainingAttendantsDetailsControl
     Inherits System.Web.UI.UserControl
 
     Dim ds As DataSet
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
 
@@ -60,7 +60,7 @@ Partial Class TrainingAttendantsDetailsControl
 
                 With cboBeneficiaryType
 
-                    .DataSource = objLookup.Lookup("luBeneficiaryType", "BeneficiaryTypeID", "Description").Tables(0)
+                    .DataSource = objLookup.Lookup("luBeneficiaryType", "BeneficiaryTypeID", "Description", , "Description IN ('HealthCenter','Household','Individual')").Tables(0)
                     .DataValueField = "BeneficiaryTypeID"
                     .DataTextField = "Description"
                     .DataBind()
@@ -69,6 +69,8 @@ Partial Class TrainingAttendantsDetailsControl
                     .SelectedIndex = 0
 
                 End With
+
+                LoadGrid()
 
             End If
 
@@ -96,7 +98,7 @@ Partial Class TrainingAttendantsDetailsControl
 
             For i As Long = 0 To Beneficiary.Length - 1
 
-                Dim objAttendants As New BusinessLogic.TrainingAttendants("Demo", 1)
+                Dim objAttendants As New BusinessLogic.TrainingAttendants(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objAttendants
 
@@ -125,7 +127,7 @@ Partial Class TrainingAttendantsDetailsControl
 
         If Map() Then
 
-            Dim sql As String = "SELECT * FROM tblTrainingAttendants WHERE TrainingID = " & objUrlEncoder.Decrypt(Request.QueryString("id")) & " AND BeneficiaryTypeID =" & cboBeneficiaryType.SelectedValue
+            Dim sql As String = "SELECT * FROM tblTrainingAttendants WHERE TrainingID = " & objUrlEncoder.Decrypt(Request.QueryString("id")) & " AND BeneficiaryTypeID =" & IIf(IsNumeric(cboBeneficiaryType.SelectedValue), cboBeneficiaryType.SelectedValue, 0)
 
             ds = db.ExecuteDataSet(CommandType.Text, sql)
 
@@ -143,7 +145,10 @@ Partial Class TrainingAttendantsDetailsControl
     Private Sub LoadGrid()
 
         Dim sql As String = DertemineBeneficiaryTypeSQL(cboBeneficiaryType.SelectedItem.Text)
-        ViewState("Beneficiaries") = Nothing
+
+        Dim sql1 As String = "SELECT * FROM tblTrainingAttendants WHERE TrainingID = " & objUrlEncoder.Decrypt(Request.QueryString("id")) & " AND BeneficiaryTypeID =" & IIf(IsNumeric(cboBeneficiaryType.SelectedValue), cboBeneficiaryType.SelectedValue, 0)
+
+        ds = db.ExecuteDataSet(CommandType.Text, sql1)
 
         If sql <> "" Then
 
@@ -164,7 +169,7 @@ Partial Class TrainingAttendantsDetailsControl
 
     '    Try
 
-    '        Dim objTrainingAttendants As New TrainingAttendants(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+    '        Dim objTrainingAttendants As New TrainingAttendants(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
     '        With objTrainingAttendants
 
@@ -215,7 +220,11 @@ Partial Class TrainingAttendantsDetailsControl
                 sql = "SELECT SchoolID As ObjectID, Name FROM tblSchools"
 
             Case "HealthCenter"
-                sql = "SELECT HealthCenterID as ObjectID, Name, Description FROM tblHealthCenters"
+                sql = "SELECT HealthCenterStaffID as ObjectID, FirstName, Surname, P.Name as Province, D.Name As District FROM tblHealthCenterStaff HS "
+                sql &= "inner join tblHealthCenters H  on HS.HealthCenterID = H.HealthCenterID "
+                sql &= "inner join tblWards W on W.WardID = H.WardID "
+                sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
+                sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID  "
 
             Case "Household"
                 sql = "SELECT BeneficiaryID as ObjectID, ISNULL(FirstName, '') + ' ' + ISNULL(Surname,'') As Name FROM tblBeneficiaries WHERE Suffix = 1"
@@ -240,7 +249,7 @@ Partial Class TrainingAttendantsDetailsControl
 
                 Case "Delete"
 
-                    Dim objAttendants As New BusinessLogic.TrainingAttendants("Demo", 1)
+                    Dim objAttendants As New BusinessLogic.TrainingAttendants(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objAttendants
 
@@ -293,9 +302,6 @@ Partial Class TrainingAttendantsDetailsControl
 
     Private Sub cboBeneficiaryType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboBeneficiaryType.SelectedIndexChanged
 
-        Dim sql As String = "SELECT * FROM tblTrainingAttendants WHERE TrainingID = " & objUrlEncoder.Decrypt(Request.QueryString("id")) & " AND BeneficiaryTypeID =" & cboBeneficiaryType.SelectedValue
-
-        ds = db.ExecuteDataSet(CommandType.Text, sql)
         LoadGrid()
 
     End Sub

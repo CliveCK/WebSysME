@@ -19,7 +19,7 @@ Public Class EvaluationListing
 
         ViewState("Evaluation") = Nothing
 
-        Dim objEvaluation As New BusinessLogic.Evaluation("Demo", 1)
+        Dim objEvaluation As New BusinessLogic.Evaluation(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objEvaluation.GetEvaluation("SELECT * FROM tblEvaluations")
 
         With radEvaluationListing

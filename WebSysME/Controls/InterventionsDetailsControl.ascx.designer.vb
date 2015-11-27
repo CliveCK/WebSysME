@@ -32,13 +32,22 @@ Partial Public Class InterventionsDetailsControl
     Protected WithEvents cboProject As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
-    '''cboSector control.
+    '''txtName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cboSector As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents txtName As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''txtDescription control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtDescription As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''txtBeneficiariesTarget control.
@@ -77,22 +86,13 @@ Partial Public Class InterventionsDetailsControl
     Protected WithEvents radEndDate As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
-    '''txtName control.
+    '''radReviewDate control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtName As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''txtDescription control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtDescription As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents radReviewDate As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
     '''txtDescriptionOfBeneficiaries control.

@@ -49,6 +49,13 @@ Partial Class OrganizationDetailsControl
                 .SelectedIndex = 0
 
             End With
+
+            If Not IsNothing(Request.QueryString("id")) Then
+
+                LoadOrganization(objUrlEncoder.Decrypt(Request.QueryString("id")))
+
+            End If
+
         End If
 
     End Sub
@@ -63,7 +70,7 @@ Partial Class OrganizationDetailsControl
 
         Try
 
-            Dim objOrganization As New Organization("Demo", 1)
+            Dim objOrganization As New Organization(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objOrganization
 
@@ -80,6 +87,7 @@ Partial Class OrganizationDetailsControl
                     txtEmail.Text = .Email
                     txtAddress.Text = .Address
 
+                    lnkSubOffices.Visible = True
                     ShowMessage("Organization loaded successfully...", MessageTypeEnum.Information)
                     Return True
 
@@ -105,7 +113,7 @@ Partial Class OrganizationDetailsControl
 
         Try
 
-            Dim objOrganization As New Organization("Demo", 1)
+            Dim objOrganization As New Organization(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objOrganization
 

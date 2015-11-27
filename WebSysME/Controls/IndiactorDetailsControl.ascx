@@ -112,10 +112,14 @@
         <td>&nbsp;</td>
     </tr>
     <tr>
-        <td>Year:</td>
-        <td><asp:TextBox runat="server" ID="txtYear" CssClass="form-control"></asp:TextBox></td>
+        <td>Organization:</td>
+        <td><asp:DropDownList runat="server" ID="cboOrganization" CssClass="form-control"></asp:DropDownList></td>
+        <td>District:</td>
+        <td><asp:DropDownList runat="server" ID="cboDistrict" CssClass="form-control"></asp:DropDownList></td>
         <td>Month:</td>
         <td><asp:DropDownList runat="server" ID="cboMonth" CssClass="form-control"></asp:DropDownList></td>
+        <td>Year:</td>
+        <td><asp:TextBox runat="server" ID="txtYear" CssClass="form-control"></asp:TextBox></td>        
         <td>Target:</td>
         <td><asp:TextBox runat="server" ID="txtTarget" CssClass="form-control"></asp:TextBox></td>
         <td class="auto-style1"><asp:Button runat="server" ID="cmdSaveTracking" Text="+" class="btn btn-default" Width="38px"/></td>
@@ -126,7 +130,7 @@
         </td>
     </tr>
     <tr>
-        <td colspan="10">
+        <td colspan="11">
              <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server"></telerik:RadAjaxLoadingPanel>
     <telerik:RadAjaxPanel runat="server" ID="RadAjaxPanel1" CssClass="div-container no-bg" LoadingPanelID="RadAjaxLoadingPanel1">
  
@@ -136,6 +140,24 @@
             <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
             <MasterTableView EditMode="InPlace" DataKeyNames="IndicatorTrackingID">
                 <Columns>
+                    <telerik:GridTemplateColumn HeaderText="Organization" SortExpression="Organization">
+                        <ItemTemplate>
+                            <%# DataBinder.Eval(Container.DataItem, "Organization")%>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <telerik:RadTextBox ID="OrganizationTextBox" runat="server" Width="100px" Text='<%# Bind("Organization")%>'>
+                            </telerik:RadTextBox>
+                        </EditItemTemplate>
+                    </telerik:GridTemplateColumn>
+                    <telerik:GridTemplateColumn HeaderText="District" SortExpression="District">
+                        <ItemTemplate>
+                            <%# DataBinder.Eval(Container.DataItem, "District")%>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <telerik:RadTextBox ID="DistrictTextBox" runat="server" Width="100px" Text='<%# Bind("District")%>'>
+                            </telerik:RadTextBox>
+                        </EditItemTemplate>
+                    </telerik:GridTemplateColumn>
                     <telerik:GridTemplateColumn HeaderText="Year" SortExpression="Year">
                         <ItemTemplate>
                             <%# DataBinder.Eval(Container.DataItem, "Year")%>

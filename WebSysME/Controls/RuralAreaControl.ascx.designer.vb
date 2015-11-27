@@ -50,6 +50,15 @@ Partial Public Class RuralAreaControl
     Protected WithEvents cboWard As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
+    '''cboVillage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboVillage As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
     '''txtCountry control.
     '''</summary>
     '''<remarks>
@@ -84,6 +93,15 @@ Partial Public Class RuralAreaControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtWard As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''txtVillage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtVillage As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''rbLstSaveOption control.

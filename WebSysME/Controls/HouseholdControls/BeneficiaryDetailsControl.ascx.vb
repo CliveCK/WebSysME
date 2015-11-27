@@ -1,5 +1,6 @@
 ﻿Imports BusinessLogic
 Imports Telerik.Web.UI
+Imports SysPermissionsManager.Functionality
 
 Partial Class BeneficiaryDetailsControl
     Inherits System.Web.UI.UserControl
@@ -42,16 +43,17 @@ Partial Class BeneficiaryDetailsControl
 
         If Not Page.IsPostBack Then
 
-            Dim objBeneficiary As New BusinessLogic.Beneficiary("Demo", 1)
+            Dim objBeneficiary As New BusinessLogic.Beneficiary(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+            InitializeComponents()
 
             If Not IsNothing(Request.QueryString("id")) Then
 
                 LoadBeneficiary(objUrlEncoder.Decrypt(Request.QueryString("id")))
 
-            End If
+                LoadGrid(objBeneficiary)
 
-            InitializeComponents()
-            LoadGrid(objBeneficiary)
+            End If
 
         End If
 
@@ -74,7 +76,15 @@ Partial Class BeneficiaryDetailsControl
 
     Protected Sub cmdSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdSave.Click
 
-        Save()
+        If Not SystemInitialization.EnforceUserFunctionalitySecurity(FunctionalityEnum.AddOrEditBeneficiaryDetails) Then
+
+            Save()
+
+        Else
+
+            ShowMessage("You are not authorised to Add or Edit Beneficiary details...", MessageTypeEnum.Error)
+
+        End If
 
     End Sub
 
@@ -82,7 +92,7 @@ Partial Class BeneficiaryDetailsControl
 
         Try
 
-            Dim objBeneficiary As New BusinessLogic.Beneficiary("Demo", 1)
+            Dim objBeneficiary As New BusinessLogic.Beneficiary(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objBeneficiary
 
@@ -109,9 +119,10 @@ Partial Class BeneficiaryDetailsControl
                     If Not IsNothing(cboSex.Items.FindByValue(.Sex)) Then cboSex.SelectedValue = .Sex
                     txtNationlIDNo.Text = .NationlIDNo
 
-                    If .IsDependant = 1 Then
+                    If .IsDependant <> 0 Then
 
                         cmdAddDependant.Text = "View Principal"
+                        chkAddDependant.Checked = True
 
                     End If
 
@@ -120,7 +131,7 @@ Partial Class BeneficiaryDetailsControl
 
                 Else
 
-                    ShowMessage("Failed to loadBeneficiary: & .ErrorMessage", MessageTypeEnum.Error)
+                    ShowMessage("Failed to load Beneficiary", MessageTypeEnum.Error)
                     Return False
 
                 End If
@@ -140,23 +151,23 @@ Partial Class BeneficiaryDetailsControl
 
         Try
 
-            Dim objBeneficiary As New BusinessLogic.Beneficiary("Demo", 1)
+            Dim objBeneficiary As New BusinessLogic.Beneficiary(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objBeneficiary
 
                 .BeneficiaryID = IIf(IsNumeric(txtBeneficiaryID1.Text), txtBeneficiaryID1.Text, 0)
                 .Suffix = IIf(txtSuffix.Text <> "", txtSuffix.Text, 0)
-                .MaritalStatus = cboMaritalStatus.SelectedValue
-                .HealthStatus = cboHealthStatus.SelectedValue
-                .DisabilityStatus = cboDisabilityStatus.SelectedValue
-                .LevelOfEducation = cboLevelOfEducation.SelectedValue
-                .Regularity = cboRegularity.SelectedValue
-                .Opharnhood = cboOpharnhood.SelectedValue
-                .MajorSourceIncome = cboMajorSourceIncome.SelectedValue
+                If cboMaritalStatus.SelectedIndex > 0 Then .MaritalStatus = cboMaritalStatus.SelectedValue
+                If cboHealthStatus.SelectedIndex > 0 Then .HealthStatus = cboHealthStatus.SelectedValue
+                If cboDisabilityStatus.SelectedIndex > 0 Then .DisabilityStatus = cboDisabilityStatus.SelectedValue
+                If cboLevelOfEducation.SelectedIndex > 0 Then .LevelOfEducation = cboLevelOfEducation.SelectedValue
+                If cboRegularity.SelectedIndex > 0 Then .Regularity = cboRegularity.SelectedValue
+                If cboOpharnhood.SelectedIndex > 0 Then .Opharnhood = cboOpharnhood.SelectedValue
+                If cboMajorSourceIncome.SelectedIndex > 0 Then .MajorSourceIncome = cboMajorSourceIncome.SelectedValue
                 .ContactNo = txtContactNo.Text
-                .Condition = cboCondition.SelectedValue
-                .Attendance = cboAttendance.SelectedValue
-                .Disability = cboDisability.SelectedValue
+                If cboCondition.SelectedIndex > 0 Then .Condition = cboCondition.SelectedValue
+                If cboAttendance.SelectedIndex > 0 Then .Attendance = cboAttendance.SelectedValue
+                If cboDisability.SelectedIndex > 0 Then .Disability = cboDisability.SelectedValue
                 .DateOfBirth = radDateofBirth.SelectedDate
                 .MemberNo = txtMemberNo.Text
                 .FirstName = txtFirstName.Text
@@ -170,8 +181,8 @@ Partial Class BeneficiaryDetailsControl
 
                         .ParentID = txtParentID.Text
                         .MemberNo = txtMemberNo.Text
-                        .Suffix = .GetNextSuffix()
                         .IsDependant = 1
+                        .Suffix = IIf(IsNumeric(txtSuffix.Text) AndAlso txtSuffix.Text > 0, txtSuffix.Text, .GetNextSuffix())
 
                         If .Save Then
 
@@ -200,13 +211,14 @@ Partial Class BeneficiaryDetailsControl
 
                         If Not IsNumeric(txtBeneficiaryID1.Text) OrElse Trim(txtBeneficiaryID1.Text) = 0 Then txtBeneficiaryID1.Text = .BeneficiaryID
 
-                        .MemberNo = IIf(IsNumeric(txtMemberNo.Text), .GenerateMemberNo(), txtMemberNo.Text)
-                        .Suffix = IIf(Not IsNumeric(txtSuffix.Text), .GetNextSuffix(), txtSuffix.Text)
+                        .MemberNo = IIf(Not IsNumeric(txtMemberNo.Text), .GenerateMemberNo(), txtMemberNo.Text)
                         .IsDependant = 0
+                        .Suffix = IIf(Not IsNumeric(txtSuffix.Text), .GetNextSuffix(), txtSuffix.Text)
 
                         If .MemberNo <> "" AndAlso .Suffix <> 0 Then .Save()
 
                         LoadBeneficiary(.BeneficiaryID)
+                        LoadGrid(objBeneficiary)
 
                         ShowMessage("Beneficiary saved successfully...", MessageTypeEnum.Information)
 
@@ -221,8 +233,10 @@ Partial Class BeneficiaryDetailsControl
 
                 End If
 
-            End With
+                CookiesWrapper.BeneficiaryID = .BeneficiaryID
+                CookiesWrapper.MemberNo = .MemberNo
 
+            End With
 
         Catch ex As Exception
 
@@ -235,6 +249,7 @@ Partial Class BeneficiaryDetailsControl
 
     Public Sub Clear()
 
+        CookiesWrapper.BeneficiaryID = 0
         txtBeneficiaryID1.Text = ""
         txtSuffix.Text = ""
         If Not IsNothing(cboMaritalStatus.Items.FindByValue("")) Then
@@ -341,7 +356,7 @@ Partial Class BeneficiaryDetailsControl
 
         With radBenListing
 
-            .DataSource = objBeneficiaries.GetAllBeneficiaries()
+            .DataSource = objBeneficiaries.GetBeneficiaryHousehold(CookiesWrapper.BeneficiaryID)
             .DataBind()
 
             ViewState("Beneficiaries") = .DataSource
@@ -370,10 +385,11 @@ Partial Class BeneficiaryDetailsControl
 
         If cmdAddDependant.Text = "Add Dependant" Then
 
-            If IsNumeric(txtParentID.Text) AndAlso txtParentID.Text > 0 Then
+            If IsNumeric(txtBeneficiaryID1.Text) AndAlso txtSuffix.Text = 1 Then
 
                 chkAddDependant.Checked = True
 
+                txtParentID.Text = txtBeneficiaryID1.Text
                 txtBeneficiaryID1.Text = ""
                 txtSuffix.Text = ""
                 If Not IsNothing(cboMaritalStatus.Items.FindByValue("")) Then

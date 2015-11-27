@@ -26,7 +26,7 @@
         	<td ><asp:textbox id="txtContactName" runat="server" CssClass="form-control"></asp:textbox><br /></td>
     </tr> 
     <tr>  
-		<td >Dddress</td> 
+		<td >Address</td> 
         	<td ><asp:textbox id="txtAddress" runat="server" CssClass="form-control"></asp:textbox> </td> 
 		<td >Email</td> 
         	<td ><asp:textbox id="txtEmail" runat="server" CssClass="form-control"></asp:textbox><br /></td>

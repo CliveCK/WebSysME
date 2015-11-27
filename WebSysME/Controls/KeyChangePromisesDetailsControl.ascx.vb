@@ -72,7 +72,7 @@ Partial Class KeyChangePromisesDetailsControl
 
         Try
 
-            Dim objKeyChangePromises As New KeyChangePromises("Demo", 1)
+            Dim objKeyChangePromises As New KeyChangePromises(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objKeyChangePromises
 
@@ -106,7 +106,7 @@ Partial Class KeyChangePromisesDetailsControl
     Private Function LoadKeyChangePromiseDescription(ByVal KeyChangePromiseDescription As Long) As Boolean
 
         Try
-            Dim objKeyChangeDescription As New KeyChangePromiseDescription("Demo", 1)
+            Dim objKeyChangeDescription As New KeyChangePromiseDescription(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objKeyChangeDescription
 
@@ -140,7 +140,7 @@ Partial Class KeyChangePromisesDetailsControl
 
         Try
 
-            Dim objKeyChangePromises As New KeyChangePromises("Demo", 1)
+            Dim objKeyChangePromises As New KeyChangePromises(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objKeyChangePromises
 
@@ -191,7 +191,7 @@ Partial Class KeyChangePromisesDetailsControl
 
     Private Sub LoadGrid(ByVal KeyChangePromiseID As Long)
 
-        Dim objKeyChangeDescription As New KeyChangePromiseDescription("Demo", 1)
+        Dim objKeyChangeDescription As New KeyChangePromiseDescription(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radKeyChangeDescription
 
@@ -208,7 +208,7 @@ Partial Class KeyChangePromisesDetailsControl
 
         If IsNumeric(txtKeyChangePromiseID.Text) AndAlso txtKeyChangePromiseID.Text > 0 Then
 
-            Dim objKeyChangeDescription As New KeyChangePromiseDescription("Demo", 1)
+            Dim objKeyChangeDescription As New KeyChangePromiseDescription(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objKeyChangeDescription
 
@@ -247,7 +247,7 @@ Partial Class KeyChangePromisesDetailsControl
 
                 Case "Delete"
 
-                    Dim objKeyPromiseDescription As New BusinessLogic.KeyChangePromiseDescription("Demo", 1)
+                    Dim objKeyPromiseDescription As New BusinessLogic.KeyChangePromiseDescription(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objKeyPromiseDescription
 

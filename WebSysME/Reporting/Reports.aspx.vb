@@ -56,7 +56,7 @@ Partial Public Class Reports
             Dim objReportCriteria As String = Request.QueryString("Criteria")
 
             txtUserReportFilter.Text = objReportCriteria
-            crvReports.PrintMode = PrintMode.ActiveX
+            crvReports1.PrintMode = PrintMode.ActiveX
 
             'Get the users report permissions here and put them in a sessio
 
@@ -66,7 +66,7 @@ Partial Public Class Reports
 
                 txtReportName.Text = dr(0)("ReportName")
 
-                crvReports.ToolPanelView = CBool(dr(0)("DisplayGroupTree"))
+                crvReports1.ToolPanelView = CBool(dr(0)("DisplayGroupTree"))
 
                 If GetCookieBasedCriteria(objReportID) <> "" Then
 
@@ -85,7 +85,7 @@ Partial Public Class Reports
 
         If Page.IsPostBack Then
 
-            crvReports.ReportSource = CType(Session.Item("REPORT_KEY"), ReportDocument)
+            crvReports1.ReportSource = CType(Session.Item("REPORT_KEY"), ReportDocument)
             ' ConfigureCrystalReports()
 
         End If
@@ -300,7 +300,7 @@ Partial Public Class Reports
         Try
 
             txtReportID.Text = e.Node.Value
-            CookiesWrapper.ReportID = e.Node.Value
+            CookiesWrapper.thisReportID = e.Node.Value
             txtSaveAs.Text = "-"
             txtSaveAsExcel.Text = "-"
             txtSaveAsWord.Text = "-"
@@ -309,9 +309,10 @@ Partial Public Class Reports
             txtReportName.Text = ""
 
         Catch ex As Exception
-            'LogError(ex)
+            log.Error(ex)
             ShowMessage(ex.Message, MessageTypeEnum.Error)
         End Try
+
     End Sub
 
     Private Sub tvwReportsCategories_NodeBound(ByVal o As Object, ByVal e As Telerik.Web.UI.RadTreeNodeEventArgs) Handles tvwReportsCategories.NodeDataBound
@@ -354,7 +355,7 @@ Partial Public Class Reports
 
     Private Function GetConnectionString() As String
 
-        Return ConfigurationManager.ConnectionStrings("ConnectionString").ConnectionString
+        Return ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
 
     End Function
 
@@ -364,11 +365,11 @@ Partial Public Class Reports
         '   Catch ex As Exception
 
         '  End Try
-        crvReports.Visible = True
+        crvReports1.Visible = True
         Try
 
-            Dim con As String = ConfigurationManager.ConnectionStrings("ConnectionString").ConnectionString
-            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create("ConnectionString")
+            Dim con As String = ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
+            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
             Dim builder As New SqlClient.SqlConnectionStringBuilder(GetConnectionString())
 
             builder.ConnectionString = con
@@ -389,7 +390,7 @@ Partial Public Class Reports
 
             If txtReportName.Text <> "" Then
 
-                ReportPath = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & "ConnectionString" & "\" & txtReportName.Text & ".rpt"
+                ReportPath = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & CookiesWrapper.thisConnectionName & "\" & txtReportName.Text & ".rpt"
                 reportfilename = txtReportName.Text
 
             Else
@@ -446,10 +447,9 @@ Partial Public Class Reports
 
             crReportDocument.RecordSelectionFormula = Criteria
             crReportDocument.SummaryInfo.ReportComments = CriteriaSummary
-            crReportDocument.SummaryInfo.ReportAuthor = CookiesWrapper.UserFullName
+            crReportDocument.SummaryInfo.ReportAuthor = CookiesWrapper.thisUserFullName
             crReportDocument.DataDefinition.RecordSelectionFormula = txtUserReportFilter.Text
             crReportDocument.SummaryInfo.ReportTitle = txtReportTitle.Text
-
 
             If Not IsNothing(Parameters) AndAlso Parameters.Count > 0 Then
 
@@ -477,7 +477,7 @@ Partial Public Class Reports
             SetDBLogonForSubreports(myConnectionInfo, crReportDocument)
 
             Session.Add("REPORT_KEY", crReportDocument)
-            crvReports.ReportSource = crReportDocument
+            crvReports1.ReportSource = crReportDocument
             '   crReportDocument.Dispose()
             'If Not IsNothing(crReportDocument) Then
             '    crReportDocument.Dispose()
@@ -496,8 +496,8 @@ Partial Public Class Reports
         Try
 
 
-            Dim con As String = ConfigurationManager.ConnectionStrings("ConnectionString").ConnectionString
-            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create("ConnectionString")
+            Dim con As String = ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
+            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
             Dim builder As New SqlClient.SqlConnectionStringBuilder(GetConnectionString())
 
             builder.ConnectionString = con
@@ -505,7 +505,7 @@ Partial Public Class Reports
 
             Dim ReportPath As String = ""
 
-            ReportPath = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & "ConnectionString" & "\Reports\MessageReport.rpt"
+            ReportPath = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & CookiesWrapper.thisConnectionName & "\Reports\MessageReport.rpt"
 
             If Not System.IO.File.Exists(ReportPath) Then
                 ShowMessage("Report not found: '" & ReportPath & "'", MessageTypeEnum.Error)
@@ -515,7 +515,7 @@ Partial Public Class Reports
             Dim crReportDocument As New ReportDocument
             crReportDocument.Load(ReportPath)
 
-            crvReports.ReportSource = crReportDocument
+            crvReports1.ReportSource = crReportDocument
 
         Catch ex As Exception
 
@@ -533,10 +533,10 @@ Partial Public Class Reports
             txtReportName.Text = dr(0)("ReportName")
             txtHasParameters.Text = CBool(dr(0)("HasParameters"))
             Dim newrpt As New ReportDocument
-            Dim rpt As ReportDocument = TryCast(crvReports.ReportSource, ReportDocument)
+            Dim rpt As ReportDocument = TryCast(crvReports1.ReportSource, ReportDocument)
             If Not IsNothing(rpt) Then
                 rpt.Dispose()
-                crvReports.ReportSource = newrpt
+                crvReports1.ReportSource = newrpt
             End If
             'clear error messages raised from last report
             ClearDisplayLabel()
@@ -545,7 +545,7 @@ Partial Public Class Reports
 
             If reportnode.Category = "HasUserInput=1" Then
                 'LoadMessageReport()
-                crvReports.Visible = False
+                crvReports1.Visible = False
                 lblReports.Text = "Enter report criteria above to view report"
                 lblReports.ForeColor = Color.Blue
                 lblReports.Font.Size = 25
@@ -659,7 +659,7 @@ Partial Public Class Reports
 
     End Function
 
-    Private Sub crvReports_Error(ByVal source As Object, ByVal e As CrystalDecisions.Web.ErrorEventArgs) Handles crvReports.Error
+    Private Sub crvReports_Error(ByVal source As Object, ByVal e As CrystalDecisions.Web.ErrorEventArgs) Handles crvReports1.Error
         e.Handled = True
         Dim objerr As String = ""
         objerr = "Crystal Reports Error. <br />" & vbCrLf
@@ -671,13 +671,13 @@ Partial Public Class Reports
 
     End Sub
 
-    Private Sub crvReports_Navigate(ByVal source As Object, ByVal e As CrystalDecisions.Web.NavigateEventArgs) Handles crvReports.Navigate
+    Private Sub crvReports_Navigate(ByVal source As Object, ByVal e As CrystalDecisions.Web.NavigateEventArgs) Handles crvReports1.Navigate
 
         Try
             e.Handled = False
 
             If Not IsNothing(CType(Session.Item("REPORT_KEY"), ReportDocument)) Then
-                crvReports.ReportSource = CType(Session.Item("REPORT_KEY"), ReportDocument)
+                crvReports1.ReportSource = CType(Session.Item("REPORT_KEY"), ReportDocument)
                 '   ConfigureCrystalReports()
             End If
 
@@ -708,14 +708,14 @@ Partial Public Class Reports
             Dim oStream As New IO.MemoryStream
             Dim DiskOutPut As New DiskFileDestinationOptions
 
-            Dim con As String = ConfigurationManager.ConnectionStrings("ConnectionString").ConnectionString
-            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create("ConnectionString")
+            Dim con As String = ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
+            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
             Dim builder As New SqlClient.SqlConnectionStringBuilder(GetConnectionString())
 
             builder.ConnectionString = con
             builder.AsynchronousProcessing = True
 
-            Dim ReportPath As String = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & "ConnectionString" & "\" & txtReportName.Text & ".rpt"
+            Dim ReportPath As String = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & CookiesWrapper.thisConnectionName & "\" & txtReportName.Text & ".rpt"
             Dim crReportDocument As New ReportDocument
 
             If IsNothing(CType(Session.Item("REPORT_KEY"), ReportDocument)) Then
@@ -734,7 +734,7 @@ Partial Public Class Reports
                 SetDBLogonForSubreports(myConnectionInfo, crReportDocument)
 
                 crReportDocument.DataDefinition.RecordSelectionFormula = txtUserReportFilter.Text
-                ' crvReports.ReportSource = crReportDocument
+                ' crvReports1.ReportSource = crReportDocument
             Else
                 crReportDocument = CType(Session.Item("REPORT_KEY"), ReportDocument)
             End If
@@ -775,19 +775,19 @@ Partial Public Class Reports
     End Sub
 
     Private Sub txtFirst_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtFirst.TextChanged
-        Me.crvReports.ShowFirstPage()
+        Me.crvReports1.ShowFirstPage()
     End Sub
 
     Private Sub txtLast_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtLast.TextChanged
-        Me.crvReports.ShowLastPage()
+        Me.crvReports1.ShowLastPage()
     End Sub
 
     Private Sub txtNext_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtNext.TextChanged
-        Me.crvReports.ShowNextPage()
+        Me.crvReports1.ShowNextPage()
     End Sub
 
     Private Sub txtPrevious_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtPrevious.TextChanged
-        Me.crvReports.ShowPreviousPage()
+        Me.crvReports1.ShowPreviousPage()
     End Sub
 
     Private Sub txtSaveAsExcel_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtSaveAsExcel.TextChanged
@@ -801,11 +801,11 @@ Partial Public Class Reports
             Dim oStream As New IO.MemoryStream
             Dim DiskOutPut As New DiskFileDestinationOptions
 
-            Dim con As String = ConfigurationManager.ConnectionStrings("ConnectionString").ConnectionString
-            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create("ConnectionString")
+            Dim con As String = ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
+            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
             Dim builder As New SqlClient.SqlConnectionStringBuilder(GetConnectionString())
 
-            Dim ReportPath As String = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & "ConnectionString" & "\" & txtReportName.Text & ".rpt"
+            Dim ReportPath As String = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & CookiesWrapper.thisConnectionName & "\" & txtReportName.Text & ".rpt"
 
             Dim crReportDocument As New ReportDocument
 
@@ -825,7 +825,7 @@ Partial Public Class Reports
                 SetDBLogonForSubreports(myConnectionInfo, crReportDocument)
 
                 crReportDocument.DataDefinition.RecordSelectionFormula = txtUserReportFilter.Text
-                ' crvReports.ReportSource = crReportDocument
+                ' crvReports1.ReportSource = crReportDocument
             Else
                 crReportDocument = CType(Session.Item("REPORT_KEY"), ReportDocument)
             End If
@@ -856,14 +856,14 @@ Partial Public Class Reports
             Dim oStream As New IO.MemoryStream
             Dim DiskOutPut As New DiskFileDestinationOptions
 
-            Dim con As String = ConfigurationManager.ConnectionStrings("ConnectionString").ConnectionString
-            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create("ConnectionString")
+            Dim con As String = ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
+            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
             Dim builder As New SqlClient.SqlConnectionStringBuilder(GetConnectionString())
 
             builder.ConnectionString = con
             builder.AsynchronousProcessing = True
 
-            Dim ReportPath As String = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & "ConnectionString" & "\" & txtReportName.Text & ".rpt"
+            Dim ReportPath As String = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & CookiesWrapper.thisConnectionName & "\" & txtReportName.Text & ".rpt"
 
             Dim crReportDocument As New ReportDocument
 
@@ -883,7 +883,7 @@ Partial Public Class Reports
                 SetDBLogonForSubreports(myConnectionInfo, crReportDocument)
 
                 crReportDocument.DataDefinition.RecordSelectionFormula = txtUserReportFilter.Text
-                ' crvReports.ReportSource = crReportDocument
+                ' crvReports1.ReportSource = crReportDocument
             Else
                 crReportDocument = CType(Session.Item("REPORT_KEY"), ReportDocument)
             End If
@@ -915,14 +915,14 @@ Partial Public Class Reports
             Dim oStream As New IO.MemoryStream
             Dim DiskOutPut As New DiskFileDestinationOptions
 
-            Dim con As String = ConfigurationManager.ConnectionStrings("ConnectionString").ConnectionString
-            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create("ConnectionString")
+            Dim con As String = ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
+            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
             Dim builder As New SqlClient.SqlConnectionStringBuilder(GetConnectionString())
 
             builder.ConnectionString = con
             builder.AsynchronousProcessing = True
 
-            Dim ReportPath As String = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & "ConnectionString" & "\" & txtReportName.Text & ".rpt"
+            Dim ReportPath As String = System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & CookiesWrapper.thisConnectionName & "\" & txtReportName.Text & ".rpt"
 
             Dim crReportDocument As New ReportDocument
 
@@ -942,7 +942,7 @@ Partial Public Class Reports
                 SetDBLogonForSubreports(myConnectionInfo, crReportDocument)
 
                 crReportDocument.DataDefinition.RecordSelectionFormula = txtUserReportFilter.Text
-                ' crvReports.ReportSource = crReportDocument
+                ' crvReports1.ReportSource = crReportDocument
             Else
                 crReportDocument = CType(Session.Item("REPORT_KEY"), ReportDocument)
             End If
@@ -963,10 +963,10 @@ Partial Public Class Reports
     End Sub
 
     Private Sub txtDisplayGroupTree_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtDisplayGroupTree.TextChanged
-        If crvReports.ToolPanelView = CrystalDecisions.Web.ToolPanelViewType.None Then
-            crvReports.ToolPanelView = CrystalDecisions.Web.ToolPanelViewType.GroupTree
-        ElseIf crvReports.ToolPanelView = CrystalDecisions.Web.ToolPanelViewType.GroupTree Then
-            crvReports.ToolPanelView = CrystalDecisions.Web.ToolPanelViewType.None
+        If crvReports1.ToolPanelView = CrystalDecisions.Web.ToolPanelViewType.None Then
+            crvReports1.ToolPanelView = CrystalDecisions.Web.ToolPanelViewType.GroupTree
+        ElseIf crvReports1.ToolPanelView = CrystalDecisions.Web.ToolPanelViewType.GroupTree Then
+            crvReports1.ToolPanelView = CrystalDecisions.Web.ToolPanelViewType.None
 
         End If
     End Sub

@@ -39,7 +39,7 @@
 
     Private Sub LoadGrid()
 
-        Dim objBeneficiaries As New BusinessLogic.Beneficiary("Demo", 1)
+        Dim objBeneficiaries As New BusinessLogic.Beneficiary(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radBenListing
 

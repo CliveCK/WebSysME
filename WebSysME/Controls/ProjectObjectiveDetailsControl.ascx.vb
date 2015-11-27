@@ -6,7 +6,7 @@ Partial Class ProjectObjectiveDetailsControl
     Inherits System.Web.UI.UserControl
 
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private ds As DataSet
 
 #Region "Status Messages"
@@ -59,17 +59,18 @@ Partial Class ProjectObjectiveDetailsControl
     Private Sub LoadGrid()
 
         Try
-            Dim db As Database = New DatabaseProviderFactory().Create("Demo")
+            Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
             Dim sql As String = "SELECT ObjectiveID, ObjectiveNo, Description FROM tblObjectives "
 
             With radProjectObjective
 
                 Dim ds As DataSet = db.ExecuteDataSet(CommandType.Text, sql)
 
-                Session("ProjectObjectives") = ds
                 .DataSource = ds
 
                 .DataBind()
+
+                Session("ProjectObjectives") = .DataSource
 
             End With
 
@@ -84,7 +85,7 @@ Partial Class ProjectObjectiveDetailsControl
         Dim ObjectiveIDArray As New List(Of String)
 
         For Each gridRow As Telerik.Web.UI.GridDataItem In radProjectObjective.SelectedItems
-            ObjectiveIDArray.Add(gridRow.Item("ActivityID").Text.ToString())
+            ObjectiveIDArray.Add(gridRow.Item("ObjectiveID").Text.ToString())
         Next
 
         Return String.Join(",", ObjectiveIDArray.ToArray())
@@ -99,7 +100,7 @@ Partial Class ProjectObjectiveDetailsControl
 
             For i As Long = 0 To Objective.Length - 1
 
-                Dim objProjectObjective As New BusinessLogic.ProjectObjective("Demo", 1)
+                Dim objProjectObjective As New BusinessLogic.ProjectObjective(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objProjectObjective
 
@@ -117,9 +118,11 @@ Partial Class ProjectObjectiveDetailsControl
 
             Next
 
+            Return True
+
         End If
 
-        Return True
+        Return False
 
     End Function
     Protected Sub cmdSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdSave.Click
@@ -141,7 +144,7 @@ Partial Class ProjectObjectiveDetailsControl
 
     '    Try
 
-    '        Dim objProjectObjective As New ProjectObjective("Demo", 1)
+    '        Dim objProjectObjective As New ProjectObjective(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
     '        With objProjectObjective
 
@@ -175,7 +178,7 @@ Partial Class ProjectObjectiveDetailsControl
 
     '    Try
 
-    '        Dim objProjectObjective As New ProjectObjective("Demo", 1)
+    '        Dim objProjectObjective As New ProjectObjective(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
     '        With objProjectObjective
 
@@ -233,7 +236,7 @@ Partial Class ProjectObjectiveDetailsControl
 
                 Case "Delete"
 
-                    Dim objProjectObjective As New BusinessLogic.ProjectObjective("Demo", 1)
+                    Dim objProjectObjective As New BusinessLogic.ProjectObjective(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objProjectObjective
 
@@ -264,6 +267,11 @@ Partial Class ProjectObjectiveDetailsControl
                 Dim gridItem As GridDataItem = e.Item
 
                 Dim btnImage As ImageButton = DirectCast(gridItem.FindControl("imgEdit"), ImageButton)
+
+                Dim sql As String = "select O.ObjectiveID, O.Description from tblObjectives O inner join tblProjectObjectives "
+                sql &= " PO on O.ObjectiveID = PO.ObjectiveID inner join tblProjects P on P.Project = PO.ProjectID where P.Project = " & cboProject.SelectedValue
+
+                ds = db.ExecuteDataSet(CommandType.Text, sql)
 
                 If ds.Tables(0).Select("ObjectiveID = " & gridItem("ObjectiveID").Text).Length > 0 Then
 

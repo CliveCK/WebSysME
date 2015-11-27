@@ -18,8 +18,6 @@
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Definition" UniqueName="Definition" HeaderText="Definition">
                             </telerik:GridBoundColumn>
-                            <telerik:GridBoundColumn DataField="Description" UniqueName="Description" HeaderText="Description">
-                            </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Year" UniqueName="Year" HeaderText="Year">
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Month" UniqueName="Month" HeaderText="Month">

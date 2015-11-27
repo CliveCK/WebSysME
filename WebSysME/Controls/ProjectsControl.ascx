@@ -18,13 +18,19 @@
  
         </td>
     </tr>
+    
 	<tr> 
-		<td class="auto-style2" >Project Code</td> 
+		<td colspan="4"> 
+            		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 
+     </td> 
+	</tr> 
+	<tr> 
+		<td class="auto-style2" >Program Code</td> 
         	<td ><asp:textbox id="txtProjectCode" runat="server"  CssClass="form-control"></asp:textbox> </td> 
 	</tr>
     <tr>
-        <td >Program</td> 
-        	<td ><asp:DropDownList id="cboProgram" runat="server" CssClass="form-control"></asp:DropDownList> </td>
+        <td >Key Change Promise</td> 
+        	<td ><asp:DropDownList id="cboKeyChangePromise" runat="server" CssClass="form-control"></asp:DropDownList> </td>
     </tr>
     <tr> 
 		<td class="auto-style2" >Name</td> 
@@ -33,8 +39,8 @@
         	<td ><asp:textbox id="txtAcronym" runat="server"  CssClass="form-control"></asp:textbox> </td> 
 	</tr> 
 	<tr> 
-		<td class="auto-style2" >Sector</td> 
-        	<td ><asp:DropDownList id="cboSector" runat="server" CssClass="form-control"></asp:DropDownList> </td> 
+		<td class="auto-style2" >Strategic Objective</td> 
+        	<td ><asp:DropDownList id="cboStrategicObjective" runat="server" CssClass="form-control"></asp:DropDownList> </td> 
 		<td >Project Manager</td> 
         	<td ><asp:DropDownList id="cboProjectManager" runat="server" CssClass="form-control"></asp:DropDownList> </td> 
 	</tr> 
@@ -44,10 +50,6 @@
 		<td >Actual Beneficiaries</td> 
         	<td ><asp:textbox id="txtActualBeneficiaries" runat="server" CssClass="form-control"></asp:textbox> </td> 
 	</tr> 
-    <tr>
-		<td class="auto-style2" >Objective</td> 
-        	<td ><asp:textbox id="txtObjective" runat="server"  CssClass="form-control"></asp:textbox> </td> 
-	</tr>
 	<tr> 
 		<td class="auto-style2" >Start Date</td> 
         	<td > <telerik:RadDatePicker ID="radStartDate" runat="server" MinDate="1900-01-01"
@@ -97,11 +99,9 @@
 		<td class="auto-style1" >Final Goal Statement</td> 
         	<td ><asp:textbox id="txtFinalGStatement" runat="server" TextMode="MultiLine" Rows="5" Columns="40"  CssClass="form-control"></asp:textbox> </td> 
     </tr>
-	<tr> 
-		<td colspan="2"> 
-            		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 
-     </td> 
-	</tr> 
+    <tr>
+        <td colspan="2"><asp:PlaceHolder ID="phCustomFields" runat="server"></asp:PlaceHolder></td>
+    </tr>
 	<tr> 
 		<td colspan="2"> 
             		<asp:button id="cmdSave" runat="server" Text="Save" CssClass="btn btn-default" Width="75px"></asp:button>

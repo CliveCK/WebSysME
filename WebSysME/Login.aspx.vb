@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.Practices.EnterpriseLibrary.Data
 Imports SecurityPolicy
+Imports BusinessLogic
 
 Public Class Login1
     Inherits System.Web.UI.Page
@@ -48,143 +49,183 @@ Public Class Login1
 
         If Not Page.IsPostBack Then
 
-           
+            With cboOrganisation
+
+                .DataSource = GetOrganisations()
+                .DataValueField = "ConnectionName"
+                .DataTextField = "ConnectionName"
+                .DataBind()
+
+            End With
+
         End If
 
     End Sub
 
+    Private Function GetOrganisations() As DataSet
+
+        Dim ds As New DataSet
+
+        ds.Tables.Add(New DataTable)
+
+        ds.Tables(0).Columns.Add(New DataColumn("ConnectionName"))
+
+        For Each cnn As ConnectionStringSettings In ConfigurationManager.ConnectionStrings  'need to loop through all the databases
+
+            Try
+
+                If cnn.Name.StartsWith("WebSys") Then
+
+                    Dim dr As DataRow = ds.Tables(0).NewRow
+
+                    dr("ConnectionName") = cnn.Name.Substring(6)
+
+                    ds.Tables(0).Rows.Add(dr)
+
+                End If
+
+            Catch ex As Exception
+
+            End Try
+
+        Next
+
+        Return ds
+
+    End Function
+
     Protected Sub cmdLogin_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdLogin.Click
 
-        Dim myUser As New SecurityPolicy.UserManager("Demo", 1)
-        Dim myAdmin As New AdminSettings("Demo", 0)
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy("Demo", 1)
+        CookiesWrapper.thisConnectionName = "WebSys" & cboOrganisation.SelectedValue
 
         Try
 
-            CookiesWrapper.ConnectionName = "Demo"
+            Dim myUser As New SecurityPolicy.UserManager(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+            Dim myAdmin As New AdminSettings(CookiesWrapper.thisConnectionName, 0)
+            Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With myUser
 
                 .Username = txtUserName.Text
                 .Password = .PasswordHash(txtUserName.Text, txtPassword.Text)
 
-                If .ValidateUser() Then
+                    If .ValidateUser() Then
 
-                    log.Error("User validation complete")
+                        log.Error("User validation complete")
 
-                    If .IsLockedOut Then
+                        If .IsLockedOut Then
 
-                        SecurityLog.ErrorFormat("'{0}' failed to login. Account locked out", txtUserName.Text.ToUpper())
-                        ShowMessage("Your account is locked! Please contact the systems administrator", MessageTypeEnum.Error)
-                        Exit Sub
+                            SecurityLog.ErrorFormat("'{0}' failed to login. Account locked out", txtUserName.Text.ToUpper())
+                            ShowMessage("Your account is locked! Please contact the systems administrator", MessageTypeEnum.Error)
+                            Exit Sub
 
-                    Else
+                        Else
 
-                        If .PasswordExpires Then    'Using User Defined Settings
+                            If .PasswordExpires Then    'Using User Defined Settings
 
-                            If .VerifyPasswordValidity() Then
+                                If .VerifyPasswordValidity() Then
 
-                                'Expired
-                                pnlLogin.Visible = False
-                                pnlResetPassword.Visible = True
-                                SecurityLog.ErrorFormat("'{0}' Login failed. Password has expired. Please reset your password", txtUserName.Text.ToUpper())
-                                ShowMessage("Login failed. Password has expired. Please reset your password", MessageTypeEnum.Warning)
-                                Exit Sub
+                                    'Expired
+                                    pnlLogin.Visible = False
+                                    pnlResetPassword.Visible = True
+                                    SecurityLog.ErrorFormat("'{0}' Login failed. Password has expired. Please reset your password", txtUserName.Text.ToUpper())
+                                    ShowMessage("Login failed. Password has expired. Please reset your password", MessageTypeEnum.Warning)
+                                    Exit Sub
 
-                            Else        'Proceed
+                                Else        'Proceed
 
-                                AuthenticateLogon(myUser)
-                                log.Error("Authentication of user complete")
+                                    AuthenticateLogon(myUser)
+                                    log.Error("Authentication of user complete")
 
-                            End If
+                                End If
 
-                        Else 'Use Admin Settings for All Users
+                            Else 'Use Admin Settings for All Users
 
-                            If objSecurityPolicy.RetrieveActiveSecurityPolicy() Then
+                                If objSecurityPolicy.RetrieveActiveSecurityPolicy() Then
 
-                                If objSecurityPolicy.PasswordExpires Then
+                                    If objSecurityPolicy.PasswordExpires Then
 
-                                    .PasswordExpirationDays = objSecurityPolicy.PasswordValidityPeriod
+                                        .PasswordExpirationDays = objSecurityPolicy.PasswordValidityPeriod
 
-                                    If .VerifyPasswordValidity() Then
+                                        If .VerifyPasswordValidity() Then
 
-                                        'Expired
-                                        pnlLogin.Visible = False
-                                        pnlResetPassword.Visible = True
-                                        ShowMessage("Login failed. Password has expired. Please reset your password", MessageTypeEnum.Warning)
-                                        Exit Sub
+                                            'Expired
+                                            pnlLogin.Visible = False
+                                            pnlResetPassword.Visible = True
+                                            ShowMessage("Login failed. Password has expired. Please reset your password", MessageTypeEnum.Warning)
+                                            Exit Sub
 
-                                    Else        'Proceed
+                                        Else        'Proceed
 
+                                            AuthenticateLogon(myUser)
+
+                                        End If
+
+                                    Else
+
+                                        'Just Authenticate
                                         AuthenticateLogon(myUser)
+                                        log.Error("Authentication of user complete.Password does not expire.")
 
                                     End If
 
                                 Else
 
-                                    'Just Authenticate
-                                    AuthenticateLogon(myUser)
-                                    log.Error("Authentication of user complete.Password does not expire.")
+                                    SecurityLog.ErrorFormat("'{0}' login failed.Error: Bad User Default Settings. Contact your Administrator..", txtUserName.Text.ToUpper())
+                                    ShowMessage("Error: Bad User Default Settings. Contact your Administrator..", MessageTypeEnum.Error)
 
                                 End If
-
-                            Else
-
-                                SecurityLog.ErrorFormat("'{0}' login failed.Error: Bad User Default Settings. Contact your Administrator..", txtUserName.Text.ToUpper())
-                                ShowMessage("Error: Bad User Default Settings. Contact your Administrator..", MessageTypeEnum.Error)
 
                             End If
 
                         End If
 
-                    End If
+                        CookiesWrapper.thisUserID = .UserID
+                        CookiesWrapper.thisUserName = txtUserName.Text
+                        CookiesWrapper.thisUserFullName = .FullName
 
-                    CookiesWrapper.UserID = .UserID
-                    CookiesWrapper.UserName = txtUserName.Text
-                    CookiesWrapper.UserFullName = .FullName
+                        .SaveUserLog(myUser.UserID)
 
-                    .SaveUserLog(myUser.UserID)
-
-                    CookiesWrapper.LogID = .LogID
-                    SecurityLog.InfoFormat("'{0}' logged in successfully", txtUserName.Text.ToUpper())
-                    FormsAuthentication.RedirectFromLoginPage(txtUserName.Text, True)
-
-                Else
-
-                    Counter = .FailedPasswordAttemptCount
-
-                    ' UpdateAttemptsCounter(.UserID)
-
-                    If myAdmin.ReturnAdminSettings Then
-
-                        If Counter >= myAdmin.Attempts Then
-
-                            .UpdateUserLockStatus(.UserID, True)
-
-                            SecurityLog.ErrorFormat("User '{0}' has been locked out after {1} login attempts", txtUserName.Text.ToUpper, myAdmin.Attempts)
-                            ShowMessage("You have been locked out. Please contact the systems administrator!", MessageTypeEnum.Error)
-
-                        Else
-
-                            SecurityLog.ErrorFormat("Incorrect username or password for user '{0}' after {1} login attempts from address {2}", txtUserName.Text.ToUpper, Counter, WebHelper.GetUserIPAddress)
-                            ShowMessage("Incorrect username or password. You have " & myAdmin.Attempts - Counter & " attempts left.", MessageTypeEnum.Error)
-
-                        End If
+                        CookiesWrapper.thisLogID = .LogID
+                        SecurityLog.InfoFormat("'{0}' logged in successfully", txtUserName.Text.ToUpper())
+                        FormsAuthentication.RedirectFromLoginPage(txtUserName.Text, True)
 
                     Else
 
-                        If Counter >= SecurityPolicy.UserManager.MAXPASSWORDATTEMPTS Then
-                            SecurityLog.ErrorFormat("'{0}' login failed.Account has been locked out.", txtUserName.Text.ToUpper())
-                            ShowMessage("You have been locked out. Please contact the systems administrator!", MessageTypeEnum.Error)
-                            .UpdateUserLockStatus(.UserID, True)
+                        Counter = .FailedPasswordAttemptCount
+
+                        ' UpdateAttemptsCounter(.UserID)
+
+                        If myAdmin.ReturnAdminSettings Then
+
+                            If Counter >= myAdmin.Attempts Then
+
+                                .UpdateUserLockStatus(.UserID, True)
+
+                                SecurityLog.ErrorFormat("User '{0}' has been locked out after {1} login attempts", txtUserName.Text.ToUpper, myAdmin.Attempts)
+                                ShowMessage("You have been locked out. Please contact the systems administrator!", MessageTypeEnum.Error)
+
+                            Else
+
+                                SecurityLog.ErrorFormat("Incorrect username or password for user '{0}' after {1} login attempts from address {2}", txtUserName.Text.ToUpper, Counter, WebHelper.GetUserIPAddress)
+                                ShowMessage("Incorrect username or password. You have " & myAdmin.Attempts - Counter & " attempts left.", MessageTypeEnum.Error)
+
+                            End If
+
                         Else
-                            SecurityLog.ErrorFormat("'{0}' login failed.'{1}' attempt(s) left ", txtUserName.Text.ToUpper(), SecurityPolicy.UserManager.MAXPASSWORDATTEMPTS - Counter)
-                            ShowMessage("Incorrect username or password. You have " & SecurityPolicy.UserManager.MAXPASSWORDATTEMPTS - Counter & " attempt(s) left.", MessageTypeEnum.Warning)
+
+                            If Counter >= SecurityPolicy.UserManager.MAXPASSWORDATTEMPTS Then
+                                SecurityLog.ErrorFormat("'{0}' login failed.Account has been locked out.", txtUserName.Text.ToUpper())
+                                ShowMessage("You have been locked out. Please contact the systems administrator!", MessageTypeEnum.Error)
+                                .UpdateUserLockStatus(.UserID, True)
+                            Else
+                                SecurityLog.ErrorFormat("'{0}' login failed.'{1}' attempt(s) left ", txtUserName.Text.ToUpper(), SecurityPolicy.UserManager.MAXPASSWORDATTEMPTS - Counter)
+                                ShowMessage("Incorrect username or password. You have " & SecurityPolicy.UserManager.MAXPASSWORDATTEMPTS - Counter & " attempt(s) left.", MessageTypeEnum.Warning)
+                            End If
+
                         End If
 
                     End If
-
-                End If
 
             End With
 
@@ -201,8 +242,8 @@ Public Class Login1
 
         Try
 
-            Dim myUser As New SecurityPolicy.UserManager("Demo", CookiesWrapper.UserID)
-            Dim myPasswordHistory As New SecurityPolicy.UserPasswordHistory(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+            Dim myUser As New SecurityPolicy.UserManager(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+            Dim myPasswordHistory As New SecurityPolicy.UserPasswordHistory(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With myUser
 
@@ -218,7 +259,7 @@ Public Class Login1
                             Exit Sub
                         End If
 
-                        If CheckPasswordHistory(.PasswordHash(txtUserName.Text, txtNewPassword.Text), CookiesWrapper.UserID) = False Then
+                        If CheckPasswordHistory(.PasswordHash(txtUserName.Text, txtNewPassword.Text), CookiesWrapper.thisUserID) = False Then
                             DisplayResetMessage("Password has already been used before! Try again...", MessageTypeEnum.Error)
                             Exit Sub
                         End If
@@ -272,22 +313,44 @@ Public Class Login1
     Private Sub AuthenticateLogon(ByRef myUser As SecurityPolicy.UserManager)
 
         Try
+            CookiesWrapper.StaffID = 0
+            CookiesWrapper.OrganizationID = 0
 
             ' Redirect to requested URL, or homepage if no previous page requested
             Dim returnUrl As String = Request.QueryString("ReturnUrl")
 
             With myUser
 
-                CookiesWrapper.UserID = .UserID
-                CookiesWrapper.UserName = txtUserName.Text
-                CookiesWrapper.UserFullName = .FullName
+                Dim objAccountsLink As New UserAccountProfileLink(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+                Dim objStaffMembers As New BusinessLogic.StaffMember(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+                Dim ds As DataSet = objAccountsLink.GetUserAccountProfileLink(.UserID)
+
+                If Not IsNothing(ds) AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count Then
+
+                    With objStaffMembers
+
+                        If .Retrieve(ds.Tables(0).Rows(0)("StaffID")) Then
+
+                            CookiesWrapper.StaffID = .StaffID
+                            CookiesWrapper.OrganizationID = .OrganizationID
+
+                        End If
+
+                    End With
+
+                End If
+
+                CookiesWrapper.thisUserID = .UserID
+                CookiesWrapper.thisUserName = txtUserName.Text
+                CookiesWrapper.thisUserFullName = .FullName
 
                 If .SaveUserLog(myUser.UserID) = True Then
                     .UpdateUserLockStatus(myUser.UserID, False)
                     ResetAttemptsCounter(.UserID)
                 End If
 
-                CookiesWrapper.LogID = .LogID
+                CookiesWrapper.thisLogID = .LogID
 
                 'Dim dsRoles As DataSet
                 'dsRoles = .GetUserRoles(.UserID)
@@ -318,7 +381,7 @@ Public Class Login1
 
             sql = "UPDATE tblUsers SET FailedPasswordAttemptCount = " & Counter & " WHERE UserID= " & UserID
 
-            Dim DB As Database = New DatabaseProviderFactory().Create(CookiesWrapper.ConnectionName)
+            Dim DB As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
             Return DB.ExecuteDataSet(CommandType.Text, sql)
 
         Catch ex As Exception
@@ -334,7 +397,7 @@ Public Class Login1
 
             sql = "UPDATE tblUsers SET FailedPasswordAttemptCount = 0 WHERE UserID= " & UserID
 
-            Dim DB As Database = New DatabaseProviderFactory().Create(CookiesWrapper.ConnectionName)
+            Dim DB As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
             Return DB.ExecuteDataSet(CommandType.Text, sql)
 
         Catch ex As Exception
@@ -349,7 +412,7 @@ Public Class Login1
         Dim result As Boolean
         Dim sbPasswordRegx As New StringBuilder(String.Empty)
 
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objSecurityPolicy
 
@@ -390,7 +453,7 @@ Public Class Login1
 
     Private Function CheckPasswordHistory(ByVal Password As String, ByVal UserID As Long) As Boolean
 
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objSecurityPolicy
 
@@ -417,7 +480,7 @@ Public Class Login1
     Private Function CheckDictionaryWords(ByVal Password As String) As Boolean
 
         Dim hash As HashSet(Of String) = New HashSet(Of String)(IO.File.ReadAllLines(Server.MapPath("Dictionary/dictionary.txt")))
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objSecurityPolicy
 

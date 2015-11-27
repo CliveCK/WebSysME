@@ -6,7 +6,11 @@ Public Class StaffMember
 #region "Variables"
 
     Protected mStaffID As long
-    Protected mOrganizationID As long
+    Protected mOrganizationID As Long
+    Protected mOrganizationTypeID As Long
+    Protected mOrganization As String
+    Protected mOrganizationType As String
+    Protected mStaffPosition As String
     Protected mContactNo As long
     Protected mCreatedBy As long
     Protected mUpdatedBy As long
@@ -66,6 +70,15 @@ Public Class StaffMember
         End Set
     End Property
 
+    Public Property OrganizationTypeID() As Long
+        Get
+            Return mOrganizationTypeID
+        End Get
+        Set(ByVal value As Long)
+            mOrganizationTypeID = value
+        End Set
+    End Property
+
     Public  Property ContactNo() As long
         Get
 		return mContactNo
@@ -99,6 +112,33 @@ Public Class StaffMember
         End Get
         Set(ByVal value As string)
 		mCreatedDate = value
+        End Set
+    End Property
+
+    Public Property Organization() As String
+        Get
+            Return mOrganization
+        End Get
+        Set(ByVal value As String)
+            mOrganization = value
+        End Set
+    End Property
+
+    Public Property OrganizationType() As String
+        Get
+            Return mOrganizationType
+        End Get
+        Set(ByVal value As String)
+            mOrganizationType = value
+        End Set
+    End Property
+
+    Public Property StaffPosition() As String
+        Get
+            Return mStaffPosition
+        End Get
+        Set(ByVal value As String)
+            mStaffPosition = value
         End Set
     End Property
 
@@ -222,9 +262,13 @@ End Sub
         Dim sql As String 
 
         If StaffID > 0 Then 
-            sql = "SELECT * FROM tblStaffMembers WHERE StaffID = " & StaffID
+            sql = "SELECT S.*, O.Name As Organization, OT.OrganizationTypeID, OT.Description As OrganizationType, SP.Description as StaffPosition FROM tblStaffMembers S inner join tblOrganization O on S.OrganizationID = O.OrganizationID "
+            sql &= "inner join luOrganizationTypes OT on OT.OrganizationTypeID = O.OrganizationTypeID "
+            sql &= "left outer join luStaffPosition SP on SP.PositionID = S.PositionID WHERE StaffID = " & StaffID
         Else 
-            sql = "SELECT * FROM tblStaffMembers WHERE StaffID = " & mStaffID
+            sql = "SELECT S.*, O.Name As Organization, OT.OrganizationTypeID, OT.Description As OrganizationType, SP.Description as StaffPosition FROM tblStaffMembers S inner join tblOrganization O on S.OrganizationID = O.OrganizationID "
+            sql &= "inner join luOrganizationTypes OT on OT.OrganizationTypeID = O.OrganizationTypeID "
+            sql &= "left outer join luStaffPosition SP on SP.PositionID = S.PositionID WHERE StaffID = " & mStaffID
         End If 
 
         Return Retrieve(sql) 
@@ -281,15 +325,19 @@ End Sub
 
     End Function 
 
-    Protected Overridable Function GetStaffMember(ByVal sql As String) As DataSet 
+    Public Overridable Function GetStaffMember(ByVal sql As String) As DataSet
 
-        Return db.ExecuteDataSet(CommandType.Text, sql) 
+        Return db.ExecuteDataSet(CommandType.Text, sql)
 
     End Function
 
     Public Overridable Function GetAllStaffMember() As DataSet
 
-        Return db.ExecuteDataSet(CommandType.Text, "SELECT O.Name As Organization, S.* FROM tblStaffMembers S inner join tblOrganization O on S.OrganizationID = O.OrganizationID")
+        Dim sql As String = "SELECT S.StaffID, O.Name As Organization, SP.Description As Position, S.FirstName, S.Surname, S.ContactNo, "
+        sql &= " S.EmailAddress, S.Address, S.Sex FROM tblStaffMembers S inner join tblOrganization O on S.OrganizationID = O.OrganizationID"
+        sql &= " left outer join luStaffPosition SP on SP.PositionID = S.PositionID"
+
+        Return db.ExecuteDataSet(CommandType.Text, Sql)
 
     End Function
 
@@ -301,6 +349,7 @@ End Sub
 
             mStaffID = Catchnull(.Item("StaffID"), 0)
             mOrganizationID = Catchnull(.Item("OrganizationID"), 0)
+            mOrganizationTypeID = Catchnull(.Item("OrganizationTypeID"), 0)
             mContactNo = Catchnull(.Item("ContactNo"), 0)
             mCreatedBy = Catchnull(.Item("CreatedBy"), 0)
             mUpdatedBy = Catchnull(.Item("UpdatedBy"), 0)
@@ -310,9 +359,12 @@ End Sub
             mFirstName = Catchnull(.Item("FirstName"), "")
             mSurname = Catchnull(.Item("Surname"), "")
             mSex = Catchnull(.Item("Sex"), "")
-            mPositionID = Catchnull(.Item("PositionID"), "")
+            mPositionID = Catchnull(.Item("PositionID"), 0)
             mAddress = Catchnull(.Item("Address"), "")
             mEmailAddress = Catchnull(.Item("EmailAddress"), "")
+            mOrganization = Catchnull(.Item("Organization"), "")
+            mOrganizationType = Catchnull(.Item("OrganizationType"), "")
+            mStaffPosition = Catchnull(.Item("StaffPosition"), "")
 
         End With 
 

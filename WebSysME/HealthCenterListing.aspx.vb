@@ -3,6 +3,7 @@
 Public Class HealthCenterListing
     Inherits System.Web.UI.Page
 
+    Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
 
 #Region "Status Messages"
 
@@ -40,7 +41,7 @@ Public Class HealthCenterListing
 
     Private Sub LoadGrid()
 
-        Dim objHealthCenter As New BusinessLogic.HealthCenter("Demo", 1)
+        Dim objHealthCenter As New BusinessLogic.HealthCenter(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radHealthCenterListing
 
@@ -64,11 +65,11 @@ Public Class HealthCenterListing
 
                 Case "View"
 
-                    Response.Redirect("~/HealthCenterPage.aspx?id=" & Server.HtmlDecode(item("HeathCenterID").Text))
+                    Response.Redirect("~/HealthCentersPage.aspx?id=" & objUrlEncoder.Encrypt(Server.HtmlDecode(item("HealthCenterID").Text)))
 
                 Case "Delete"
 
-                    Dim objHealthCenter As New BusinessLogic.HealthCenter("Demo", 1)
+                    Dim objHealthCenter As New BusinessLogic.HealthCenter(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objHealthCenter
 
@@ -96,7 +97,7 @@ Public Class HealthCenterListing
 
     Private Sub cmdNew_Click(sender As Object, e As EventArgs) Handles cmdNew.Click
 
-        Response.Redirect("~/HealthCenterPage.aspx")
+        Response.Redirect("~/HealthCentersPage.aspx")
 
     End Sub
 End Class

@@ -42,7 +42,12 @@ Public Class HouseHoldAFWS
         If Not Page.IsPostBack Then
 
             InitializeComponents()
-            LoadGrid()
+
+            If CookiesWrapper.BeneficiaryID > 0 Then
+
+                LoadGrid()
+
+            End If
 
         End If
 
@@ -50,13 +55,13 @@ Public Class HouseHoldAFWS
 
     Private Sub LoadGrid()
 
-        Dim objAsset As New HouseHoldAssets("Demo", 1)
+        Dim objAsset As New HouseHoldAssets(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         ViewState("Assets") = Nothing
 
         With radAsset
 
-            .DataSource = objAsset.GetAssets(txtHouseholdNo.Text)
+            .DataSource = objAsset.GetAssets(CookiesWrapper.BeneficiaryID)
             .DataBind()
 
             ViewState("Assets") = .DataSource
@@ -97,7 +102,7 @@ Public Class HouseHoldAFWS
 
     Protected Sub cmdSaveA_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdSaveA.Click
 
-        If HouseholdID > 0 Then
+        If CookiesWrapper.BeneficiaryID > 0 Then
 
             SaveA()
 
@@ -113,7 +118,7 @@ Public Class HouseHoldAFWS
 
         Try
 
-            Dim objHouseHoldAssetsDetails As New HouseHoldAssetsDetails("Demo", 1)
+            Dim objHouseHoldAssetsDetails As New HouseHoldAssetsDetails(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objHouseHoldAssetsDetails
 
@@ -156,7 +161,7 @@ Public Class HouseHoldAFWS
 
         Try
 
-            Dim objHouseHoldAssetsDetails As New HouseHoldAssetsDetails("Demo", 1)
+            Dim objHouseHoldAssetsDetails As New HouseHoldAssetsDetails(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objHouseHoldAssetsDetails
 
@@ -169,7 +174,7 @@ Public Class HouseHoldAFWS
                 If cboSourceOfWater.SelectedIndex > -1 Then .SourceOfWaterID = cboSourceOfWater.SelectedValue
                 If cboTypeOfToilet.SelectedIndex > -1 Then .TypeOfToiletID = cboTypeOfToilet.SelectedValue
                 .HealthCareProvider = txtHealthCareProvider.Text
-                .HouseholdID = HouseholdID
+                .HouseholdID = CookiesWrapper.BeneficiaryID
                 .RoomOccupationRatio = txtRoomOccupationRatio.Text
 
                 If .Save Then
@@ -202,7 +207,7 @@ Public Class HouseHoldAFWS
 
         Try
 
-            Dim objHouseHoldAssets As New HouseHoldAssets("Demo", 1)
+            Dim objHouseHoldAssets As New HouseHoldAssets(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objHouseHoldAssets
 
@@ -239,7 +244,7 @@ Public Class HouseHoldAFWS
 
         Try
 
-            Dim objHouseHoldAssets As New HouseHoldAssets("Demo", 1)
+            Dim objHouseHoldAssets As New HouseHoldAssets(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objHouseHoldAssets
 
@@ -247,7 +252,7 @@ Public Class HouseHoldAFWS
                 If cboAssetType.SelectedIndex > -1 Then .AssetTypeID = cboAssetType.SelectedValue
                 If cboAsset.SelectedIndex > -1 Then .AssetID = cboAsset.SelectedValue
                 .Quantity = txtQuantity.Text
-                .HouseholdNo = HouseholdID
+                .HouseholdNo = CookiesWrapper.BeneficiaryID
 
                 If .Save Then
 
@@ -352,7 +357,7 @@ Public Class HouseHoldAFWS
 
     Private Sub cmdSaveAsset_Click(sender As Object, e As EventArgs) Handles cmdSaveAsset.Click
 
-        If HouseholdID > 0 Then
+        If CookiesWrapper.BeneficiaryID > 0 Then
 
             SaveB()
 

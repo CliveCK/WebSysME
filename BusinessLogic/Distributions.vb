@@ -6,12 +6,14 @@ Public Class Distributions
 #region "Variables"
 
     Protected mDistributionID As long
-    Protected mDistributionTypeID As long
+    Protected mDistributionTypeID As Long
+    Protected mDistributionDate As String
     Protected mCreatedBy As long
     Protected mUpdatedBy As long
     Protected mCreatedDate As string
     Protected mUpdatedDate As string
-    Protected mName As string
+    Protected mName As String
+    Protected mOrganizationID As Long
     Protected mDescription As string
     Protected mLocation As string
 
@@ -61,6 +63,15 @@ Public Class Distributions
         End Set
     End Property
 
+    Public Property OrganizationID() As Long
+        Get
+            Return mOrganizationID
+        End Get
+        Set(ByVal value As Long)
+            mOrganizationID = value
+        End Set
+    End Property
+
     Public  Property CreatedBy() As long
         Get
 		return mCreatedBy
@@ -85,6 +96,15 @@ Public Class Distributions
         End Get
         Set(ByVal value As string)
 		mCreatedDate = value
+        End Set
+    End Property
+
+    Public Property DistributionDate() As String
+        Get
+            Return mDistributionDate
+        End Get
+        Set(ByVal value As String)
+            mDistributionDate = value
         End Set
     End Property
 
@@ -143,7 +163,9 @@ Public Class Distributions
 Public Sub Clear()  
 
     DistributionID = 0
-    mDistributionTypeID = 0
+        mDistributionTypeID = 0
+        mDistributionDate = ""
+        mOrganizationID = 0
     mCreatedBy = mObjectUserID
     mUpdatedBy = 0
     mCreatedDate = ""
@@ -242,9 +264,11 @@ End Sub
             mDistributionTypeID = Catchnull(.Item("DistributionTypeID"), 0)
             mCreatedBy = Catchnull(.Item("CreatedBy"), 0)
             mUpdatedBy = Catchnull(.Item("UpdatedBy"), 0)
+            mOrganizationID = Catchnull(.Item("OrganizationID"), 0)
             mCreatedDate = Catchnull(.Item("CreatedDate"), "")
             mUpdatedDate = Catchnull(.Item("UpdatedDate"), "")
             mName = Catchnull(.Item("Name"), "")
+            mDistributionDate = Catchnull(.Item("DistributionDate"), "")
             mDescription = Catchnull(.Item("Description"), "")
             mLocation = Catchnull(.Item("Location"), "")
 
@@ -258,8 +282,10 @@ End Sub
 
         db.AddInParameter(cmd, "@DistributionID", DBType.Int32, mDistributionID)
         db.AddInParameter(cmd, "@DistributionTypeID", DBType.Int32, mDistributionTypeID)
-        db.AddInParameter(cmd, "@UpdatedBy", DBType.Int32, mObjectUserID)
-        db.AddInParameter(cmd, "@Name", DBType.String, mName)
+        db.AddInParameter(cmd, "@UpdatedBy", DbType.Int32, mObjectUserID)
+        db.AddInParameter(cmd, "@OrganizationID", DbType.Int32, mOrganizationID)
+        db.AddInParameter(cmd, "@Name", DbType.String, mName)
+        db.AddInParameter(cmd, "@DistributionDate", DbType.String, mName)
         db.AddInParameter(cmd, "@Description", DBType.String, mDescription)
         db.AddInParameter(cmd, "@Location", DBType.String, mLocation)
 

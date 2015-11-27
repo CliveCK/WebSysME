@@ -52,9 +52,13 @@
 
             End With
 
-            Dim objNeeds As New BusinessLogic.HouseHoldNeeds("Demo", 1)
+            Dim objNeeds As New BusinessLogic.HouseHoldNeeds(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
-            LoadGrid(objNeeds, HouseholdID)
+            If CookiesWrapper.BeneficiaryID > 0 Then
+
+                LoadGrid(objNeeds, CookiesWrapper.BeneficiaryID)
+
+            End If
 
         End If
 
@@ -64,7 +68,7 @@
 
         Try
 
-            Dim objHouseHoldNeeds As New BusinessLogic.HouseHoldNeeds("Demo", 1)
+            Dim objHouseHoldNeeds As New BusinessLogic.HouseHoldNeeds(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objHouseHoldNeeds
 
@@ -95,12 +99,12 @@
 
         Try
 
-            Dim objHouseHoldNeeds As New BusinessLogic.HouseHoldNeeds("Demo", 1)
+            Dim objHouseHoldNeeds As New BusinessLogic.HouseHoldNeeds(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objHouseHoldNeeds
 
                 .NeedID = cboNeeds.SelectedValue
-                .BeneficiaryID = HouseholdID
+                .BeneficiaryID = CookiesWrapper.BeneficiaryID
 
                 If .Save Then
 
@@ -146,7 +150,7 @@
 
         With radBenListing
 
-            .DataSource = objNeeds.GetNeeds(BeneficiaryID)
+            .DataSource = objNeeds.GetNeeds(CookiesWrapper.BeneficiaryID)
 
             Session("Needs") = .DataSource
 
@@ -162,7 +166,7 @@
 
     Private Sub cmdAddNeed_Click(sender As Object, e As EventArgs) Handles cmdAddNeed.Click
 
-        If HouseholdID > 0 Then
+        If CookiesWrapper.BeneficiaryID > 0 Then
 
             Save()
 

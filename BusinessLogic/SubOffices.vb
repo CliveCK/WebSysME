@@ -184,7 +184,7 @@ End Sub
 
     End Function
 
-    Public Function GetSubOfficesByOrganization(ByVal OrganizationID) As DataSet
+    Public Function GetSubOfficesByOrganization(ByVal OrganizationID As Long) As DataSet
 
         Return GetSubOffices("SELECT * FROM tblSubOffices WHERE OrganizationID = " & OrganizationID)
 
@@ -210,7 +210,7 @@ End Sub
 
     End Function
 
-    Protected Overridable Function GetSubOffices(ByVal sql As String) As DataSet
+    Public Overridable Function GetSubOffices(ByVal sql As String) As DataSet
 
         Return db.ExecuteDataSet(CommandType.Text, sql)
 

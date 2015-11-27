@@ -278,7 +278,7 @@ End Sub
             mDescription = Catchnull(.Item("Description"), "")
             mContactName = Catchnull(.Item("ContactName"), "")
             mAddress = Catchnull(.Item("Address"), "")
-            mEmail = Catchnull(.Item("Email"), "")
+            mEmail = Catchnull(.Item("EmailAddress"), "")
 
         End With
 

@@ -14,6 +14,24 @@ Option Explicit On
 Partial Public Class LibraryListing
 
     '''<summary>
+    '''pnlError control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlError As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''lblError control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''cmdNew control.
     '''</summary>
     '''<remarks>

@@ -50,7 +50,7 @@ Public Class CustomFieldTemplateActivation
 
     Private Sub InitialisePageobjects()
 
-        db = DatabaseFactory.CreateDatabase("ConnectionString")
+        db = New DatabaseProviderFactory().Create("ConnectionString")
 
     End Sub
 

@@ -7,6 +7,14 @@
     <title>Login</title>
      <link href="Content/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Content/Messages.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .auto-style1 {
+            background: white url('images/AA.jpg') no-repeat;
+            padding: 0px 0px 0px 496px;
+            height: 80px;
+            width: 467px;
+        }
+    </style>
 </head>
    <body class="LoginBody" style="margin: 0px 0px 0px 0px">
        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
@@ -14,7 +22,7 @@
                 <td class="MainHeaderTile" style="width: 100%">
                     <table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
                         <tr>
-                            <td class="MainHeaderLogo">....</td>
+                            <td class="auto-style1">&nbsp;</td>
                             <td class="MainHeaderTile" align="right" valign="top"></td>
                         </tr>
                     </table>
@@ -42,10 +50,16 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <td align="Left">Organisation</td>
+                                            <td style="width: 176px;">
+                                                <asp:DropDownList ID="cboOrganisation" runat="server" Width="200px" CssClass="form-control"></asp:DropDownList></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
                                             <td align="Left">Username
                                             </td>
                                             <td style="width: 176px;">
-                                                <asp:TextBox ID="txtUserName" runat="server" Width="150px" CssClass="form-control"></asp:TextBox>
+                                                <asp:TextBox ID="txtUserName" runat="server" Width="200px" CssClass="form-control"></asp:TextBox>
                                             </td>
                                             <td style="width: 176px; height: 3px">
                                                 <asp:RequiredFieldValidator ID="CustomValidator2" runat="server" ControlToValidate="txtPassword"
@@ -56,7 +70,7 @@
                                             <td align="Left">Password
                                             </td>
                                             <td style="width: 176px">
-                                                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" Width="150px" AutoCompleteType="Disabled" CssClass="form-control"></asp:TextBox>
+                                                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" Width="200px" AutoCompleteType="Disabled" CssClass="form-control"></asp:TextBox>
                                             </td>
                                             <td style="width: 176px">
                                                 <asp:RequiredFieldValidator ID="CustomValidator3" runat="server" ControlToValidate="txtUserName"

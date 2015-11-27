@@ -95,6 +95,15 @@ Partial Public Class SubOfficesDetailsControl
     Protected WithEvents cmdSave As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''cmdNew control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cmdNew As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
     '''txtSubOfficeID control.
     '''</summary>
     '''<remarks>
@@ -111,4 +120,22 @@ Partial Public Class SubOfficesDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtOrganizationID As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''lnkBack control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkBack As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''radSubListing control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents radSubListing As Global.Telerik.Web.UI.RadGrid
 End Class

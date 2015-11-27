@@ -92,7 +92,7 @@ Partial Public Class CustomFields
 
         Try
 
-            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/SimpleSearch/" & MemberType & ".xml")
+            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/SimpleSearch/" & MemberType & ".xml")
 
             If My.Computer.FileSystem.FileExists(TreeIDFilterControlsFile) Then
 
@@ -119,9 +119,9 @@ Partial Public Class CustomFields
 
         Try
 
-            If System.IO.File.Exists(System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & "ConnectionString" & "\GAM\AdjustmentApproval.xml") Then
+            If System.IO.File.Exists(System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & CookiesWrapper.thisConnectionName & "\GAM\AdjustmentApproval.xml") Then
 
-                Dim CompanySpecificApprovalFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/GAM/AdjustmentApproval.xml")
+                Dim CompanySpecificApprovalFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/GAM/AdjustmentApproval.xml")
 
                 If My.Computer.FileSystem.FileExists(CompanySpecificApprovalFile) Then
 
@@ -164,9 +164,9 @@ Partial Public Class CustomFields
 
         Try
 
-            If System.IO.File.Exists(System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & "ConnectionString" & "\GAM\ReceiptHistory.xml") Then
+            If System.IO.File.Exists(System.AppDomain.CurrentDomain.BaseDirectory() & "Settings\" & CookiesWrapper.thisConnectionName & "\GAM\ReceiptHistory.xml") Then
 
-                Dim CompanySpecificReceiptHistoryFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/GAM/ReceiptHistory.xml")
+                Dim CompanySpecificReceiptHistoryFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/GAM/ReceiptHistory.xml")
 
                 If My.Computer.FileSystem.FileExists(CompanySpecificReceiptHistoryFile) Then
 
@@ -211,7 +211,7 @@ Partial Public Class CustomFields
 
         Try
 
-            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/SimpleSearch/" & MemberType & ".xml")
+            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/SimpleSearch/" & MemberType & ".xml")
 
             If My.Computer.FileSystem.FileExists(TreeIDFilterControlsFile) Then
 
@@ -264,7 +264,7 @@ Partial Public Class CustomFields
     Public Function CreateListManagementControls() As Boolean
 
         Try
-            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/ListManagement/ListManagement.xml")
+            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/ListManagement/ListManagement.xml")
 
             If My.Computer.FileSystem.FileExists(TreeIDFilterControlsFile) Then
 
@@ -290,7 +290,7 @@ Partial Public Class CustomFields
     Public Function CreateMemberApprovalControls() As Boolean
 
         Try
-            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/ListManagement/MemberApproval.xml")
+            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/ListManagement/MemberApproval.xml")
 
             If My.Computer.FileSystem.FileExists(TreeIDFilterControlsFile) Then
 
@@ -317,7 +317,7 @@ Partial Public Class CustomFields
 
         Try
 
-            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/CategoryFilters/TreeID-" & TreeID & ".xml")
+            Dim TreeIDFilterControlsFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/CategoryFilters/TreeID-" & TreeID & ".xml")
 
             If My.Computer.FileSystem.FileExists(TreeIDFilterControlsFile) Then
 
@@ -344,7 +344,7 @@ Partial Public Class CustomFields
 
         Try
 
-            Dim MemberTypeFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/WildFields/" & MemberType & ".xml")
+            Dim MemberTypeFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/WildFields/" & MemberType & ".xml")
 
             If My.Computer.FileSystem.FileExists(MemberTypeFile) Then
 
@@ -371,7 +371,7 @@ Partial Public Class CustomFields
 
         Try
 
-            Dim CategoryFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/WildFields/Category/Category.xml")
+            Dim CategoryFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/WildFields/Category/Category.xml")
 
             If My.Computer.FileSystem.FileExists(CategoryFile) Then
 
@@ -398,7 +398,7 @@ Partial Public Class CustomFields
 
         Try
 
-            Dim CategoryFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/WildFields/Category/Category.xml")
+            Dim CategoryFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/WildFields/Category/Category.xml")
 
             If My.Computer.FileSystem.FileExists(CategoryFile) Then
 
@@ -425,7 +425,7 @@ Partial Public Class CustomFields
 
         Try
 
-            Dim CategoryFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/WildFields/SegregatedFund/SegregatedFund.xml")
+            Dim CategoryFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/WildFields/SegregatedFund/SegregatedFund.xml")
 
             If My.Computer.FileSystem.FileExists(CategoryFile) Then
 
@@ -452,7 +452,7 @@ Partial Public Class CustomFields
 
         Try
 
-            Dim MemberTypeFile As String = Server.MapPath("~/Settings/" & "ConnectionString" & "/WildFields/" & MemberType & ".xml")
+            Dim MemberTypeFile As String = Server.MapPath("~/Settings/" & CookiesWrapper.thisConnectionName & "/WildFields/" & MemberType & ".xml")
 
             If My.Computer.FileSystem.FileExists(MemberTypeFile) Then
 
@@ -928,7 +928,7 @@ Partial Public Class CustomFields
                         'Dim DBRestoreQuery As String = LookupPanel.Attributes("DBRestoreQuery")
                         Dim DBRestoreQuery As String = "SELECT Description FROM tblCategories WHERE CategoryID = @Value "
 
-                        Dim db As Database = New DatabaseProviderFactory().Create("ConnectionString")
+                        Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
                         Dim cmd As Data.Common.DbCommand = db.GetSqlStringCommand(DBRestoreQuery)
 
                         db.AddInParameter(cmd, "@Value", DbType.String, Value)
@@ -1000,7 +1000,7 @@ Partial Public Class CustomFields
 
                         Dim DBRestoreQuery As String = LookupPanel.Attributes("DBRestoreQuery")
 
-                        Dim db As Database = New DatabaseProviderFactory().Create("ConnectionString")
+                        Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
                         Dim cmd As Data.Common.DbCommand = db.GetSqlStringCommand(DBRestoreQuery)
 
                         db.AddInParameter(cmd, "@Value", DbType.String, Value)
@@ -1335,7 +1335,7 @@ Partial Public Class CustomFields
         'Dim tcLabel As TableCell
         Dim tcControl As TableCell
 
-        Dim db As Database = New DatabaseProviderFactory().Create("ConnectionString")
+        Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
         Try
 
@@ -2121,7 +2121,7 @@ Partial Public Class CustomFields
 
     Private Function GetAutocompleteData(ByVal SelectedValues As String, ByVal DBQuery As String)
 
-        db = New DatabaseProviderFactory().Create("ConnectionString")
+        db = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
         Dim sql As String = DBQuery & " WHERE TariffID IN (0" & IIf(SelectedValues = "", "", "," & SelectedValues) & ")"
 
@@ -2156,7 +2156,7 @@ Partial Public Class CustomFields
         Dim tcLabel As TableCell
         Dim tcControl As TableCell
 
-        Dim db As Database = New DatabaseProviderFactory().Create("ConnectionString")
+        Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
         Try
 

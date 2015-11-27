@@ -31,7 +31,7 @@ Public Class CustomFieldTemplate
     Sub New(ByVal ConnectionName As String, UserID As Long)
 
         Me.ConnectionName = ConnectionName
-        db = DatabaseFactory.CreateDatabase(ConnectionName)
+        db = New DatabaseProviderFactory().Create(ConnectionName)
         Me.ObjectUserID = UserID
 
     End Sub

@@ -49,7 +49,7 @@
 			<Reminders Enabled="True" />
                  <AdvancedForm Modal="true"></AdvancedForm>
                 <ResourceTypes>
-                    <telerik:ResourceType KeyField="StaffID" Name="User" TextField="Firstname" ForeignKeyField="UserID"
+                    <telerik:ResourceType KeyField="StaffID" Name="User" TextField="StaffFullName" ForeignKeyField="UserID"
                         DataSourceID="UsersDataSource"></telerik:ResourceType>
                     <telerik:ResourceType KeyField="ActivityID" Name="Activity" TextField="Description" ForeignKeyField="ActivityID"
                         DataSourceID="ActivityDataSource"></telerik:ResourceType>
@@ -87,7 +87,6 @@
             </ResourceStyles>
 		</telerik:RadScheduler>
     	<asp:SqlDataSource ID="SqlDataSource1" runat="server"
-			ConnectionString="<%$ ConnectionStrings:Demo %>" 
 			DeleteCommand="DELETE FROM [Appointments] WHERE [ID] = @ID" 
 			InsertCommand="INSERT INTO [Appointments] ([Subject], [Start], [End], [UserID], [RoomID], [RecurrenceRule], [ActivityID], [RecurrenceParentID], [Annotations], [Description], [Reminder], [LastModified]) VALUES (@Subject, @Start, @End, @UserID, @RoomID, @RecurrenceRule, @ActivityID, @RecurrenceParentID, @Annotations, @Description, @Reminder, @LastModified)" 
 			SelectCommand="SELECT * FROM [Appointments]" 
@@ -127,11 +126,11 @@
 			</UpdateParameters>
 		</asp:SqlDataSource>
         <asp:SqlDataSource ID="UsersDataSource" runat="server"
-                ProviderName="System.Data.SqlClient" ConnectionString="<%$ ConnectionStrings:Demo %>"
+                ProviderName="System.Data.SqlClient" 
                 SelectCommand="SELECT * FROM [tblStaffMembers]">
         </asp:SqlDataSource>
         <asp:SqlDataSource ID="ActivityDataSource" runat="server"
-                ProviderName="System.Data.SqlClient" ConnectionString="<%$ ConnectionStrings:Demo %>"
+                ProviderName="System.Data.SqlClient"
                 SelectCommand="SELECT * FROM [tblActivities]">
         </asp:SqlDataSource>
         </td>

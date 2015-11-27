@@ -56,7 +56,7 @@ Partial Class StrategicObjectivesDetailsControl
 
     Private Sub LoadGrid()
 
-        Dim objStrategicObjectives As New StrategicObjectives("Demo", 1)
+        Dim objStrategicObjectives As New StrategicObjectives(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radStrategicListing
 
@@ -73,7 +73,7 @@ Partial Class StrategicObjectivesDetailsControl
 
         Try
 
-            Dim objStrategicObjectives As New StrategicObjectives("Demo", 1)
+            Dim objStrategicObjectives As New StrategicObjectives(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objStrategicObjectives
 
@@ -110,7 +110,7 @@ Partial Class StrategicObjectivesDetailsControl
 
         Try
 
-            Dim objStrategicObjectives As New StrategicObjectives("Demo", 1)
+            Dim objStrategicObjectives As New StrategicObjectives(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objStrategicObjectives
 
@@ -177,7 +177,7 @@ Partial Class StrategicObjectivesDetailsControl
 
                 Case "Delete"
 
-                    Dim objStrategicObjective As New BusinessLogic.StrategicObjectives("Demo", 1)
+                    Dim objStrategicObjective As New BusinessLogic.StrategicObjectives(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objStrategicObjective
 

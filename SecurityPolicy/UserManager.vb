@@ -937,6 +937,28 @@ Public Class UserManager
 
     End Function
 
+    Public Function ValidateUserAccount() As Boolean
+
+        Dim sql As String = String.Empty
+
+        sql = "SELECT * FROM tblUsers WHERE UserName=@UserName AND Password=@Password"
+
+        Dim cmd As System.Data.Common.DbCommand = db.GetSqlStringCommand(sql)
+
+        db.AddInParameter(cmd, "@UserName", DbType.String, mUsername)
+        db.AddInParameter(cmd, "@Password", DbType.String, mPassword)
+
+        Dim ds As DataSet = db.ExecuteDataSet(cmd)
+
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 AndAlso Not IsDBNull(ds.Tables(0).Rows(0)("UserID")) AndAlso Not (ds.Tables(0).Rows(0)("Deleted")) Then
+            Return True
+        Else
+
+            Return False
+        End If
+
+    End Function
+
     Private Function ValidateUsingPassword(ByVal UserName As String, ByVal Password As String) As Boolean
 
         Dim sql As String = String.Empty
@@ -986,13 +1008,36 @@ Public Class UserManager
 
     Public Function DeactivateUserByUserID(ByVal UserID As String) As Boolean
 
-        Dim str As String = "UPDATE [tblUsers] SET IsActive = 0 WHERE UserID = @UserID"
+        Dim str As String = "UPDATE [tblUsers] SET Deleted = 1 WHERE UserID = @UserID"
         Dim sqlStringCommand As DbCommand = Me.db.GetSqlStringCommand(str)
         Me.db.AddInParameter(sqlStringCommand, "@UserID", DbType.[String], UserID)
 
         Try
 
-            Me.db.ExecuteNonQuery(CommandType.Text, str)
+            Me.db.ExecuteNonQuery(sqlStringCommand)
+
+            Return True
+
+        Catch exception As Exception
+
+            log.Error(exception)
+            Return False
+
+        End Try
+
+        Return False
+
+    End Function
+
+    Public Function ActivateUserByUserID(ByVal UserID As String) As Boolean
+
+        Dim str As String = "UPDATE [tblUsers] SET Deleted = 0 WHERE UserID = @UserID"
+        Dim sqlStringCommand As DbCommand = Me.db.GetSqlStringCommand(str)
+        Me.db.AddInParameter(sqlStringCommand, "@UserID", DbType.[String], UserID)
+
+        Try
+
+            Me.db.ExecuteNonQuery(sqlStringCommand)
 
             Return True
 
@@ -1272,6 +1317,14 @@ Public Class UserManager
 
     End Function
 
+    Public Function GetUserUsergroupsDescriptions(ByVal UserID As Long) As DataSet
+
+        Dim sql As String = "SELECT * FROM tblUserUsergroups UG inner join luUserGroups U on UG.UserGroupID = U.UserGroupID WHERE UserID=" & UserID
+
+        Return db.ExecuteDataSet(CommandType.Text, sql)
+
+    End Function
+
     Public Sub DeleteUserGroupRoles(ByVal GroupID As Integer)
 
         Dim DeleteSQL As String = "Delete From tblUserGroupRoles Where GroupID = " & GroupID
@@ -1341,7 +1394,7 @@ Public Class UserManager
                 sql = "UPDATE tblUsers SET IsLockedOut = @IslockedOut, LastLockoutDate = @LastLockoutDate WHERE UserID= @UserID"
 
 
-                Dim DB As Database = DatabaseFactory.CreateDatabase(mConnectionName)
+                Dim DB As Database = New DatabaseProviderFactory().Create(mConnectionName)
 
                 Dim cmd As System.Data.Common.DbCommand = DB.GetSqlStringCommand(sql)
 
@@ -1354,7 +1407,7 @@ Public Class UserManager
             Else 'Success password or administrator unlocking of user account 
                 sql = "UPDATE tblUsers SET IsLockedOut = @IslockedOut, FailedPasswordAttemptCount = 0 WHERE UserID= @UserID"
 
-                Dim DB As Database = DatabaseFactory.CreateDatabase(mConnectionName)
+                Dim DB As Database = New DatabaseProviderFactory().Create(mConnectionName)
 
                 Dim cmd As System.Data.Common.DbCommand = DB.GetSqlStringCommand(sql)
 
@@ -1495,11 +1548,11 @@ Public Class UserManager
 
         If sqlCriteria = "" Then
 
-            Return "SELECT UserID, Username, UserFirstname, UserSurname, EmailAddress FROM tblUsers  WHERE MemberID IS NULL AND Deleted='" & False & "'"
+            Return "SELECT UserID, Username, UserFirstname, UserSurname, EmailAddress, Deleted FROM tblUsers  WHERE MemberID IS NULL "
 
         Else
 
-            Return "SELECT UserID, Username, UserFirstname, UserSurname, EmailAddress FROM tblUsers " & IIf(sqlCriteria = "", "", " WHERE " & sqlCriteria) & " AND Deleted='" & False & "'"
+            Return "SELECT UserID, Username, UserFirstname, UserSurname, EmailAddress, Deleted FROM tblUsers " & IIf(sqlCriteria = "", "", " WHERE " & sqlCriteria) & " "
 
         End If
 
@@ -1925,7 +1978,7 @@ Public Class UserPasswordHistory
 
         mObjectUserID = ObjectUserID
         mConnectionName = ConnectionName
-        db = DatabaseFactory.CreateDatabase(ConnectionName)
+        db = New DatabaseProviderFactory().Create(ConnectionName)
 
     End Sub
 

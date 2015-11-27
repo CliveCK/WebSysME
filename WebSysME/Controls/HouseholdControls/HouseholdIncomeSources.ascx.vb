@@ -3,7 +3,7 @@
 Public Class HouseholdIncomeSources
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private dsIncome As DataSet
     Private ReadOnly Property HouseholdID As Long
         Get
@@ -46,7 +46,7 @@ Public Class HouseholdIncomeSources
 
         End If
 
-        dsIncome = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblIncomeSources I inner join tblHouseholdIncome HI on I.IncomeSourceID = HI.IncomeSourceID WHERE HouseholdID = " & HouseholdID)
+        dsIncome = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblIncomeSources I inner join tblHouseholdIncome HI on I.IncomeSourceID = HI.IncomeSourceID WHERE HouseholdID = " & CookiesWrapper.BeneficiaryID)
 
     End Sub
 
@@ -89,7 +89,7 @@ Public Class HouseholdIncomeSources
 
                     Return True
 
-                ElseIf Not db.ExecuteNonQuery(CommandType.Text, "INSERT INTO tblHouseholdIncome (HouseholdID, IncomeSourceID) VALUES (" & HouseholdID & "," & Income(i) & ")") > 0 Then
+                ElseIf Not db.ExecuteNonQuery(CommandType.Text, "INSERT INTO tblHouseholdIncome (HouseholdID, IncomeSourceID) VALUES (" & CookiesWrapper.BeneficiaryID & "," & Income(i) & ")") > 0 Then
 
                     Return False
 
@@ -105,7 +105,7 @@ Public Class HouseholdIncomeSources
 
     Private Sub cmdMapIncome_Click(sender As Object, e As EventArgs) Handles cmdMapIncome.Click
 
-        If HouseholdID > 0 Then
+        If CookiesWrapper.BeneficiaryID > 0 Then
 
             If MapIncome() Then
 

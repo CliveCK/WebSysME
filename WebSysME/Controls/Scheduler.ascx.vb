@@ -51,6 +51,14 @@ Public Class Scheduler
         End Get
     End Property
 
+    Private Sub Page_Init(sender As Object, e As EventArgs) Handles Me.Init
+
+        SqlDataSource1.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
+        UsersDataSource.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
+        ActivityDataSource.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings(CookiesWrapper.thisConnectionName).ConnectionString
+
+    End Sub
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not Page.IsPostBack Then
@@ -61,8 +69,8 @@ Public Class Scheduler
 
                 With lstUsers
 
-                    .DataSource = objLookup.Lookup("tblStaffMembers", "StaffID", "FirstName", , "StaffID = " & objUrlEncoder.Decrypt(Request.QueryString("staffid")))
-                    .DataTextField = "FirstName"
+                    .DataSource = objLookup.Lookup("tblStaffMembers", "StaffID", "StaffFullName", , "StaffID = " & objUrlEncoder.Decrypt(Request.QueryString("staffid")))
+                    .DataTextField = "StaffFullName"
                     .DataValueField = "StaffID"
                     .DataBind()
 
@@ -88,8 +96,8 @@ Public Class Scheduler
 
                 With lstUsers
 
-                    .DataSource = objLookup.Lookup("tblStaffMembers", "StaffID", "FirstName")
-                    .DataTextField = "FirstName"
+                    .DataSource = objLookup.Lookup("tblStaffMembers", "StaffID", "StaffFullName")
+                    .DataTextField = "StaffFullName"
                     .DataValueField = "StaffID"
                     .DataBind()
 

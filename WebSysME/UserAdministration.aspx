@@ -24,7 +24,7 @@
                         <telerik:RadPanelItem ID="UserActions" runat="server" Text="User Actions" Expanded="True">
                             <Items>
                                 <telerik:RadPanelItem ID="cmdAdd" runat="server" Text="Add New User" Expanded="True"
-                                    NavigateUrl="~/UserAdministration.aspx">
+                                    NavigateUrl="~/UserAdministration.aspx?op=new">
                                 </telerik:RadPanelItem>
                                 <telerik:RadPanelItem ID="cmdFind" runat="server" Text="FindUser(s)" Expanded="True"
                                     NavigateUrl="~/UserAdministration.aspx?op=vw">

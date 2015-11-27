@@ -3,7 +3,7 @@
     EnableEventValidation="false" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
-<%@ Register Src="~/Reporting/ReportsFilterControl.ascx" TagName="ReportsFilterControl"
+<%@ Register Src="ReportsFilterControl.ascx" TagName="ReportsFilterControl"
     TagPrefix="uc1" %>
 <%@ Register Assembly="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"
     Namespace="CrystalDecisions.Web" TagPrefix="CR" %>
@@ -14,7 +14,7 @@
         function OnReportClick(sender, node) {
             displayMessage('Loading report..please wait.', 'Ajax'); //alert('Showing report: ' + node.Text + ', ID: ' + node.Value + ', ' + node.Category);
             document.getElementById('<%= txtReportID.ClientID %>').value = node.get_node().get_value();
-            SetCookie("ReportID", node.get_node().get_value());
+            SetCookie("thisReportID", node.get_node().get_value());
             document.getElementById('<% Response.Write(txtSaveAs.ClientID) %>').value = '-';
             document.getElementById('<% Response.Write(txtSaveAsExcel.ClientID) %>').value = '-';
             document.getElementById('<% Response.Write(txtSaveAsWord.ClientID) %>').value = '-';
@@ -122,7 +122,7 @@
         
         
     </script>
-    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; margin-left:2%">
         <tr>
             <td class="PageTitle" colspan="2" rowspan="1" valign="top">
                 Reports
@@ -133,7 +133,7 @@
             <td rowspan="4" style="width: 100px; background-color: whitesmoke; border: solid 1px #C0C0C0;"
                 valign="top">
                 <telerik:RadTreeView ID="tvwReportsCategories" CausesValidation="false" runat="server"
-                    Width="200px" OnClientNodeClicking="OnReportClick" >
+                    Width="200px" OnClientNodeClicking="OnReportClick" Enabled="true">
                 </telerik:RadTreeView>
                 &nbsp;<br />
             </td>
@@ -181,8 +181,8 @@
                         <td valign="top" align="center">
                             <%-- <CR:CrystalReportSource ID="crsreport" runat="server" CacheDuration ="180" >
                             </CR:CrystalReportSource>--%>
-                            <CR:CrystalReportViewer ID="crvReports" runat="server" AutoDataBind="true" DisplayToolbar="true"
-                                HasCrystalLogo="False" />
+                            <CR:CrystalReportViewer ID="crvReports1" runat="server" AutoDataBind="true" DisplayToolbar="true"
+                                HasCrystalLogo="False"/>
                             <asp:Label ID="lblReports" runat="server" Text="REPORTS" Font-Size="45"> </asp:Label>
                         </td>
                     </tr>

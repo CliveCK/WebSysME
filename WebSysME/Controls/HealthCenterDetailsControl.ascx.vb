@@ -1,8 +1,11 @@
 ﻿Imports BusinessLogic
+Imports Telerik.Web.UI
 
 Partial Class HealthCenterDetailsControl
     Inherits System.Web.UI.UserControl
 
+    Private HealthCenterID As Long
+    Private objCustomFields As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
 
 #Region "Status Messages"
@@ -29,6 +32,17 @@ Partial Class HealthCenterDetailsControl
     End Sub
 
 #End Region
+
+    Private Sub Page_Init(sender As Object, e As EventArgs) Handles Me.Init
+
+        If Not IsNothing(Request.QueryString("id")) Then
+
+            HealthCenterID = objUrlEncoder.Decrypt(Request.QueryString("id"))
+            phCustomFields.Controls.Add(objCustomFields.LoadCustomFieldsPanel(Page, HealthCenterID, "H", My.Settings.DisplayDateFormat))
+
+        End If
+
+    End Sub
 
 
     Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -79,17 +93,72 @@ Partial Class HealthCenterDetailsControl
 
     End Sub
 
+    Private Sub LoadCombos()
+
+        Dim objLookup As New BusinessLogic.CommonFunctions
+
+        With cboProvince
+
+            .DataSource = objLookup.Lookup("tblProvinces", "ProvinceID", "Name").Tables(0)
+            .DataValueField = "ProvinceID"
+            .DataTextField = "Name"
+            .DataBind()
+
+            .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+            .SelectedIndex = 0
+
+        End With
+
+        With cboDistrict
+
+            .DataSource = objLookup.Lookup("tblDistricts", "DistrictID", "Name").Tables(0)
+            .DataValueField = "DistrictID"
+            .DataTextField = "Name"
+            .DataBind()
+
+            .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+
+        End With
+
+        With cboWard
+
+            .DataSource = objLookup.Lookup("tblWards", "WardID", "Name").Tables(0)
+            .DataValueField = "WardID"
+            .DataTextField = "Name"
+            .DataBind()
+
+            .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+
+        End With
+
+        With cboHealthCenterType
+
+            .DataSource = objLookup.Lookup("luHealthCenterTypes", "HealthCenterTypeID", "Description").Tables(0)
+            .DataValueField = "HealthCenterTypeID"
+            .DataTextField = "Description"
+            .DataBind()
+
+            .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+
+        End With
+
+    End Sub
+
     Public Function LoadHealthCenter(ByVal HealthCenterID As Long) As Boolean
 
         Try
 
-            Dim objHealthCenter As New HealthCenter("Demo", 1)
+            Dim objHealthCenter As New HealthCenter(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objHealthCenter
 
                 If .Retrieve(HealthCenterID) Then
 
+                    LoadCombos()
+
                     txtHealthCenterID.Text = .HealthCenterID
+                    If Not IsNothing(cboProvince.Items.FindByValue(.ProvinceID)) Then cboProvince.SelectedValue = .ProvinceID
+                    If Not IsNothing(cboDistrict.Items.FindByValue(.DistrictID)) Then cboDistrict.SelectedValue = .DistrictID
                     If Not IsNothing(cboWard.Items.FindByValue(.WardID)) Then cboWard.SelectedValue = .WardID
                     If Not IsNothing(cboHealthCenterType.Items.FindByValue(.HealthCenterTypeID)) Then cboHealthCenterType.SelectedValue = .HealthCenterTypeID
                     txtNoOfDoctors.Text = .NoOfDoctors
@@ -126,23 +195,29 @@ Partial Class HealthCenterDetailsControl
 
         Try
 
-            Dim objHealthCenter As New HealthCenter("Demo", 1)
+            Dim objHealthCenter As New HealthCenter(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objHealthCenter
 
                 .HealthCenterID = IIf(IsNumeric(txtHealthCenterID.Text), txtHealthCenterID.Text, 0)
                 If cboWard.SelectedIndex > -1 Then .WardID = cboWard.SelectedValue
                 If cboHealthCenterType.SelectedIndex > -1 Then .HealthCenterTypeID = cboHealthCenterType.SelectedValue
-                .NoOfDoctors = txtNoOfDoctors.Text
-                .NoOfNurses = txtNoOfNurses.Text
-                .NoOfBeds = txtNoOfBeds.Text
+                .NoOfDoctors = IIf(IsNumeric(txtNoOfDoctors.Text), txtNoOfDoctors.Text, 0)
+                .NoOfNurses = IIf(IsNumeric(txtNoOfNurses.Text), txtNoOfNurses.Text, 0)
+                .NoOfBeds = IIf(IsNumeric(txtNoOfBeds.Text), txtNoOfBeds.Text, 0)
                 .HasAmbulance = chkHasAmbulance.Checked
-                .Longitude = txtLongitude.Text
-                .Latitude = txtLatitude.Text
+                .Longitude = IIf(IsNumeric(txtLongitude.Text), txtLongitude.Text, 0)
+                .Latitude = IIf(IsNumeric(txtLatitude.Text), txtLatitude.Text, 0)
                 .Name = txtName.Text
                 .Description = txtDescription.Text
 
                 If .Save Then
+
+                    Dim NumberOfNewFields As Integer = UpdateCustomFieldTemplates(.HealthCenterID)
+
+                    If (phCustomFields.Controls.Count > 0) Then
+                        objCustomFields.SaveCustomFields(DirectCast(phCustomFields.Controls(0), RadPanelBar), .HealthCenterID, "H")
+                    End If
 
                     If Not IsNumeric(txtHealthCenterID.Text) OrElse Trim(txtHealthCenterID.Text) = 0 Then txtHealthCenterID.Text = .HealthCenterID
                     ShowMessage("HealthCenter saved successfully...", MessageTypeEnum.Information)
@@ -209,6 +284,9 @@ Partial Class HealthCenterDetailsControl
                 .DataTextField = "Name"
                 .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
             End With
 
         End If
@@ -223,15 +301,49 @@ Partial Class HealthCenterDetailsControl
 
             With cboWard
 
-                .DataSource = objLookup.Lookup("tblWards", "WardID", "Name", , "DestrictID = " & cboDistrict.SelectedValue).Tables(0)
+                .DataSource = objLookup.Lookup("tblWards", "WardID", "Name", , "DistrictID = " & cboDistrict.SelectedValue).Tables(0)
                 .DataValueField = "WardID"
                 .DataTextField = "Name"
                 .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
             End With
 
         End If
 
     End Sub
+
+    Private Sub lnkStaff_Click(sender As Object, e As EventArgs) Handles lnkStaff.Click
+
+        Response.Redirect("~/HealthCenterStaffPage.aspx?id=" & objUrlEncoder.Encrypt(txtHealthCenterID.Text))
+
+    End Sub
+
+    Public Function UpdateCustomFieldTemplates(ByVal HealthCenterID As Long) As Integer
+
+        'Creating a project: 
+        '   - Now we know the type, and/or the status, so we need to 
+        '     load the relevant custom fields
+        'Updating a project: 
+        '   - We check if the type/status has changed, and if so, we 
+        '     need to load the relevant custom fields for this new 
+        '     project type/status.
+
+        Dim NewStatusTemplates As Long = 0, NewTypeTemplates As Long = 0
+
+        If HealthCenterID > 0 Then
+
+            Dim objCustomFields As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
+
+            objCustomFields.UpdateObjectWithStatusTemplates(HealthCenterID, "H", HealthCenterID, BusinessLogic.CustomFields.AutomatorTypes.HealthCenter, RowsAffected:=NewStatusTemplates)
+
+        End If
+
+        Return NewStatusTemplates + NewTypeTemplates
+
+    End Function
+
 End Class
- 
+

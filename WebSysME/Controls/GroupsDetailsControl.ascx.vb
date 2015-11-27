@@ -32,43 +32,85 @@
 
         Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-            If Not Page.IsPostBack Then
+        If Not Page.IsPostBack Then
 
-                If Not IsNothing(Request.QueryString("id")) Then
+            Dim objLookup As New BusinessLogic.CommonFunctions
 
-                    LoadGrid(objUrlEncoder.Decrypt(Request.QueryString("id")))
-                    LoadGroups(objUrlEncoder.Decrypt(Request.QueryString("id")))
+            With cboProvince
 
-                Else
+                .DataSource = objLookup.Lookup("tblProvinces", "ProvinceID", "Name").Tables(0)
+                .DataValueField = "ProvinceID"
+                .DataTextField = "Name"
+                .DataBind()
 
-                    Dim objLookup As New BusinessLogic.CommonFunctions
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
-                    With cboProvince
+            End With
 
-                        .DataSource = objLookup.Lookup("tblProvinces", "ProvinceID", "Name").Tables(0)
-                        .DataValueField = "ProvinceID"
-                        .DataTextField = "Name"
-                        .DataBind()
+            With cboGroupType
 
-                        .Items.Insert(0, New ListItem(String.Empty, String.Empty))
-                        .SelectedIndex = 0
+                .DataSource = objLookup.Lookup("luGroupTypes", "GroupTypeID", "Description").Tables(0)
+                .DataValueField = "GroupTypeID"
+                .DataTextField = "Description"
+                .DataBind()
 
-                    End With
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
-                End If
+            End With
+
+            If Not IsNothing(Request.QueryString("id")) Then
+
+                LoadGrid(objUrlEncoder.Decrypt(Request.QueryString("id")))
+                LoadGroups(objUrlEncoder.Decrypt(Request.QueryString("id")))
 
             End If
 
-        End Sub
+        End If
+
+    End Sub
+
+    Private Sub LoadCombo()
+
+        Dim objLookup As New BusinessLogic.CommonFunctions
+
+        With cboDistrict
+
+            .DataSource = objLookup.Lookup("tblDistricts", "DistrictID", "Name").Tables(0)
+            .DataValueField = "DistrictID"
+            .DataTextField = "Name"
+            .DataBind()
+
+            .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+            .SelectedIndex = 0
+
+        End With
+
+        With cboWard
+
+            .DataSource = objLookup.Lookup("tblWards", "WardID", "Name").Tables(0)
+            .DataValueField = "WardID"
+            .DataTextField = "Name"
+            .DataBind()
+
+            .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+            .SelectedIndex = 0
+
+        End With
+
+    End Sub
 
         Private Sub LoadGrid(ByVal GroupID As Long)
 
-            Dim objBeneficiaries As New Groups("Demo", 1)
+            Dim objBeneficiaries As New Groups(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With radGroupMembership
 
                 .DataSource = objBeneficiaries.GetGroupMembership(GroupID)
-                .DataBind()
+            .DataBind()
+
+            ViewState("mGroups") = .DataSource
 
             End With
 
@@ -84,13 +126,16 @@
 
             Try
 
-                Dim objGroups As New Groups("Demo", 1)
+                Dim objGroups As New Groups(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objGroups
 
                     If .Retrieve(GroupID) Then
 
-                        txtGroupID.Text = .GroupID
+                    LoadCombo()
+                    txtGroupID.Text = .GroupID
+                    If Not IsNothing(cboProvince.Items.FindByValue(.ProvinceID)) Then cboProvince.SelectedValue = .ProvinceID
+                    If Not IsNothing(cboDistrict.Items.FindByValue(.DistrictID)) Then cboDistrict.SelectedValue = .DistrictID
                         If Not IsNothing(cboWard.Items.FindByValue(.WardID)) Then cboWard.SelectedValue = .WardID
                         If Not IsNothing(cboGroupType.Items.FindByValue(.GroupTypeID)) Then cboGroupType.SelectedValue = .GroupTypeID
                         txtDescription.Text = .Description
@@ -122,7 +167,7 @@
 
             Try
 
-                Dim objGroups As New Groups("Demo", 1)
+                Dim objGroups As New Groups(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objGroups
 
@@ -130,7 +175,7 @@
                     If cboWard.SelectedIndex > -1 Then .WardID = cboWard.SelectedValue
                     If cboGroupType.SelectedIndex > -1 Then .GroupTypeID = cboGroupType.SelectedValue
                     .Description = txtDescription.Text
-                    .GroupSize = txtGroupSize.Text
+                .GroupSize = IIf(IsNumeric(txtGroupSize.Text), txtGroupSize.Text, 0)
                     .GroupName = txtGroupName.Text
 
                     If .Save Then
@@ -194,7 +239,10 @@
                     .DataSource = objLookup.Lookup("tblDistricts", "DistrictID", "Name", , "ProvinceID = " & cboProvince.SelectedValue).Tables(0)
                     .DataValueField = "DistrictID"
                     .DataTextField = "Name"
-                    .DataBind()
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
                 End With
 
@@ -214,6 +262,9 @@
                     .DataValueField = "WardID"
                     .DataTextField = "Name"
                     .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
                 End With
 

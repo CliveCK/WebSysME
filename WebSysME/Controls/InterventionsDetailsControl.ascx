@@ -20,9 +20,11 @@
 		<td >Project</td> 
         	<td ><asp:dropdownlist id="cboProject" runat="server" AutoPostBack="true" CssClass="form-control"></asp:dropdownlist> </td> 
 	</tr>
-	<tr> 
-		<td >Sector</td> 
-        	<td ><asp:dropdownlist id="cboSector" runat="server" CssClass="form-control"></asp:dropdownlist> </td> 
+    <tr> 
+		<td >Name</td> 
+        	<td ><asp:textbox id="txtName" runat="server" CssClass="form-control"></asp:textbox> </td> 
+		<td >Description</td> 
+        	<td ><asp:textbox id="txtDescription" runat="server" CssClass="form-control"></asp:textbox> </td> 
 	</tr> 
 	<tr> 
 		<td >Beneficiaries Target</td> 
@@ -50,12 +52,17 @@
                     </DateInput>
                 </telerik:RadDatePicker></td>  
 	</tr> 
-	<tr> 
-		<td >Name</td> 
-        	<td ><asp:textbox id="txtName" runat="server" CssClass="form-control"></asp:textbox> </td> 
-		<td >Description</td> 
-        	<td ><asp:textbox id="txtDescription" runat="server" CssClass="form-control"></asp:textbox> </td> 
-	</tr> 
+    <tr> 
+		<td >Review Date</td> 
+        	<td > <telerik:RadDatePicker ID="radReviewDate" runat="server" MinDate="1900-01-01"
+                    Width="150px">
+                    <Calendar ID="Calendar3" runat="server" UseColumnHeadersAsSelectors="False" UseRowHeadersAsSelectors="False"
+                        ViewSelectorText="x">
+                    </Calendar>
+                    <DateInput ID="Dateinput3" runat="server" DateFormat="dd/MMM/yyyy" DisplayDateFormat="dd/MMM/yyyy">
+                    </DateInput>
+                </telerik:RadDatePicker></td> 
+    </tr> 
 	<tr> 
 		<td >Description Of Beneficiaries</td> 
         	<td ><asp:textbox id="txtDescriptionOfBeneficiaries" runat="server" CssClass="form-control"></asp:textbox> </td> 

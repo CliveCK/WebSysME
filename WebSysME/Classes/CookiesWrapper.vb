@@ -109,19 +109,19 @@ Partial Public Class CookiesWrapper
 #Region "User Cookies"
 
     <Description("Gets or sets a Connection Name saved into the ConnectionName cookie.")> _
-    Public Shared Property ConnectionName() As String
+    Public Shared Property thisConnectionName() As String
         Get
-            Return GetCookie("ConnectionName", "CustomFields")
+            Return GetCookie("thisConnectionName", "Test")
         End Get
         Set(ByVal Value As String)
-            AddCookie("ConnectionName", Value)
+            AddCookie("thisConnectionName", Value)
         End Set
     End Property
 
     <Description("Gets or sets a Connection Name saved into the ConnectionName cookie.")> _
     Public Shared Property RadTreeSelectedNode() As String
         Get
-            Return GetCookie("RadTreeSelectedNode", "CustomFields")
+            Return GetCookie("RadTreeSelectedNode", "")
         End Get
         Set(ByVal Value As String)
             AddCookie("RadTreeSelectedNode", Value)
@@ -139,62 +139,62 @@ Partial Public Class CookiesWrapper
     End Property
 
     <Description("Gets or sets the reportid saved into the ReportID cookie.")> _
-    Public Shared Property ReportID() As Long
+    Public Shared Property thisReportID() As Long
         Get
-            Return GetCookie("ReportID", "0")
+            Return GetCookie("thisReportID", "0")
         End Get
         Set(ByVal Value As Long)
-            AddCookie("ReportID", Value)
+            AddCookie("thisReportID", Value)
         End Set
     End Property
 
     <Description("Gets or sets a user id saved into the UserID cookie.")> _
-    Public Shared Property UserID() As Long
+    Public Shared Property thisUserID() As Long
         Get
-            Return GetCookie("UserID", 1)
+            Return GetCookie("thisUserID", 1)
         End Get
         Set(ByVal Value As Long)
-            AddCookie("UserID", Value)
+            AddCookie("thisUserID", Value)
         End Set
     End Property
 
     <Description("Gets or sets a user id saved into the LogID cookie.")> _
-    Public Shared Property LogID() As Long
+    Public Shared Property thisLogID() As Long
         Get
-            Return GetCookie("LogID", 1)
+            Return GetCookie("thisLogID", 1)
         End Get
         Set(ByVal Value As Long)
-            AddCookie("LogID", Value)
+            AddCookie("thisLogID", Value)
         End Set
     End Property
 
     <Description("Gets or sets a user name saved into the UserFullName cookie.")> _
-    Public Shared Property UserFullName() As String
+    Public Shared Property thisUserFullName() As String
         Get
-            Return GetCookie("UserFullName", "")
+            Return GetCookie("thisUserFullName", "")
         End Get
         Set(ByVal Value As String)
-            AddCookie("UserFullName", Value)
+            AddCookie("thisUserFullName", Value)
         End Set
     End Property
 
     <Description("Gets or sets a user name saved into the UserName cookie.")> _
-    Public Shared Property UserName() As String
+    Public Shared Property thisUserName() As String
         Get
-            Return GetCookie("UserName", "")
+            Return GetCookie("thisUserName", "")
         End Get
         Set(ByVal Value As String)
-            AddCookie("UserName", Value)
+            AddCookie("thisUserName", Value)
         End Set
     End Property
 
     <Description("Gets or sets a User Groups saved into the UserGroups cookie.")> _
-    Public Shared Property UserGroups() As String
+    Public Shared Property thisUserGroups() As String
         Get
-            Return GetCookie("UserGroups", "")
+            Return GetCookie("thisUserGroups", "")
         End Get
         Set(ByVal Value As String)
-            AddCookie("UserGroups", Value)
+            AddCookie("thisUserGroups", Value)
         End Set
     End Property
 
@@ -210,26 +210,35 @@ Partial Public Class CookiesWrapper
 
 #End Region
 
-#Region "Member Cookies"
+#Region "Beneficiary Cookies"
 
     <Description("Gets or sets the SegregatedFundID saved into the SegregatedFundID cookie.")> _
-    Public Shared Property SegregatedFundID() As Long
+    Public Shared Property BeneficiaryID() As Long
         Get
-            Return GetCookie("SegregatedFundID", 0)
+            Return GetCookie("BeneficiaryID", 0)
         End Get
         Set(ByVal Value As Long)
-            AddCookie("SegregatedFundID", Value)
+            AddCookie("BeneficiaryID", Value)
+        End Set
+    End Property
+
+    Public Shared Property PatientID() As Long
+        Get
+            Return GetCookie("PatientID", 0)
+        End Get
+        Set(ByVal Value As Long)
+            AddCookie("PatientID", Value)
         End Set
     End Property
 
     <Description("Gets or sets a Member id saved into the MemberID cookie.")> _
-    Public Shared Property MemberID() As Long
+    Public Shared Property ParentID() As Long
         Get
-            Dim tmp As String = GetCookie("MemberID", 0)
+            Dim tmp As String = GetCookie("ParentID", 0)
             Return IIf(IsNumeric(tmp), tmp, 0)
         End Get
         Set(ByVal Value As Long)
-            AddCookie("MemberID", Value)
+            AddCookie("ParentID", Value)
         End Set
     End Property
 
@@ -250,6 +259,27 @@ Partial Public Class CookiesWrapper
         End Get
         Set(ByVal Value As String)
             AddCookie("MemberNo", Value)
+        End Set
+    End Property
+
+
+    <Description("Gets or sets the OrganizationId saved into the OrganizationID cookie.")> _
+    Public Shared Property OrganizationID() As Long
+        Get
+            Return GetCookie("OrganizationID", "0")
+        End Get
+        Set(ByVal Value As Long)
+            AddCookie("OrganizationID", Value)
+        End Set
+    End Property
+
+    <Description("Gets or sets the StaffID saved into the StaffID cookie.")> _
+    Public Shared Property StaffID() As Long
+        Get
+            Return GetCookie("StaffID", "0")
+        End Get
+        Set(ByVal Value As Long)
+            AddCookie("StaffID", Value)
         End Set
     End Property
 

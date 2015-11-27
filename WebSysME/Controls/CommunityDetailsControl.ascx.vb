@@ -1,7 +1,9 @@
 ﻿Imports BusinessLogic
 
     Partial Class CommunityDetailsControl
-        Inherits System.Web.UI.UserControl
+    Inherits System.Web.UI.UserControl
+
+    Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
 
 #Region "Status Messages"
 
@@ -32,19 +34,26 @@
 
             If Not Page.IsPostBack Then
 
-                Dim objLookup As New BusinessLogic.CommonFunctions
+            Dim objLookup As New BusinessLogic.CommonFunctions
 
-                With cboProvince
+            With cboProvince
 
-                    .DataSource = objLookup.Lookup("tblProvinces", "ProvinceID", "Name").Tables(0)
-                    .DataValueField = "ProvinceID"
-                    .DataTextField = "Name"
-                    .DataBind()
+                .DataSource = objLookup.Lookup("tblProvinces", "ProvinceID", "Name").Tables(0)
+                .DataValueField = "ProvinceID"
+                .DataTextField = "Name"
+                .DataBind()
 
-                    .Items.Insert(0, New ListItem(String.Empty, String.Empty))
-                    .SelectedIndex = 0
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
-                End With
+            End With
+
+            If Not IsNothing(Request.QueryString("id")) Then
+
+                LoadCommunity(objUrlEncoder.Decrypt(Request.QueryString("id")))
+
+            End If
+
             End If
 
         End Sub
@@ -59,79 +68,62 @@
 
             Try
 
-                Dim objCommunity As New Community("Demo", 1)
+                Dim objCommunity As New Community(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
-                With objCommunity
+            With objCommunity
 
-                    If .Retrieve(CommunityID) Then
+                If .Retrieve(CommunityID) Then
 
-                        txtCommunityID.Text = .CommunityID
-                        If Not IsNothing(cboWard.Items.FindByValue(.WardID)) Then cboWard.SelectedValue = .WardID
-                        txtNoOfHouseholds.Text = .NoOfHouseholds
-                        txtNoOfIndividualAdultMales.Text = .NoOfIndividualAdultMales
-                        txtNoOfIndividualAdultFemales.Text = .NoOfIndividualAdultFemales
-                        txtNoOfMaleYouths.Text = .NoOfMaleYouths
-                        txtNoOfFemaleYouth.Text = .NoOfFemaleYouth
-                        txtNoOfChildren.Text = .NoOfChildren
-                        txtName.Text = .Name
-                        txtDescription.Text = .Description
+                    Dim objLookup As New BusinessLogic.CommonFunctions
 
-                        ShowMessage("Community loaded successfully...", MessageTypeEnum.Information)
-                        Return True
+                    With cboWard
 
-                    Else
+                        .DataSource = objLookup.Lookup("tblWards", "WardID", "Name").Tables(0)
+                        .DataValueField = "WardID"
+                        .DataTextField = "Name"
+                        .DataBind()
 
-                        ShowMessage("Failed to load Community: & .ErrorMessage", MessageTypeEnum.Error)
-                        Return False
+                        .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                        .SelectedIndex = 0
 
-                    End If
+                    End With
 
-                End With
+                    With cboDistrict
 
-            Catch ex As Exception
+                        .DataSource = objLookup.Lookup("tblDistricts", "DistrictID", "Name").Tables(0)
+                        .DataValueField = "DistrictID"
+                        .DataTextField = "Name"
+                        .DataBind()
 
-                ShowMessage(ex, MessageTypeEnum.Error)
-                Return False
+                        .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                        .SelectedIndex = 0
 
-            End Try
+                    End With
 
-        End Function
+                    txtCommunityID.Text = .CommunityID
+                    If Not IsNothing(cboProvince.Items.FindByValue(.ProvinceID)) Then cboProvince.SelectedValue = .ProvinceID
+                    If Not IsNothing(cboDistrict.Items.FindByValue(.DistrictID)) Then cboDistrict.SelectedValue = .DistrictID
+                    If Not IsNothing(cboWard.Items.FindByValue(.WardID)) Then cboWard.SelectedValue = .WardID
+                    txtNoOfHouseholds.Text = .NoOfHouseholds
+                    txtNoOfIndividualAdultMales.Text = .NoOfIndividualAdultMales
+                    txtNoOfIndividualAdultFemales.Text = .NoOfIndividualAdultFemales
+                    txtNoOfMaleYouths.Text = .NoOfMaleYouths
+                    txtNoOfFemaleYouth.Text = .NoOfFemaleYouth
+                    txtNoOfChildren.Text = .NoOfChildren
+                    txtName.Text = .Name
+                    txtDescription.Text = .Description
 
-        Public Function Save() As Boolean
+                    ShowMessage("Community loaded successfully...", MessageTypeEnum.Information)
+                    Return True
 
-            Try
+                Else
 
-                Dim objCommunity As New Community("Demo", 1)
+                    ShowMessage("Failed to load Community: & .ErrorMessage", MessageTypeEnum.Error)
+                    Return False
 
-                With objCommunity
+                End If
 
-                    .CommunityID = IIf(txtCommunityID.Text <> "", txtCommunityID.Text, 0)
-                    If cboWard.SelectedIndex > -1 Then .WardID = cboWard.SelectedValue
-                    .NoOfHouseholds = txtNoOfHouseholds.Text
-                    .NoOfIndividualAdultMales = txtNoOfIndividualAdultMales.Text
-                    .NoOfIndividualAdultFemales = txtNoOfIndividualAdultFemales.Text
-                    .NoOfMaleYouths = txtNoOfMaleYouths.Text
-                    .NoOfFemaleYouth = txtNoOfFemaleYouth.Text
-                    .NoOfChildren = txtNoOfChildren.Text
-                    .Name = txtName.Text
-                    .Description = txtDescription.Text
-
-                    If .Save Then
-
-                        If Not IsNumeric(txtCommunityID.Text) OrElse Trim(txtCommunityID.Text) = 0 Then txtCommunityID.Text = .CommunityID
-                        ShowMessage("Community saved successfully...", MessageTypeEnum.Information)
-
-                        Return True
-
-                    Else
-
-                        ShowMessage("Error: Failed to save community", MessageTypeEnum.Error)
-                        Return False
-
-                    End If
-
-                End With
-
+            End With
 
             Catch ex As Exception
 
@@ -141,6 +133,51 @@
             End Try
 
         End Function
+
+    Public Function Save() As Boolean
+
+        Try
+
+            Dim objCommunity As New Community(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+            With objCommunity
+
+                .CommunityID = IIf(txtCommunityID.Text <> "", txtCommunityID.Text, 0)
+                If cboWard.SelectedIndex > -1 Then .WardID = cboWard.SelectedValue
+                .NoOfHouseholds = IIf(IsNumeric(txtNoOfHouseholds.Text), txtNoOfHouseholds.Text, 0)
+                .NoOfIndividualAdultMales = IIf(IsNumeric(txtNoOfIndividualAdultMales.Text), txtNoOfIndividualAdultMales.Text, 0)
+                .NoOfIndividualAdultFemales = IIf(IsNumeric(txtNoOfIndividualAdultFemales.Text), txtNoOfIndividualAdultFemales.Text, 0)
+                .NoOfMaleYouths = IIf(IsNumeric(txtNoOfMaleYouths.Text), txtNoOfMaleYouths.Text, 0)
+                .NoOfFemaleYouth = IIf(IsNumeric(txtNoOfFemaleYouth.Text), txtNoOfFemaleYouth.Text, 0)
+                .NoOfChildren = IIf(IsNumeric(txtNoOfChildren.Text), txtNoOfChildren.Text, 0)
+                .Name = txtName.Text
+                .Description = txtDescription.Text
+
+                If .Save Then
+
+                    If Not IsNumeric(txtCommunityID.Text) OrElse Trim(txtCommunityID.Text) = 0 Then txtCommunityID.Text = .CommunityID
+                    ShowMessage("Community saved successfully...", MessageTypeEnum.Information)
+
+                    Return True
+
+                Else
+
+                    ShowMessage("Error: Failed to save community", MessageTypeEnum.Error)
+                    Return False
+
+                End If
+
+            End With
+
+
+        Catch ex As Exception
+
+            ShowMessage(ex, MessageTypeEnum.Error)
+            Return False
+
+        End Try
+
+    End Function
 
         Public Sub Clear()
 
@@ -176,6 +213,9 @@
                     .DataTextField = "Name"
                     .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
                 End With
 
             End If
@@ -190,10 +230,13 @@
 
                 With cboWard
 
-                    .DataSource = objLookup.Lookup("tblWards", "WardID", "Name", , "DestrictID = " & cboDistrict.SelectedValue).Tables(0)
+                .DataSource = objLookup.Lookup("tblWards", "WardID", "Name", , "DistrictID = " & cboDistrict.SelectedValue).Tables(0)
                     .DataValueField = "WardID"
                     .DataTextField = "Name"
                     .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
                 End With
 

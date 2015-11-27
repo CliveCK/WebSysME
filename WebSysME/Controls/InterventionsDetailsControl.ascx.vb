@@ -51,25 +51,13 @@ Partial Class InterventionsDetailsControl
                 .SelectedIndex = 0
 
             End With
-
-            With cboProgram
-
-                .DataSource = objLookup.Lookup("tblSector", "SectorID", "Name").Tables(0)
-                .DataValueField = "SectorID"
-                .DataTextField = "Name"
-                .DataBind()
-
-                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
-                .SelectedIndex = 0
-
-            End With
         End If
 
     End Sub
 
     Private Sub LoadGrid()
 
-        Dim objIntervention As New BusinessLogic.Interventions("Demo", 1)
+        Dim objIntervention As New BusinessLogic.Interventions(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim sql As String = "SELECT P.Name as Project, I.* FROM tblInterventions I inner JOIN tblProjects P on I.ProjectID = P.Project "
 
         With radInterventionListing
@@ -93,7 +81,7 @@ Partial Class InterventionsDetailsControl
 
         Try
 
-            Dim objInterventions As New Interventions("Demo", 1)
+            Dim objInterventions As New Interventions(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objInterventions
 
@@ -102,7 +90,6 @@ Partial Class InterventionsDetailsControl
 
                     txtInterventionID.Text = .InterventionID
                     If Not IsNothing(cboProject.Items.FindByValue(.ProjectID)) Then cboProject.SelectedValue = .ProjectID
-                    If Not IsNothing(cboSector.Items.FindByValue(.SectorID)) Then cboSector.SelectedValue = .SectorID
                     txtBeneficiariesTarget.Text = .BeneficiariesTarget
                     txtActualBenficiaries.Text = .ActualBenficiaries
                     radStartDate.SelectedDate = .StartDate
@@ -136,14 +123,14 @@ Partial Class InterventionsDetailsControl
 
         Try
 
-            Dim objInterventions As New Interventions("Demo", 1)
+            Dim objInterventions As New Interventions(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objInterventions
 
                 .InterventionID = IIf(txtInterventionID.Text <> "", txtInterventionID.Text, 0)
-                If cboSector.SelectedIndex > -1 Then .SectorID = cboSector.SelectedValue
-                .BeneficiariesTarget = txtBeneficiariesTarget.Text
-                .ActualBenficiaries = txtActualBenficiaries.Text
+                If cboProject.SelectedIndex > -1 Then .ProjectID = cboProject.SelectedValue
+                .BeneficiariesTarget = IIf(IsNumeric(txtBeneficiariesTarget.Text), txtBeneficiariesTarget.Text, 0)
+                .ActualBenficiaries = IIf(IsNumeric(txtActualBenficiaries.Text), txtActualBenficiaries.Text, 0)
                 .StartDate = radStartDate.SelectedDate
                 .EndDate = radEndDate.SelectedDate
                 .Name = txtName.Text
@@ -182,12 +169,19 @@ Partial Class InterventionsDetailsControl
     Public Sub Clear()
 
         txtInterventionID.Text = ""
-        If Not IsNothing(cboSector.Items.FindByValue("")) Then
-            cboSector.SelectedValue = ""
-        ElseIf Not IsNothing(cboSector.Items.FindByValue(0)) Then
-            cboSector.SelectedValue = 0
+        If Not IsNothing(cboProgram.Items.FindByValue("")) Then
+            cboProgram.SelectedValue = ""
+        ElseIf Not IsNothing(cboProgram.Items.FindByValue(0)) Then
+            cboProgram.SelectedValue = 0
         Else
-            cboSector.SelectedIndex = -1
+            cboProgram.SelectedIndex = -1
+        End If
+        If Not IsNothing(cboProject.Items.FindByValue("")) Then
+            cboProgram.SelectedValue = ""
+        ElseIf Not IsNothing(cboProject.Items.FindByValue(0)) Then
+            cboProject.SelectedValue = 0
+        Else
+            cboProject.SelectedIndex = -1
         End If
         txtBeneficiariesTarget.Text = 0
         txtActualBenficiaries.Text = 0

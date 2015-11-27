@@ -61,7 +61,7 @@ Partial Class ReportSumbissionTrackingDetailsControl
 
         Try
 
-            Dim objReportSumbissionTracking As New ReportSumbissionTracking("Demo", 1)
+            Dim objReportSumbissionTracking As New ReportSumbissionTracking(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objReportSumbissionTracking
 
@@ -100,7 +100,7 @@ Partial Class ReportSumbissionTrackingDetailsControl
 
         Try
 
-            Dim objReportSumbissionTracking As New ReportSumbissionTracking("Demo", 1)
+            Dim objReportSumbissionTracking As New ReportSumbissionTracking(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objReportSumbissionTracking
 

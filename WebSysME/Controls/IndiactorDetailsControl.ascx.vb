@@ -7,7 +7,7 @@ Partial Class IndiactorDetailsControl
 
     Protected ProjectID As Integer = 0
     Protected IndicatorID As Integer = 0
-    Protected db As Database = New DatabaseProviderFactory().Create("Demo")
+    Protected db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
 
 #Region "Status Messages"
@@ -85,6 +85,22 @@ Partial Class IndiactorDetailsControl
                 LoadGrid()
                 pnlIndicatorTracking.Visible = True
 
+            Else
+
+                Dim sql As String = "SELECT * FROM tblObjectives"
+
+                With cboObjective
+
+                    .DataSource = db.ExecuteDataSet(CommandType.Text, sql).Tables(0)
+                    .DataValueField = "ObjectiveID"
+                    .DataTextField = "Description"
+                    .DataBind()
+
+                    .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                    .SelectedIndex = 0
+
+                End With
+
             End If
 
             LoadComponents()
@@ -95,11 +111,12 @@ Partial Class IndiactorDetailsControl
 
     Private Sub LoadGrid()
 
-        ViewState("Tracking") = Nothing
+        Dim sql As String = "SELECT I.*, O.Name as Organization, D.Name as District FROM tblIndicatorTracking I left outer join tblOrganization O on I.OrganizationID = O.OrganizationID "
+        sql &= "left outer join tblDistricts D on D.DistrictID = I.DistrictID WHERE IndicatorID = " & IndicatorID
 
         With radIndicatorTargets
 
-            .DataSource = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblIndicatorTracking WHERE IndicatorID = " & IndicatorID).Tables(0)
+            .DataSource = db.ExecuteDataSet(CommandType.Text, sql).Tables(0)
             .DataBind()
 
             ViewState("Tracking") = .DataSource
@@ -116,6 +133,8 @@ Partial Class IndiactorDetailsControl
         LoadCombo(cboDataSource, "luDataSource", "Description", "DataSourceID")
         LoadCombo(cboUnitOfMeasurement, "luUnitOfMeasurement", "Description", "UnitOfMeasurementID")
         LoadCombo(cboMonth, "luMonths", "Description", "MonthID")
+        LoadCombo(cboOrganization, "tblOrganization", "Name", "OrganizationID")
+        LoadCombo(cboDistrict, "tblDistricts", "Name", "DistrictID")
 
     End Sub
 
@@ -147,7 +166,7 @@ Partial Class IndiactorDetailsControl
 
         Try
 
-            Dim objIndiactor As New Indiactor("Demo", 1)
+            Dim objIndiactor As New Indiactor(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objIndiactor
 
@@ -220,7 +239,7 @@ Partial Class IndiactorDetailsControl
 
         Try
 
-            Dim objIndiactor As New Indiactor("Demo", 1)
+            Dim objIndiactor As New Indiactor(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objIndiactor
 
@@ -455,7 +474,7 @@ Partial Class IndiactorDetailsControl
 
         Try
 
-            Dim objTracking As New Indiactor("Demo", 1)
+            Dim objTracking As New Indiactor(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objTracking
 
@@ -487,7 +506,7 @@ Partial Class IndiactorDetailsControl
 
     Private Sub cmdSaveTracking_Click(sender As Object, e As EventArgs) Handles cmdSaveTracking.Click
 
-        Dim objIndicators As New Indiactor("Demo", 1)
+        Dim objIndicators As New Indiactor(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objIndicators
 
@@ -495,6 +514,8 @@ Partial Class IndiactorDetailsControl
             .Year = IIf(IsNumeric(txtYear.Text), txtYear.Text, 0)
             .Month = cboMonth.SelectedValue
             .Target = IIf(IsNumeric(txtTarget.Text), txtTarget.Text, 0)
+            If cboOrganization.SelectedIndex > -1 Then .OrganizationID = cboOrganization.SelectedValue
+            If cboDistrict.SelectedIndex > -1 Then .DistrictID = cboDistrict.SelectedValue
 
             If .SaveTracking(0) Then
 

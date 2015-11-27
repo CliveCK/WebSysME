@@ -11,14 +11,19 @@
                     <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" 
                        AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced">
                         <Columns>
-                            <telerik:GridBoundColumn DataField="StaffID" UniqueName="FileID" HeaderText="FileID"
+                            <telerik:GridBoundColumn DataField="StaffID" UniqueName="StaffID" HeaderText="StaffID"
                                 Display="false">
-                            </telerik:GridBoundColumn>
+                            </telerik:GridBoundColumn>                            
+                            <telerik:GridButtonColumn ButtonType="LinkButton" Text="Edit Details" UniqueName="column"
+                                CommandName="View">
+                            </telerik:GridButtonColumn>
                              <telerik:GridBoundColumn DataField="Organization" UniqueName="Organization" HeaderText="Organization"  >
                             </telerik:GridBoundColumn>
                              <telerik:GridBoundColumn DataField="FirstName" UniqueName="FirstName" HeaderText="FirstName"  >
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Surname" UniqueName="Surname" HeaderText="LastName">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn DataField="Sex" UniqueName="Sex" HeaderText="Sex">
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="Position" UniqueName="Position" HeaderText="Functional Title">
                             </telerik:GridBoundColumn>

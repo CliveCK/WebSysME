@@ -12,7 +12,7 @@
             return true;
         }
 		</script>
-			<table id="table1" cellspacing="1" cellpadding="1" width="100%" border="0">
+			<table id="table1" cellspacing="1" cellpadding="1" width="100%" border="0" style="margin-left:2%">
 				<tr>
 					<td class="heading" colspan="4">
                         <span style="font-size: 14pt; color: midnightblue">Lookup List Manager</span></td>
@@ -109,10 +109,10 @@
 							<HeaderStyle Font-Bold="True" ForeColor="White" BackColor="#1C5E55"></HeaderStyle>
 							<FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White"></FooterStyle>
 							<Columns>
-								<asp:EditCommandColumn ButtonType="PushButton" UpdateText="Update" CancelText="Cancel" EditText="Edit">
+								<asp:EditCommandColumn ButtonType="PushButton" UpdateText="Update" CancelText="Cancel" EditText="Edit" >
 									<HeaderStyle Width="100px"></HeaderStyle>
 								</asp:EditCommandColumn>
-								<asp:ButtonColumn Text="Delete" ButtonType="PushButton" CommandName="Delete"></asp:ButtonColumn>
+								<asp:ButtonColumn Text="Delete" ButtonType="PushButton" CommandName="Delete" ></asp:ButtonColumn>
 							</Columns>
 							<pagerStyle HorizontalAlign="Center" ForeColor="White" BackColor="#666666"></PagerStyle>
                             <EditItemStyle BackColor="#7C6F57" />

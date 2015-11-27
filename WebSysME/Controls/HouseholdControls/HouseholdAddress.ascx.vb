@@ -36,6 +36,18 @@
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        If Not Page.IsPostBack Then
+
+            LoadCombo()
+
+            If CookiesWrapper.BeneficiaryID > 0 Then
+
+                LoadAddress(CookiesWrapper.BeneficiaryID)
+
+            End If
+
+        End If
+
     End Sub
 
     Private Sub LoadCombo()
@@ -70,7 +82,7 @@
 
     Private Function Save() As Boolean
 
-        Dim objAddress As New BusinessLogic.Address("Demo", 1)
+        Dim objAddress As New BusinessLogic.Address(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objAddress
 
@@ -80,15 +92,15 @@
 
                 Case "IsUrban"
                     .StreetID = cboStreet.SelectedValue
-                    .HouseNo = txtHouseNo.Text
+                    .Address = txtHouseNo.Text
 
                 Case "IsRural"
-                    .Village = cboVillage.SelectedValue
+                    .Address = cboVillage.SelectedValue
                     .SerialNo = txtSerialNo.Text
 
             End Select
 
-            .OwnerID = HouseholdID
+            .OwnerID = CookiesWrapper.BeneficiaryID
 
             If .Save() Then
 
@@ -105,14 +117,14 @@
 
         Try
 
-            Dim objCommunity As New BusinessLogic.Address("Demo", 1)
+            Dim objCommunity As New BusinessLogic.Address(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objCommunity
 
-                If .Retrieve(AddressID) Then
+                If .RetrieveByPatient(CookiesWrapper.BeneficiaryID) Then
 
                     txtAddressID1.Text = .AddressID
-                    txtHouseNo.Text = .HouseNo
+                    txtHouseNo.Text = .Address
                     txtSerialNo.Text = .SerialNo
 
                     ShowMessage("Address loaded successfully...", MessageTypeEnum.Information)
@@ -260,7 +272,7 @@
 
     Private Sub cmdSave_Click(sender As Object, e As EventArgs) Handles cmdSave.Click
 
-        If HouseholdID > 0 Then
+        If CookiesWrapper.BeneficiaryID > 0 Then
 
             Save()
 

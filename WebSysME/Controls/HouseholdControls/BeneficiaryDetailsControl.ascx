@@ -14,7 +14,7 @@
         </td>
     </tr>
 	<tr> 
-		<td style="width: 15%">Beneficiary No</td> 
+		<td style="width: 15%">Household No</td> 
         	<td style="width: 35%"><asp:TextBox id="txtMemberNo" runat="server" Enabled="false" CssClass="form-control"></asp:TextBox> </td> 
 		<td >Suffix</td> 
         	<td ><asp:textbox id="txtSuffix" runat="server" Enabled="false" CssClass="form-control"></asp:textbox> </td> 
@@ -99,7 +99,7 @@
 </fieldset> 
 <br />
 <fieldset><legend>Beneficiary Listing</legend>
-<table cellpadding="0" cellspacing="0" border="0" style="width:300px">
+<table cellpadding="0" cellspacing="0" border="0" style="width:600px">
     <tr>
         <td>
             <h3></h3> 
@@ -130,7 +130,7 @@
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="DateOfBirth" UniqueName="DateOfBirth" HeaderText="DateOfBirth">
                             </telerik:GridBoundColumn>
-                            <telerik:GridBoundColumn DataField="NationalIDNo" UniqueName="NationalIDNo" HeaderText="NationalIDNo">
+                            <telerik:GridBoundColumn DataField="NationlIDNo" UniqueName="NationalIDNo" HeaderText="NationalIDNo">
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="MaritalStatus" UniqueName="MaritalStatus" HeaderText="MaritalStatus">
                             </telerik:GridBoundColumn>

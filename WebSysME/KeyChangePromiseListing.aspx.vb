@@ -19,7 +19,7 @@ Public Class KeyChangePromiseListing
 
         ViewState("KeyChangeList") = Nothing
 
-        Dim objSurvey As New BusinessLogic.Survey("Demo", 1)
+        Dim objSurvey As New BusinessLogic.Survey(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objSurvey.GetSurvey("SELECT P.KeyChangePromiseID, P.KeyChangePromiseNo, O.* FROM tblKeyChangePromises P INNER JOIN tblStrategicObjectives O on P.StrategicObjectiveID = O.StrategicObjectiveID")
 
         With radKeyChangeListing

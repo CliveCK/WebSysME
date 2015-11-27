@@ -6,7 +6,7 @@ Public Class ActivityCategoryPage
 
 
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private ds As DataSet
 
 #Region "Status Messages"
@@ -61,7 +61,7 @@ Public Class ActivityCategoryPage
     Private Sub LoadGrid()
 
         Try
-            Dim db As Database = New DatabaseProviderFactory().Create("Demo")
+            Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
             With radActivities
 
@@ -85,7 +85,7 @@ Public Class ActivityCategoryPage
         Dim ActivityIDArray As New List(Of String)
 
         For Each gridRow As Telerik.Web.UI.GridDataItem In radActivities.SelectedItems
-            ActivityIDArray.Add(gridRow.Item("IndicatorID").Text.ToString())
+            ActivityIDArray.Add(gridRow.Item("ActivityID").Text.ToString())
         Next
 
         Return String.Join(",", ActivityIDArray.ToArray())
@@ -100,7 +100,7 @@ Public Class ActivityCategoryPage
 
             For i As Long = 0 To Activity.Length - 1
 
-                Dim objActivityCategory As New BusinessLogic.ActivityCategory("Demo", 1)
+                Dim objActivityCategory As New BusinessLogic.ActivityCategory(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objActivityCategory
 

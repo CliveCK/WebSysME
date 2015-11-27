@@ -29,8 +29,7 @@
 	<tr> 
 		<td >Contact No</td> 
         	<td ><asp:textbox id="txtContactNo" runat="server" CssClass="form-control"></asp:textbox> </td> 
-		<td >Name</td> 
-        	<td ><asp:textbox id="txtName" runat="server" CssClass="form-control"></asp:textbox> </td> 
+        	<td ><asp:textbox id="txtName" runat="server" CssClass="form-control" Visible="false" ></asp:textbox> </td> 
 	</tr> 
 	<tr> 
 		<td >First Name</td> 

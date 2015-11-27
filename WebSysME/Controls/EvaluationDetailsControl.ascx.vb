@@ -80,7 +80,7 @@ Partial Class EvaluationDetailsControl
 
         Try
 
-            Dim objEvaluation As New Evaluation("Demo", 1)
+            Dim objEvaluation As New Evaluation(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objEvaluation
 
@@ -120,7 +120,7 @@ Partial Class EvaluationDetailsControl
 
         Try
 
-            Dim objEvaluation As New Evaluation("Demo", 1)
+            Dim objEvaluation As New Evaluation(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objEvaluation
 
@@ -195,7 +195,7 @@ Partial Class EvaluationDetailsControl
 
         ViewState("Evaluation") = Nothing
 
-        Dim objEvaluation As New BusinessLogic.Evaluation("Demo", 1)
+        Dim objEvaluation As New BusinessLogic.Evaluation(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objEvaluation.GetEvaluation(sql)
 
         With radEvaluationListing

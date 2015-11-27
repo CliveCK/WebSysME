@@ -3,7 +3,7 @@
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        Dim objOrgPlan As New BusinessLogic.OrganizationalPlan("Demo", 1)
+        Dim objOrgPlan As New BusinessLogic.OrganizationalPlan(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radOrgPlanListing
 

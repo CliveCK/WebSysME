@@ -10,17 +10,17 @@ Partial Public Class MyInFoControl
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
 
-        Dim objUser As New SecurityPolicy.UserManager("Demo", CookiesWrapper.UserID)
+        Dim objUser As New SecurityPolicy.UserManager(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         If Not Page.IsPostBack Then
 
-            Dim ds As DataSet = objUser.FindUser(CookiesWrapper.UserID)
+            Dim ds As DataSet = objUser.FindUser(CookiesWrapper.thisUserID)
 
-            Dim myAdmin As New AdminSettings(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+            Dim myAdmin As New AdminSettings(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With myAdmin
 
-                If .Retrieve(CookiesWrapper.UserID) Then
+                If .Retrieve(CookiesWrapper.thisUserID) Then
                     txtMinLength.Text = .MinPasswordLength
                     txtPasswordTemplateID.Text = .PasswordTemplateID
                 Else
@@ -68,19 +68,21 @@ Partial Public Class MyInFoControl
     Protected Sub cmdSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdSave.Click
 
 
-        Dim objUser As New SecurityPolicy.UserManager("Demo", CookiesWrapper.UserID)
+        Dim objUser As New SecurityPolicy.UserManager(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         Try
 
             ' If Page.IsValid Then
 
 
-            objUser.UpdateDetails(CookiesWrapper.UserID, txtEmail.Text, txtSurname.Text, txtFirstname.Text, txtMobileNo.Text)
+            objUser.UpdateDetails(CookiesWrapper.thisUserID, txtEmail.Text, txtSurname.Text, txtFirstname.Text, txtMobileNo.Text)
             SecurityLog.Info(txtUsername.Text.ToUpper() & " updated.")
+            lblError.CssClass = "msgInformation"
             lblError.Text = "Details saved.."
 
         Catch ex As Exception
 
+            lblError.CssClass = "msgError"
             lblError.Text = ex.Message
 
         End Try
@@ -90,8 +92,8 @@ Partial Public Class MyInFoControl
     Protected Sub cmdChangePassword_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdChangePassword.Click
 
 
-        Dim objUser As New SecurityPolicy.UserManager("Demo", CookiesWrapper.UserID)
-        Dim myPasswordHistory As New UserPasswordHistory(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objUser As New SecurityPolicy.UserManager(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+        Dim myPasswordHistory As New UserPasswordHistory(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         Try
 
@@ -100,7 +102,7 @@ Partial Public Class MyInFoControl
                 Exit Sub
             End If
 
-            If CheckPasswordHistory(objUser.PasswordHash(txtUsername.Text, txtPassword.Text), CookiesWrapper.UserID) = False Then
+            If CheckPasswordHistory(objUser.PasswordHash(txtUsername.Text, txtPassword.Text), CookiesWrapper.thisUserID) = False Then
                 lblError.Text = "Password has already been used before! Try again..."
                 Exit Sub
             End If
@@ -112,7 +114,7 @@ Partial Public Class MyInFoControl
 
             If objUser.ValidateUser(txtUsername.Text, txtOldPassword.Text) Then
 
-                objUser.ChangePassword(CookiesWrapper.UserID, objUser.PasswordHash(txtUsername.Text, txtPassword.Text))
+                objUser.ChangePassword(CookiesWrapper.thisUserID, objUser.PasswordHash(txtUsername.Text, txtPassword.Text))
 
                 With myPasswordHistory
 
@@ -123,15 +125,18 @@ Partial Public Class MyInFoControl
 
                 End With
 
+                lblError.CssClass = "msgInformation"
                 lblError.Text = "Password changed.."
             Else
 
+                lblError.CssClass = "msgError"
                 lblError.Text = "Invalid Old Password!"
 
             End If
 
         Catch ex As Exception
 
+            lblError.CssClass = "msgError"
             lblError.Text = ex.Message
 
         End Try
@@ -140,7 +145,7 @@ Partial Public Class MyInFoControl
 
     Private Function CheckPasswordHistory(ByVal Password As String, ByVal UserID As Long) As Boolean
 
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objSecurityPolicy
 
@@ -167,7 +172,7 @@ Partial Public Class MyInFoControl
     Private Function CheckDictionaryWords(ByVal Password As String) As Boolean
 
         Dim hash As HashSet(Of String) = New HashSet(Of String)(IO.File.ReadAllLines(Server.MapPath("Dictionary/dictionary.txt")))
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objSecurityPolicy
 
@@ -200,7 +205,7 @@ Partial Public Class MyInFoControl
         Dim result As Boolean
         Dim sbPasswordRegx As New StringBuilder(String.Empty)
 
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objSecurityPolicy
 
@@ -242,7 +247,7 @@ Partial Public Class MyInFoControl
     Private Function ShowPasswordReq() As String
 
         Dim Str As String = ""
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objSecurityPolicy
 

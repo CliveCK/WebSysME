@@ -13,7 +13,7 @@ Public Class DataService
     Inherits System.Web.Services.WebService
 
     Private Shared Log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
-    Private db As Database = DatabaseFactory.CreateDatabase("ConnectionString")
+    Private db As Database = New DatabaseProviderFactory().Create("ConnectionString")
     Dim SystemOptions As Object
 
     <WebMethod()> _
@@ -24,12 +24,12 @@ Public Class DataService
         Dim Query As String = contextDictionary("FilterString").ToString()
 
         Dim sql As String = ""
-        sql &= "SELECT  PrgID value,Full_Desc caption FROM [dbo].[fnGetAllowedFolders] (" & CookiesWrapper.UserID & ")  F" & vbCrLf
+        sql &= "SELECT  PrgID value,Full_Desc caption FROM [dbo].[fnGetAllowedFolders] (" & CookiesWrapper.thisUserID & ")  F" & vbCrLf
 
         sql &= "WHERE [Full_Desc] LIKE '%" & Query.Trim.Replace("'", "''") & "%' " & vbCrLf
         sql &= "ORDER BY F.Full_Desc"
 
-        Dim db As Database = DatabaseFactory.CreateDatabase("ConnectionString")
+        Dim db As Database = New DatabaseProviderFactory().Create("ConnectionString")
         Dim ds As DataSet = BusinessLogic.CustomFields.DataHelper.ExecuteDataset(db, sql)
 
         For Each dr As DataRow In ds.Tables(0).Rows
@@ -346,7 +346,7 @@ Public Class DataService
 
         Dim sql As String = ""
         sql &= "SELECT TOP 15 P.Project_ID AS [value], R1.Root + ' > ' + P.Project_Number AS [caption], R1.Root_ID, R.ContactID " & vbCrLf
-        sql &= "FROM dbo.fnGetAllowedProjects(" & CookiesWrapper.UserID & ") P " & vbCrLf
+        sql &= "FROM dbo.fnGetAllowedProjects(" & CookiesWrapper.thisUserID & ") P " & vbCrLf
         sql &= "	INNER JOIN Contacts R ON P.Client_ID = R.Root_ID AND R.Parent = '-Root-' " & vbCrLf
         sql &= "	INNER JOIN Lookup_Root R1 ON R1.Root_ID = R.Root_ID AND R.Parent = '-Root-' " & vbCrLf
         sql &= "WHERE R1.[Root] LIKE N'%" & Query.Replace("'", "''") & "%' OR P.Project_Number LIKE N'%" & Query.Replace("'", "''") & "%' " & vbCrLf
@@ -453,7 +453,7 @@ Public Class DataService
             Dim ObjectType As String = contextDictionary("ObjectType").ToString()
 
 
-            Dim objCF As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.UserID)
+            Dim objCF As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
 
             Dim tblValues As DataTable = objCF.Get_Custom_Field_Values(ObjectType, FieldName, FieldType)
 

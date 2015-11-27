@@ -1,6 +1,7 @@
 ﻿<%@ Control Language="vb" AutoEventWireup="false" CodeBehind="FileUploadControl.ascx.vb" Inherits="WebSysME.FileUploadControl" %>
 
-
+<%@ Register Src="~/Controls/ComplementaryListboxes.ascx" TagName="ComplementaryListboxes"
+    TagPrefix="uc2" %>
 <div style="padding-left:2%">
 <table width="100%" cellpadding="3">
     <tr>
@@ -49,16 +50,37 @@
         <td>Description</td>
         <td><asp:TextBox runat="server" ID="txtDescription" TextMode="MultiLine" Rows="5" Columns="40" CssClass="form-control"></asp:TextBox></td>
     </tr>
+     <tr>
+        <td>Apply Security</td>
+        <td><asp:CheckBox  runat="server" ID="cbxApplySecurity" AutoPostBack="true"></asp:CheckBox></td>
+    </tr>
     <tr> 
 		<td colspan="2"> 
             		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 
      </td> 
 	</tr> 
+    <tr>
+        <td colspan="2">
+            <asp:Panel ID="pnlPermissions" runat="server" GroupingText="File Permissions" Visible="false" >
+                <p style="color:red;font-size:8pt">This section defines who can have access to the document uploaded.</p>
+                <br />
+                Applies to:&nbsp;<asp:DropDownList ID="cboLevelOfSecurity" runat="server" AutoPostBack="true" >
+                    <asp:ListItem Text ="Users" Value="1" Selected="True"></asp:ListItem>
+                    <asp:ListItem Text ="Organizations" Value="2"></asp:ListItem>
+                </asp:DropDownList><br />
+                &nbsp;
+                <uc2:ComplementaryListboxes ID="ucComplementaryListboxes" runat="server" CssClass="form-control"></uc2:ComplementaryListboxes>
+            </asp:Panel>
+        </td>
+    </tr>
 	<tr> 
-		<td colspan="2"> 
-            		<asp:button id="cmdSave" runat="server" Text="Upload File" class="btn btn-default" Width="75px"></asp:button> 
+		<td> 
+            		<asp:button id="cmdSave" runat="server" Text="Save" class="btn btn-default" Width="75px"></asp:button> 
                     <asp:button id="cmdClear" runat="server" Text="New File" class="btn btn-default" Width="75px"></asp:button> 
      </td> 
+        <td>
+                    <asp:button id="cmdDelete" runat="server" Text="Delete" class="btn btn-default" Width="75px"></asp:button> 
+        </td>
 	</tr> 
 	<tr> 
 		<td colspan="2"> 
@@ -78,7 +100,7 @@
                 <telerik:RadGrid ID="radFileListing" runat="server" GridLines="None" Height="100%" 
                     CellPadding="0" Width="100%">
                     <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" 
-                       AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced">
+                       AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced" PageSize="5">
                         <Columns>
                             <telerik:GridBoundColumn DataField="FileID" UniqueName="FileID" HeaderText="FileID"
                                 Display="false">
@@ -114,7 +136,7 @@
                             <EditColumn FilterControlAltText="Filter EditCommandColumn column">
                             </EditColumn>
                         </EditFormSettings>
-                        <PagerStyle Position="Top" AlwaysVisible="true"/>
+                        <PagerStyle Position="Top" AlwaysVisible="true" />
                     </MasterTableView>
                     <ClientSettings EnablePostBackOnRowClick="true">
                     </ClientSettings>

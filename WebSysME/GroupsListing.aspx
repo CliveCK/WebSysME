@@ -14,6 +14,9 @@
                             <telerik:GridBoundColumn DataField="GroupID" UniqueName="GroupID" HeaderText="GroupID"
                                 Display="false">
                             </telerik:GridBoundColumn>
+                             <telerik:GridButtonColumn ButtonType="LinkButton" Text="Edit Details" UniqueName="column"
+                                CommandName="View">
+                            </telerik:GridButtonColumn>
                             <telerik:GridBoundColumn DataField="District" UniqueName="District" HeaderText="District">
                             </telerik:GridBoundColumn> 
                              <telerik:GridBoundColumn DataField="GroupType" UniqueName="GroupType" HeaderText="GroupType"  >

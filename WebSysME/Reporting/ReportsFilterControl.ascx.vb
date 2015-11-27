@@ -31,7 +31,7 @@ Public Partial Class ReportsFilterControl
         End If
 
         txtReportID.Text = ReportID
-        CookiesWrapper.ReportID = ReportID
+        CookiesWrapper.thisReportID = ReportID
 
     End Sub
 
@@ -56,9 +56,9 @@ Public Partial Class ReportsFilterControl
 
     Private Sub Page_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
 
-        If IsNumeric(CookiesWrapper.ReportID) Then
+        If IsNumeric(CookiesWrapper.thisReportID) Then
 
-            LoadReportFilter(CookiesWrapper.ReportID)
+            LoadReportFilter(CookiesWrapper.thisReportID)
 
         End If
 

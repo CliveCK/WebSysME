@@ -23,6 +23,24 @@ Partial Public Class ProjectsControl
     Protected WithEvents pnlProjects As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
+    '''pnlError control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlError As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''lblError control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''txtProjectCode control.
     '''</summary>
     '''<remarks>
@@ -32,13 +50,13 @@ Partial Public Class ProjectsControl
     Protected WithEvents txtProjectCode As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''cboProgram control.
+    '''cboKeyChangePromise control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cboProgram As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents cboKeyChangePromise As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
     '''txtName control.
@@ -59,13 +77,13 @@ Partial Public Class ProjectsControl
     Protected WithEvents txtAcronym As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''cboSector control.
+    '''cboStrategicObjective control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cboSector As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents cboStrategicObjective As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
     '''cboProjectManager control.
@@ -93,15 +111,6 @@ Partial Public Class ProjectsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtActualBeneficiaries As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''txtObjective control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtObjective As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''radStartDate control.
@@ -167,22 +176,13 @@ Partial Public Class ProjectsControl
     Protected WithEvents txtFinalGStatement As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''pnlError control.
+    '''phCustomFields control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents pnlError As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>
-    '''lblError control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents phCustomFields As Global.System.Web.UI.WebControls.PlaceHolder
 
     '''<summary>
     '''cmdSave control.

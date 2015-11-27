@@ -56,7 +56,7 @@ Public Class ReportUploads
 
     Private Sub RetrieveReport()
 
-        Dim objReportSubmission As New BusinessLogic.ReportSumbissionTracking("Demo", 1)
+        Dim objReportSubmission As New BusinessLogic.ReportSumbissionTracking(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         Try
 
@@ -115,8 +115,8 @@ Public Class ReportUploads
 
         Try
 
-            Dim objFiles As New BusinessLogic.Files("Demo", 1)
-            Dim objReportSubmission As New BusinessLogic.ReportSumbissionTracking("Demo", 1)
+            Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+            Dim objReportSubmission As New BusinessLogic.ReportSumbissionTracking(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
             Dim ds As DataSet
 
             With objFiles

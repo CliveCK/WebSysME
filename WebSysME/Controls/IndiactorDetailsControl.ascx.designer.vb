@@ -212,13 +212,22 @@ Partial Public Class IndiactorDetailsControl
     Protected WithEvents pnlIndicatorTracking As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''txtYear control.
+    '''cboOrganization control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtYear As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents cboOrganization As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''cboDistrict control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboDistrict As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
     '''cboMonth control.
@@ -228,6 +237,15 @@ Partial Public Class IndiactorDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents cboMonth As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''txtYear control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtYear As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''txtTarget control.

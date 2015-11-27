@@ -17,7 +17,7 @@ Public Class ProcumentList
 
     Public Sub LoadGrid()
 
-        Dim objSurvey As New BusinessLogic.Survey("Demo", 1)
+        Dim objSurvey As New BusinessLogic.Survey(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objSurvey.GetSurvey("SELECT * FROM tblProcument")
 
         With radProcumentListing

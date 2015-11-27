@@ -6,7 +6,7 @@ Public Class InterventionObjectsDetailsControl
     Inherits System.Web.UI.UserControl
 
     Private dsDocuments As DataSet
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
 #Region "Status Messages"
@@ -153,7 +153,7 @@ Public Class InterventionObjectsDetailsControl
 
             For i As Long = 0 To mObject.Length - 1
 
-                Dim objObjects As New BusinessLogic.InterventionObjects("Demo", 1)
+                Dim objObjects As New BusinessLogic.InterventionObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objObjects
 

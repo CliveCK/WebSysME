@@ -108,6 +108,9 @@
                 .DataTextField = "Name"
                 .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
             End With
 
         End If
@@ -127,6 +130,9 @@
                 .DataTextField = "Name"
                 .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
             End With
 
         End If
@@ -142,10 +148,13 @@
 
             With cboSection
 
-                .DataSource = objLookup.Lookup("tblSections", "SectionID", "Name", , "SuburbID = " & cboSuburb.SelectedValue).Tables(0)
+                .DataSource = objLookup.Lookup("tblSection", "SectionID", "Name", , "SuburbID = " & cboSuburb.SelectedValue).Tables(0)
                 .DataValueField = "SectionID"
                 .DataTextField = "Name"
                 .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
             End With
 
@@ -156,7 +165,7 @@
 
     Private Sub cmdSave_Click(sender As Object, e As EventArgs) Handles cmdSave.Click
 
-        Dim objUrbanArea As New BusinessLogic.UrbanArea("Demo", 1)
+        Dim objUrbanArea As New BusinessLogic.UrbanArea(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objUrbanArea
 

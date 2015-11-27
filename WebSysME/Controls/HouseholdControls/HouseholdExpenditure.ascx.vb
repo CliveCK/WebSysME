@@ -3,7 +3,7 @@
 Public Class HouseholdExpenditure
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
     Private ReadOnly Property HouseholdID As Long
         Get
@@ -69,7 +69,7 @@ Public Class HouseholdExpenditure
 
             End With
 
-            LoadGrid(HouseholdID)
+            LoadGrid(CookiesWrapper.BeneficiaryID)
 
         End If
 
@@ -82,7 +82,7 @@ Public Class HouseholdExpenditure
 
         With radExpenditure
 
-            .DataSource = db.ExecuteDataSet(CommandType.Text, "SELECT E.*, I.Description As ExpenditureItem FROM tblExpenditure E inner join luExpenditureItems I on E.ExpenditureItemID = I.ExpenditureItemID WHERE E.HouseholdID = " & HouseholdID).Tables(0)
+            .DataSource = db.ExecuteDataSet(CommandType.Text, "SELECT E.*, I.Description As ExpenditureItem FROM tblExpenditure E inner join luExpenditureItems I on E.ExpenditureItemID = I.ExpenditureItemID WHERE E.HouseholdID = " & CookiesWrapper.BeneficiaryID).Tables(0)
             .DataBind()
 
             ViewState("Expenditure") = .DataSource
@@ -91,7 +91,7 @@ Public Class HouseholdExpenditure
 
         With radDebts
 
-            .DataSource = db.ExecuteDataSet(CommandType.Text, "SELECT D.*, I.Description as DebtItem FROM tblDebts D inner join luDebtItems I on D.DebtItemID = I.DebtItemID WHERE D.HouseholdID = " & HouseholdID).Tables(0)
+            .DataSource = db.ExecuteDataSet(CommandType.Text, "SELECT D.*, I.Description as DebtItem FROM tblDebts D inner join luDebtItems I on D.DebtItemID = I.DebtItemID WHERE D.HouseholdID = " & CookiesWrapper.BeneficiaryID).Tables(0)
             .DataBind()
 
             ViewState("Debts") = .DataSource
@@ -114,15 +114,15 @@ Public Class HouseholdExpenditure
 
     Private Sub cmdSaveDebt_Click(sender As Object, e As EventArgs) Handles cmdSaveDebt.Click
 
-        If HouseholdID > 0 Then
+        If CookiesWrapper.BeneficiaryID > 0 Then
 
             Dim sql As String = ""
 
-            sql = "INSERT INTO tblDebts (HouseholdID,DebtItemID, AmountOwed) VALUES (" & HouseholdID & "," & cboDebtItem.SelectedValue & "," & txtAmountOwed.Text & ")"
+            sql = "INSERT INTO tblDebts (HouseholdID,DebtItemID, AmountOwed) VALUES (" & CookiesWrapper.BeneficiaryID & "," & cboDebtItem.SelectedValue & "," & txtAmountOwed.Text & ")"
 
             If db.ExecuteNonQuery(CommandType.Text, sql) Then
 
-                LoadGrid(HouseholdID)
+                LoadGrid(CookiesWrapper.BeneficiaryID)
                 ShowMessage("Saved successfully...", MessageTypeEnum.Information)
 
             End If
@@ -137,14 +137,14 @@ Public Class HouseholdExpenditure
 
     Private Sub cmdSaveExpenditure_Click(sender As Object, e As EventArgs) Handles cmdSaveExpenditure.Click
 
-        If HouseholdID > 0 Then
+        If CookiesWrapper.BeneficiaryID > 0 Then
             Dim sql As String = ""
 
-            sql = "INSERT INTO tblExpenditure (HouseholdID,ExpenditureItemID, AverageExpenditure) VALUES (" & HouseholdID & "," & cboExpenditureItem.SelectedValue & "," & txtAverageExpenditure.Text & ")"
+            sql = "INSERT INTO tblExpenditure (HouseholdID,ExpenditureItemID, AverageExpenditure) VALUES (" & CookiesWrapper.BeneficiaryID & "," & cboExpenditureItem.SelectedValue & "," & txtAverageExpenditure.Text & ")"
 
             If db.ExecuteNonQuery(CommandType.Text, sql) Then
 
-                LoadGrid(HouseholdID)
+                LoadGrid(CookiesWrapper.BeneficiaryID)
 
                 ShowMessage("Saved successfully...", MessageTypeEnum.Information)
 

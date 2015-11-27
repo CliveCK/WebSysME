@@ -5,7 +5,7 @@ Imports Microsoft.Practices.EnterpriseLibrary.Data
 Public Class ProjectMeetingDocuments
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
 
@@ -85,7 +85,7 @@ Public Class ProjectMeetingDocuments
 
         Try
 
-            Dim objFiles As New BusinessLogic.Files("Demo", 1)
+            Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objFiles
 
@@ -125,7 +125,7 @@ Public Class ProjectMeetingDocuments
         Try
 
             Dim FileType As Long = db.ExecuteScalar(CommandType.Text, "SELECT TOP 1 FileTypeID FROM luFileTypes where Description = 'ProjectMeetings'")
-            Dim objFiles As New BusinessLogic.Files("Demo", 1)
+            Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objFiles
 
@@ -142,7 +142,7 @@ Public Class ProjectMeetingDocuments
 
                     If .Save() Then
 
-                        Dim objObjects As New BusinessLogic.DocumentObjects("Demo", 1)
+                        Dim objObjects As New BusinessLogic.DocumentObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                         With objObjects
 
@@ -189,7 +189,7 @@ Public Class ProjectMeetingDocuments
 
     Private Sub LoadGrid()
 
-        Dim objFiles As New BusinessLogic.Files("Demo", 1)
+        Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         Dim sql As String = "SELECT F.* FROM tblFiles F inner join tblDocumentObjects O on O.DocumentID  = F.FileID "
         sql &= " inner join tblProjectMeetings P on P.ProjectMeetingID = O.ObjectID "

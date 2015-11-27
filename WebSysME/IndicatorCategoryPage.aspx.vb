@@ -5,7 +5,7 @@ Public Class IndicatorCategoryPage
     Inherits System.Web.UI.Page
 
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private ds As DataSet
 
 #Region "Status Messages"
@@ -60,7 +60,7 @@ Public Class IndicatorCategoryPage
     Private Sub LoadGrid()
 
         Try
-            Dim db As Database = New DatabaseProviderFactory().Create("Demo")
+            Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
             With radIndicators
 
@@ -99,7 +99,7 @@ Public Class IndicatorCategoryPage
 
             For i As Long = 0 To Indicator.Length - 1
 
-                Dim objOutput As New BusinessLogic.IndicatorCategory("Demo", 1)
+                Dim objOutput As New BusinessLogic.IndicatorCategory(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objOutput
 

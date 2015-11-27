@@ -95,13 +95,13 @@ Partial Public Class Reports
     Protected WithEvents cboPrinters As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
-    '''crvReports control.
+    '''crvReports1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents crvReports As Global.CrystalDecisions.Web.CrystalReportViewer
+    Protected WithEvents crvReports1 As Global.CrystalDecisions.Web.CrystalReportViewer
 
     '''<summary>
     '''lblReports control.

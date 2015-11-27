@@ -6,7 +6,7 @@ Public Class EvaluationObjects
     Inherits System.Web.UI.Page
 
     Private dsDocuments As DataSet
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
 #Region "Status Messages"
@@ -146,7 +146,7 @@ Public Class EvaluationObjects
 
     '    Try
 
-    '        Dim objDocumentObjects As New DocumentObjects("Demo", 1)
+    '        Dim objDocumentObjects As New DocumentObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
     '        With objDocumentObjects
 
@@ -197,7 +197,7 @@ Public Class EvaluationObjects
 
             For i As Long = 0 To mObject.Length - 1
 
-                Dim objObjects As New BusinessLogic.EvaluationObjects("Demo", 1)
+                Dim objObjects As New BusinessLogic.EvaluationObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objObjects
 

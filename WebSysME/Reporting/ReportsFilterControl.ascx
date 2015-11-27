@@ -16,7 +16,7 @@
         </tr>
         <tr>
             <td style="height: 25px" >
-                <asp:Button ID="cmdViewReport" runat="server" Text="View Report"  OnClientClick="clearcontrols();displayMessage('Loading report..please wait.','Ajax');" CssClass="submit" />&nbsp;
+                <asp:Button ID="cmdViewReport" runat="server" Text="View Report" CssClass="btn btn-default"  OnClientClick="clearcontrols();displayMessage('Loading report..please wait.','Ajax');" />&nbsp;
                 <asp:TextBox ID="txtReportID" runat="server" CssClass="HiddenControl"></asp:TextBox></td>
         </tr>
         <tr>

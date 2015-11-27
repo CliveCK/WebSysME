@@ -57,7 +57,7 @@ Partial Class ProjectMeetingAgendaDetailsControl
 
         Try
 
-            Dim objProjectMeetingAgenda As New ProjectMeetingAgenda(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+            Dim objProjectMeetingAgenda As New ProjectMeetingAgenda(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProjectMeetingAgenda
 
@@ -93,7 +93,7 @@ Partial Class ProjectMeetingAgendaDetailsControl
 
         Try
 
-            Dim objProjectMeetingAgenda As New ProjectMeetingAgenda("Demo", 1)
+            Dim objProjectMeetingAgenda As New ProjectMeetingAgenda(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objProjectMeetingAgenda
 
@@ -133,7 +133,7 @@ Partial Class ProjectMeetingAgendaDetailsControl
 
         If IsNumeric(txtProjectMeetingID.Text) Then
 
-            Dim objAgenda As New ProjectMeetingAgenda("Demo", 1)
+            Dim objAgenda As New ProjectMeetingAgenda(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With radAgenda
 

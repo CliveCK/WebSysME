@@ -282,6 +282,14 @@ End Sub
 
 #Region "Delete"
 
+    Public Function DeleteEntries() As Boolean
+
+        Dim sql As String = " DELETE FROM tblDocumentObjects WHERE ObjectID = " & mObjectID & " AND ObjectTypeID = " & mObjectTypeID & " AND DocumentID = " & mDocumentID
+
+        Return Delete(sql)
+
+    End Function
+
     Public Overridable Function Delete() As Boolean
 
         'Return Delete("UPDATE tblDocumentObjects SET Deleted = 1 WHERE DocumentObjectID = " & mDocumentObjectID) 
@@ -298,7 +306,7 @@ End Sub
 
         Catch e As Exception
 
-            Log.Error(e)
+            log.Error(e)
             Return False
 
         End Try

@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="vb" AutoEventWireup="false" CodeBehind="DepartmentalPlanDetailsControl.ascx.vb" Inherits="WebSysME.DepartmentalPlanDetailsControl" %>
-<table cellpadding="4" cellspacing="0" border="0" style="width:100%"> 
+<table cellpadding="4" cellspacing="0" border="0" style="width:100%;margin-left:2%"> 
 	<tr> 
-		<td colspan="4" class="PageTitle"><h1>Departmental Plan Details</h1><br /></td> 
+		<td colspan="4" class="PageTitle"><h4>Departmental Plan Details</h4><br /></td> 
 	</tr> 
 	<tr> 
 		<td >Organization Plan</td> 

@@ -3,6 +3,10 @@
 	<tr> 
 		<td colspan="4" class="PageTitle"><h4>Training Details</h4></td> 
 	</tr> 
+    <tr> 
+		<td >Organization</td> 
+        	<td ><asp:dropdownlist id="cboOrganization" runat="server" CssClass="form-control"></asp:dropdownlist> </td> 
+	</tr>
 	<tr> 
 		<td >Training Type</td> 
         	<td ><asp:dropdownlist id="cboTrainingType" runat="server" CssClass="form-control"></asp:dropdownlist> </td> 
@@ -18,6 +22,31 @@
         	<td ><asp:textbox id="txtLocation" runat="server" CssClass="form-control"></asp:textbox> </td> 
         <td >Facilitator</td> 
         	<td ><asp:textbox id="txtFacilitator" runat="server" CssClass="form-control"></asp:textbox> </td> 
+    </tr>
+    <tr>
+        <td>From</td>
+        <td>
+            <telerik:RadDatePicker ID="radDate" runat="server" MinDate="1900-01-01"
+                    Width="150px">
+                    <Calendar ID="Calendar1" runat="server" UseColumnHeadersAsSelectors="False" UseRowHeadersAsSelectors="False"
+                        ViewSelectorText="x">
+                    </Calendar>
+                    <DateInput ID="Dateinput1" runat="server" DateFormat="dd/MMM/yyyy" DisplayDateFormat="dd/MMM/yyyy">
+                    </DateInput>
+                </telerik:RadDatePicker>
+        </td>
+        <td>To</td>
+        <td>
+            <telerik:RadDatePicker ID="radToDate" runat="server" MinDate="1900-01-01"
+                    Width="150px">
+                    <Calendar ID="Calendar2" runat="server" UseColumnHeadersAsSelectors="False" UseRowHeadersAsSelectors="False"
+                        ViewSelectorText="x">
+                    </Calendar>
+                    <DateInput ID="Dateinput2" runat="server" DateFormat="dd/MMM/yyyy" DisplayDateFormat="dd/MMM/yyyy">
+                    </DateInput>
+                </telerik:RadDatePicker>
+        </td>
+    </tr>
 	<tr> 
 		<td colspan="4"> 
             		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 
@@ -38,5 +67,6 @@
         <td><asp:LinkButton ID="lnkBeneficiaries" runat="server" Text="Training Attendants"></asp:LinkButton></td>
         <td><asp:LinkButton ID="lnkInputs" runat="server" Text="Inputs" ></asp:LinkButton></td>
         <td><asp:LinkButton ID="lnkFiles" runat="server" Text="File uploads" ></asp:LinkButton></td>
+        <td><asp:LinkButton ID="lnkMarks" runat="server" Text="Training Scores" ></asp:LinkButton></td>
     </tr>
 </table> 

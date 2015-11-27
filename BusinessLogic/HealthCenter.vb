@@ -6,7 +6,9 @@ Public Class HealthCenter
 #region "Variables"
 
     Protected mHealthCenterID As long
-    Protected mWardID As long
+    Protected mWardID As Long
+    Protected mProvinceID As Long
+    Protected mDistrictID As Long
     Protected mHealthCenterTypeID As long
     Protected mNoOfDoctors As long
     Protected mNoOfNurses As long
@@ -63,6 +65,24 @@ Public Class HealthCenter
         End Get
         Set(ByVal value As long)
 		mWardID = value
+        End Set
+    End Property
+
+    Public Property ProvinceID() As Long
+        Get
+            Return mProvinceID
+        End Get
+        Set(ByVal value As Long)
+            mProvinceID = value
+        End Set
+    End Property
+
+    Public Property DistrictID() As Long
+        Get
+            Return mDistrictID
+        End Get
+        Set(ByVal value As Long)
+            mDistrictID = value
         End Set
     End Property
 
@@ -232,9 +252,13 @@ End Sub
         Dim sql As String 
 
         If HealthCenterID > 0 Then 
-            sql = "SELECT * FROM tblHealthCenters WHERE HealthCenterID = " & HealthCenterID
+            sql = "SELECT * FROM tblHealthCenters H inner join tblWards W on W.WardID  = H.WardID "
+            sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
+            sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID WHERE HealthCenterID = " & HealthCenterID
         Else 
-            sql = "SELECT * FROM tblHealthCenters WHERE HealthCenterID = " & mHealthCenterID
+            sql = "SELECT * FROM tblHealthCenters H inner join tblWards W on W.WardID  = H.WardID "
+            sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
+            sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID WHERE HealthCenterID = " & mHealthCenterID
         End If 
 
         Return Retrieve(sql) 
@@ -243,7 +267,10 @@ End Sub
 
     Public Function RetrieveAll() As DataSet
 
-        Dim sql As String = "SELECT * FROM tblHealthCenters"
+        Dim sql As String = "SELECT H.*, P.Name As Province, D.Name as District FROM tblHealthCenters H "
+        sql &= "inner join tblWards W on W.WardID = H.WardID "
+        sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
+        sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID  "
 
         Return GetHealthCenter(sql)
 
@@ -313,6 +340,8 @@ End Sub
 
             mHealthCenterID = Catchnull(.Item("HealthCenterID"), 0)
             mWardID = Catchnull(.Item("WardID"), 0)
+            mProvinceID = Catchnull(.Item("ProvinceID"), 0)
+            mDistrictID = Catchnull(.Item("DistrictID"), 0)
             mHealthCenterTypeID = Catchnull(.Item("HealthCenterTypeID"), 0)
             mNoOfDoctors = Catchnull(.Item("NoOfDoctors"), 0)
             mNoOfNurses = Catchnull(.Item("NoOfNurses"), 0)

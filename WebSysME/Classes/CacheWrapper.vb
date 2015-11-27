@@ -7,206 +7,206 @@ Partial Public Class CacheWrapper
 
     '    Private objCategories As NestedSetManager
 
-    '    Public Shared Property MainMenuItemsCache() As DataSet
+    Public Shared Property MainMenuItemsCache() As DataSet
 
-    '        Get
+        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "MainMenuItemsCache") Is Nothing Then
+            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MainMenuItemsCache") Is Nothing Then
 
-    '                Dim myMenuItems As New UserMenu("ConnectionString")
-    '                HttpContext.Current.Cache("ConnectionString" & "MainMenuItemsCache") = myMenuItems.GetContextMenu("MainMenu", False)
+                Dim myMenuItems As New UserMenu(CookiesWrapper.thisConnectionName)
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MainMenuItemsCache") = myMenuItems.GetContextMenu("MainMenu", False)
 
-    '            End If
+            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "MainMenuItemsCache"), DataSet)
+            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MainMenuItemsCache"), DataSet)
 
-    '        End Get
+        End Get
 
-    '        Set(ByVal value As DataSet)
+        Set(ByVal value As DataSet)
 
-    '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "MainMenuItemsCache")
-    '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "MainMenuItemsCache") = value
-    '            End If
+            If IsNothing(value) Then
+                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "MainMenuItemsCache")
+            Else
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MainMenuItemsCache") = value
+            End If
 
-    '        End Set
+        End Set
 
-    '    End Property
+    End Property
 
     '    Public Shared Property QuickIconsCache() As DataSet
 
     '        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "QuickIconsCache") Is Nothing Then
+    '            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "QuickIconsCache") Is Nothing Then
 
-    '                Dim myQuickIcons As New QuickIconMenuItem("ConnectionString", CookiesWrapper.UserID)
-    '                HttpContext.Current.Cache("ConnectionString" & "QuickIconsCache") = myQuickIcons.GetQuickIcons
+    '                Dim myQuickIcons As New QuickIconMenuItem(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "QuickIconsCache") = myQuickIcons.GetQuickIcons
 
     '            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "QuickIconsCache"), DataSet)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "QuickIconsCache"), DataSet)
 
     '        End Get
 
     '        Set(ByVal value As DataSet)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "MainMenuItemsCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "MainMenuItemsCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "MainMenuItemsCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MainMenuItemsCache") = value
     '            End If
 
     '        End Set
 
     '    End Property
 
-    '    Public Shared Property MenuItemsCache() As DataSet
+    Public Shared Property MenuItemsCache() As DataSet
 
-    '        Get
+        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "MenuItemsCache") Is Nothing Then
-    '                Dim myMenuItems As New UserMenu("ConnectionString")
-    '                HttpContext.Current.Cache("ConnectionString" & "MenuItemsCache") = myMenuItems.GetContextMenu(False)
+            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuItemsCache") Is Nothing Then
+                Dim myMenuItems As New UserMenu(CookiesWrapper.thisConnectionName)
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuItemsCache") = myMenuItems.GetContextMenu(False)
 
-    '            End If
+            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "MenuItemsCache"), DataSet)
+            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuItemsCache"), DataSet)
 
-    '        End Get
+        End Get
 
-    '        Set(ByVal value As DataSet)
+        Set(ByVal value As DataSet)
 
-    '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "MenuItemsCache")
-    '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "MenuItemsCache") = value
-    '            End If
+            If IsNothing(value) Then
+                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "MenuItemsCache")
+            Else
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuItemsCache") = value
+            End If
 
-    '        End Set
+        End Set
 
-    '    End Property
+    End Property
 
-    '    Public Shared Property MenuActionItemsCache() As DataSet
+    Public Shared Property MenuActionItemsCache() As DataSet
 
-    '        Get
+        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "MenuActionItemsCache") Is Nothing Then
-    '                Dim myMenuItems As New UserMenu("ConnectionString")
-    '                HttpContext.Current.Cache("ConnectionString" & "MenuActionItemsCache") = myMenuItems.GetContextMenu(False, "MainMenu,Dashboard")
+            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuActionItemsCache") Is Nothing Then
+                Dim myMenuItems As New UserMenu(CookiesWrapper.thisConnectionName)
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuActionItemsCache") = myMenuItems.GetContextMenu(False, "MainMenu,Dashboard")
 
-    '            End If
+            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "MenuActionItemsCache"), DataSet)
+            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuActionItemsCache"), DataSet)
 
-    '        End Get
+        End Get
 
-    '        Set(ByVal value As DataSet)
+        Set(ByVal value As DataSet)
 
-    '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "MenuActionItemsCache")
-    '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "MenuActionItemsCache") = value
-    '            End If
+            If IsNothing(value) Then
+                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "MenuActionItemsCache")
+            Else
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuActionItemsCache") = value
+            End If
 
-    '        End Set
+        End Set
 
-    '    End Property
+    End Property
 
-    '    Public Shared Property MenuRightsCache() As DataSet
+    Public Shared Property MenuRightsCache() As DataSet
 
-    '        Get
+        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "MenuRightsCache") Is Nothing Then
+            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuRightsCache") Is Nothing Then
 
-    '                Dim objMenulevelPermisions As New SpectrumITS.PermissionsManager.BusinessLogic.MenuLevelAccess("ConnectionString", CookiesWrapper.UserID)
-    '                HttpContext.Current.Cache("ConnectionString" & "MenuRightsCache") = objMenulevelPermisions.GetSelectedUserMenuRights(CookiesWrapper.UserID)
+                Dim objMenulevelPermisions As New SysPermissionsManager.MenuLevelAccess(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuRightsCache") = objMenulevelPermisions.GetSelectedUserMenuRights(CookiesWrapper.thisUserID)
 
-    '            End If
+            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "MenuRightsCache"), DataSet)
+            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuRightsCache"), DataSet)
 
-    '        End Get
+        End Get
 
-    '        Set(ByVal value As DataSet)
+        Set(ByVal value As DataSet)
 
-    '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "MenuRightsCache")
-    '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "MenuRightsCache") = value
-    '            End If
+            If IsNothing(value) Then
+                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "MenuRightsCache")
+            Else
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuRightsCache") = value
+            End If
 
-    '        End Set
+        End Set
 
-    '    End Property
+    End Property
 
-    '    Public Shared Property FunctionalityRightsCache() As DataSet
+    Public Shared Property FunctionalityRightsCache() As DataSet
 
-    '        Get
+        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "FunctionalityRightsCache") Is Nothing Then
+            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "FunctionalityRightsCache") Is Nothing Then
 
-    '                Dim objFunctionalityPermisions As New SpectrumITS.PermissionsManager.BusinessLogic.Functionality("ConnectionString", CookiesWrapper.UserID)
-    '                HttpContext.Current.Cache("ConnectionString" & "FunctionalityRightsCache") = objFunctionalityPermisions.GetSelectedUserFunctionalityRights(CookiesWrapper.UserID)
+                Dim objFunctionalityPermisions As New SysPermissionsManager.Functionality(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "FunctionalityRightsCache") = objFunctionalityPermisions.GetSelectedUserFunctionalityRights(CookiesWrapper.thisUserID)
 
-    '            End If
+            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "FunctionalityRightsCache"), DataSet)
+            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "FunctionalityRightsCache"), DataSet)
 
-    '        End Get
+        End Get
 
-    '        Set(ByVal value As DataSet)
+        Set(ByVal value As DataSet)
 
-    '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "FunctionalityRightsCache")
-    '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "FunctionalityRightsCache") = value
-    '            End If
+            If IsNothing(value) Then
+                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "FunctionalityRightsCache")
+            Else
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "FunctionalityRightsCache") = value
+            End If
 
-    '        End Set
+        End Set
 
-    '    End Property
+    End Property
 
-    '    Public Shared Property PageRightsCache() As DataSet
+    Public Shared Property PageRightsCache() As DataSet
 
-    '        Get
+        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "PageRightsCache") Is Nothing Then
-    '                Dim objMenulevelPermisions As New SpectrumITS.PermissionsManager.BusinessLogic.MenuLevelAccess("ConnectionString", CookiesWrapper.UserID)
-    '                HttpContext.Current.Cache("ConnectionString" & "PageRightsCache") = objMenulevelPermisions.GetUserPageRights(CookiesWrapper.UserID)
+            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "PageRightsCache") Is Nothing Then
+                Dim objMenulevelPermisions As New SysPermissionsManager.MenuLevelAccess(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "PageRightsCache") = objMenulevelPermisions.GetUserPageRights(CookiesWrapper.thisUserID)
 
-    '            End If
+            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "PageRightsCache"), DataSet)
+            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "PageRightsCache"), DataSet)
 
-    '        End Get
+        End Get
 
-    '        Set(ByVal value As DataSet)
+        Set(ByVal value As DataSet)
 
-    '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "PageRightsCache")
-    '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "PageRightsCache") = value
-    '            End If
+            If IsNothing(value) Then
+                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "PageRightsCache")
+            Else
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "PageRightsCache") = value
+            End If
 
-    '        End Set
+        End Set
 
-    '    End Property
+    End Property
 
     '    Public Shared Property MailReceipientsCache() As DataSet
 
     '        Get
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "MailReceipientsCache"), DataSet)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MailReceipientsCache"), DataSet)
 
     '        End Get
 
     '        Set(ByVal value As DataSet)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "MailReceipientsCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "MailReceipientsCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "MailReceipientsCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MailReceipientsCache") = value
     '            End If
 
     '        End Set
@@ -217,7 +217,7 @@ Partial Public Class CacheWrapper
 
         Get
 
-            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create("Demo")
+            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
             Return db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblReports")
 
@@ -226,9 +226,9 @@ Partial Public Class CacheWrapper
         Set(ByVal value As DataSet)
 
             If IsNothing(value) Then
-                HttpContext.Current.Cache.Remove("ConnectionString" & "ReportsCache")
+                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "ReportsCache")
             Else
-                HttpContext.Current.Cache("ConnectionString" & "ReportsCache") = value
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "ReportsCache") = value
             End If
 
         End Set
@@ -239,25 +239,25 @@ Partial Public Class CacheWrapper
 
     '        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "MemberTypeCache") Is Nothing Then
+    '            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MemberTypeCache") Is Nothing Then
 
-    '                Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create("ConnectionString")
+    '                Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     '                Dim myMemberTypes As System.Data.DataSet = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM luMemberTypes")
 
-    '                HttpContext.Current.Cache("ConnectionString" & "MemberTypeCache") = myMemberTypes
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MemberTypeCache") = myMemberTypes
 
     '            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "MemberTypeCache"), DataSet)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MemberTypeCache"), DataSet)
 
     '        End Get
 
     '        Set(ByVal value As DataSet)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "MemberTypeCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "MemberTypeCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "MemberTypeCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MemberTypeCache") = value
     '            End If
 
     '        End Set
@@ -268,25 +268,25 @@ Partial Public Class CacheWrapper
 
     '        Get
 
-    '            'If HttpContext.Current.Cache("ConnectionString" & "BillingGroupCache") Is Nothing Then
+    '            'If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "BillingGroupCache") Is Nothing Then
 
-    '            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create("ConnectionString")
+    '            Dim db As Microsoft.Practices.EnterpriseLibrary.Data.Database = New Microsoft.Practices.EnterpriseLibrary.Data.DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     '            Dim myBillingGroups As System.Data.DataSet = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM luBillingGroups")
 
-    '            HttpContext.Current.Cache("ConnectionString" & "BillingGroupCache") = myBillingGroups
+    '            HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "BillingGroupCache") = myBillingGroups
 
     '            'End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "BillingGroupCache"), DataSet)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "BillingGroupCache"), DataSet)
 
     '        End Get
 
     '        Set(ByVal value As DataSet)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "BillingGroupCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "BillingGroupCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "BillingGroupCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "BillingGroupCache") = value
     '            End If
 
     '        End Set
@@ -297,24 +297,24 @@ Partial Public Class CacheWrapper
 
     '        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "DistributionGroupsCache") Is Nothing Then
+    '            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "DistributionGroupsCache") Is Nothing Then
 
-    '                Dim objCategories As NestedSetManager = New NestedSetManager("ConnectionString", "tblCategories", "LeftValue", "RightValue", "CategoryID", "Description", "ParentID", "TreeID", "Code")
-    '                Dim myMenuItems As New UserMenu("ConnectionString")
-    '                HttpContext.Current.Cache("ConnectionString" & "DistributionGroupsCache") = objCategories.GetChildren(Options.Categories.DistributionGroupsID, False)
+    '                Dim objCategories As NestedSetManager = New NestedSetManager(CookiesWrapper.thisConnectionName, "tblCategories", "LeftValue", "RightValue", "CategoryID", "Description", "ParentID", "TreeID", "Code")
+    '                Dim myMenuItems As New UserMenu(CookiesWrapper.thisConnectionName)
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "DistributionGroupsCache") = objCategories.GetChildren(Options.Categories.DistributionGroupsID, False)
 
     '            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "DistributionGroupsCache"), DataSet)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "DistributionGroupsCache"), DataSet)
 
     '        End Get
 
     '        Set(ByVal value As DataSet)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "DistributionGroupsCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "DistributionGroupsCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "DistributionGroupsCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "DistributionGroupsCache") = value
     '            End If
 
     '        End Set
@@ -325,26 +325,26 @@ Partial Public Class CacheWrapper
 
     '        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "SegregatedFundsCache") Is Nothing Then
+    '            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "SegregatedFundsCache") Is Nothing Then
 
-    '                Dim objSegregatedFunds As New SegregatedFund("ConnectionString", CookiesWrapper.UserID)
+    '                Dim objSegregatedFunds As New SegregatedFund(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
     '                Dim dt As DataTable = objSegregatedFunds.GetAllSegregatedFunds().Tables(0)
 
-    '                HttpContext.Current.Cache("ConnectionString" & "SegregatedFundsCache") = dt
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "SegregatedFundsCache") = dt
 
     '            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "SegregatedFundsCache"), DataTable)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "SegregatedFundsCache"), DataTable)
 
     '        End Get
 
     '        Set(ByVal value As DataTable)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "SegregatedFundsCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "SegregatedFundsCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "SegregatedFundsCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "SegregatedFundsCache") = value
     '            End If
 
     '        End Set
@@ -355,26 +355,26 @@ Partial Public Class CacheWrapper
 
     '        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "ActiveSegregatedFundsCache") Is Nothing Then
+    '            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "ActiveSegregatedFundsCache") Is Nothing Then
 
-    '                Dim objSegregatedFunds As New SegregatedFund("ConnectionString", CookiesWrapper.UserID)
+    '                Dim objSegregatedFunds As New SegregatedFund(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
     '                Dim dt As DataTable = objSegregatedFunds.GetAllActiveSegregatedFunds().Tables(0)
 
-    '                HttpContext.Current.Cache("ConnectionString" & "ActiveSegregatedFundsCache") = dt
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "ActiveSegregatedFundsCache") = dt
 
     '            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "ActiveSegregatedFundsCache"), DataTable)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "ActiveSegregatedFundsCache"), DataTable)
 
     '        End Get
 
     '        Set(ByVal value As DataTable)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "ActiveSegregatedFundsCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "ActiveSegregatedFundsCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "ActiveSegregatedFundsCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "ActiveSegregatedFundsCache") = value
     '            End If
 
     '        End Set
@@ -385,26 +385,26 @@ Partial Public Class CacheWrapper
 
     '        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "CategoriesCache") Is Nothing Then
+    '            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "CategoriesCache") Is Nothing Then
 
-    '                Dim objCategories As NestedSetManager = New NestedSetManager("ConnectionString", "tblCategories", "LeftValue", "RightValue", "CategoryID", "Description", "ParentID", "TreeID", "Code")
+    '                Dim objCategories As NestedSetManager = New NestedSetManager(CookiesWrapper.thisConnectionName, "tblCategories", "LeftValue", "RightValue", "CategoryID", "Description", "ParentID", "TreeID", "Code")
 
     '                Dim dt As DataTable = objCategories.GetTrees.Tables(0)
 
-    '                HttpContext.Current.Cache("ConnectionString" & "CategoriesCache") = dt
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "CategoriesCache") = dt
 
     '            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "CategoriesCache"), DataTable)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "CategoriesCache"), DataTable)
 
     '        End Get
 
     '        Set(ByVal value As DataTable)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "CategoriesCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "CategoriesCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "CategoriesCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "CategoriesCache") = value
     '            End If
 
     '        End Set
@@ -415,24 +415,24 @@ Partial Public Class CacheWrapper
 
     '        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "MySavedSearchesCache") Is Nothing Then
+    '            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MySavedSearchesCache") Is Nothing Then
 
-    '                Dim myMenuItems As New UserMenu("ConnectionString")
+    '                Dim myMenuItems As New UserMenu(CookiesWrapper.thisConnectionName)
 
-    '                'HttpContext.Current.Cache("ConnectionString" &"MySavedSearchesCache") = objSavedSearches.GetMySavedSearches(CookiesWrapper.UserID)
+    '                'HttpContext.Current.Cache(CookiesWrapper.thisConnectionName &"MySavedSearchesCache") = objSavedSearches.GetMySavedSearches(CookiesWrapper.thisUserID)
 
     '            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "MySavedSearchesCache"), DataSet)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MySavedSearchesCache"), DataSet)
 
     '        End Get
 
     '        Set(ByVal value As DataSet)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "MySavedSearchesCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "MySavedSearchesCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "MySavedSearchesCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MySavedSearchesCache") = value
     '            End If
 
     '        End Set
@@ -443,26 +443,26 @@ Partial Public Class CacheWrapper
 
     '        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "StatusCache") Is Nothing Then
+    '            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "StatusCache") Is Nothing Then
 
-    '                Dim objCategories As NestedSetManager = New NestedSetManager("ConnectionString", "tblCategories", "LeftValue", "RightValue", "CategoryID", "Description", "ParentID", "TreeID", "Code")
+    '                Dim objCategories As NestedSetManager = New NestedSetManager(CookiesWrapper.thisConnectionName, "tblCategories", "LeftValue", "RightValue", "CategoryID", "Description", "ParentID", "TreeID", "Code")
 
     '                Dim dt As DataTable = objCategories.GetTrees.Tables(0)
 
-    '                HttpContext.Current.Cache("ConnectionString" & "StatusCache") = dt
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "StatusCache") = dt
 
     '            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "StatusCache"), DataTable)
+    '            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "StatusCache"), DataTable)
 
     '        End Get
 
     '        Set(ByVal value As DataTable)
 
     '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "StatusCache")
+    '                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "StatusCache")
     '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "StatusCache") = value
+    '                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "StatusCache") = value
     '            End If
 
     '        End Set
@@ -471,7 +471,7 @@ Partial Public Class CacheWrapper
     '    Public Shared ReadOnly Property RegisteredCompany()
     '        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "RegisteredCompany") Is Nothing Then
+    '            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "RegisteredCompany") Is Nothing Then
 
     '                Dim objLicense As New SpectrumITS.Licensing.License(Options.LicenseFilePath)
 
@@ -479,53 +479,53 @@ Partial Public Class CacheWrapper
 
     '                    If objLicense.LoadLicenseFile Then
 
-    '                        HttpContext.Current.Cache("ConnectionString" & "RegisteredCompany") = objLicense.Company
+    '                        HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "RegisteredCompany") = objLicense.Company
 
     '                    Else
 
-    '                        HttpContext.Current.Cache("ConnectionString" & "RegisteredCompany") = "UNREGISTERED"
+    '                        HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "RegisteredCompany") = "UNREGISTERED"
 
     '                    End If
 
     '                Catch ex As Exception
 
-    '                    HttpContext.Current.Cache("ConnectionString" & "RegisteredCompany") = "UNREGISTERED"
+    '                    HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "RegisteredCompany") = "UNREGISTERED"
 
     '                End Try
 
     '            End If
 
-    '            Return HttpContext.Current.Cache("ConnectionString" & "RegisteredCompany")
+    '            Return HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "RegisteredCompany")
 
     '        End Get
     '    End Property
 
-    '    Public Shared Property MenuItemsAllCache() As DataSet
+    Public Shared Property MenuItemsAllCache() As DataSet
 
-    '        ' This cache stores all the menu items that are in the database lunmenu table. 
+        ' This cache stores all the menu items that are in the database lunmenu table. 
 
-    '        Get
+        Get
 
-    '            If HttpContext.Current.Cache("ConnectionString" & "MenuItemsAllCache") Is Nothing Then
-    '                Dim myMenuItems As New UserMenu("ConnectionString")
-    '                HttpContext.Current.Cache("ConnectionString" & "MenuItemsAllCache") = myMenuItems.GetAllContextMenu(False)
+            If HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuItemsAllCache") Is Nothing Then
+                Dim myMenuItems As New UserMenu(CookiesWrapper.thisConnectionName)
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuItemsAllCache") = myMenuItems.GetAllContextMenu(False)
 
-    '            End If
+            End If
 
-    '            Return CType(HttpContext.Current.Cache("ConnectionString" & "MenuItemsAllCache"), DataSet)
+            Return CType(HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuItemsAllCache"), DataSet)
 
-    '        End Get
+        End Get
 
-    '        Set(ByVal value As DataSet)
+        Set(ByVal value As DataSet)
 
-    '            If IsNothing(value) Then
-    '                HttpContext.Current.Cache.Remove("ConnectionString" & "MenuItemsAllCache")
-    '            Else
-    '                HttpContext.Current.Cache("ConnectionString" & "MenuItemsAllCache") = value
-    '            End If
+            If IsNothing(value) Then
+                HttpContext.Current.Cache.Remove(CookiesWrapper.thisConnectionName & "MenuItemsAllCache")
+            Else
+                HttpContext.Current.Cache(CookiesWrapper.thisConnectionName & "MenuItemsAllCache") = value
+            End If
 
-    '        End Set
+        End Set
 
-    '    End Property
+    End Property
 
 End Class

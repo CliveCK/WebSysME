@@ -3,7 +3,7 @@
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        Dim objTracking As New BusinessLogic.Indiactor("Demo", 1)
+        Dim objTracking As New BusinessLogic.Indiactor(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radFileListing
 

@@ -17,7 +17,7 @@ Public Class ViewKeyChangePromises
 
     Private Sub LoadGrid()
 
-        Dim objKeyChange As New BusinessLogic.KeyChangePromises("Demo", 1)
+        Dim objKeyChange As New BusinessLogic.KeyChangePromises(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radKeyListing
 

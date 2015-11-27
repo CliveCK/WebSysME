@@ -19,7 +19,7 @@ Public Class IndicatorListingControl
 
         ViewState("Indicator") = Nothing
 
-        Dim objIndicator As New BusinessLogic.Indiactor("Demo", 1)
+        Dim objIndicator As New BusinessLogic.Indiactor(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim ds As DataSet = objIndicator.GetAllIndicators()
 
         With radIndicatorListing

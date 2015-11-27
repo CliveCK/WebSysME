@@ -5,7 +5,7 @@ Public Class ObjectiveOutcomesDetailsControl
     Inherits System.Web.UI.UserControl
 
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private ds As DataSet
 
 #Region "Status Messages"
@@ -58,7 +58,7 @@ Public Class ObjectiveOutcomesDetailsControl
     Private Sub LoadGrid()
 
         Try
-            Dim db As Database = New DatabaseProviderFactory().Create("Demo")
+            Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
             With radOutcomes
 
@@ -97,7 +97,7 @@ Public Class ObjectiveOutcomesDetailsControl
 
             For i As Long = 0 To Outputs.Length - 1
 
-                Dim objObjectiveOutcomes As New BusinessLogic.ObjectiveOutcomes("Demo", 1)
+                Dim objObjectiveOutcomes As New BusinessLogic.ObjectiveOutcomes(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objObjectiveOutcomes
 
@@ -132,7 +132,7 @@ Public Class ObjectiveOutcomesDetailsControl
 
                 Case "Delete"
 
-                    Dim objObjectiveOutcome As New BusinessLogic.ObjectiveOutcomes("Demo", 1)
+                    Dim objObjectiveOutcome As New BusinessLogic.ObjectiveOutcomes(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objObjectiveOutcome
 
@@ -163,6 +163,11 @@ Public Class ObjectiveOutcomesDetailsControl
                 Dim gridItem As GridDataItem = e.Item
 
                 Dim btnImage As ImageButton = DirectCast(gridItem.FindControl("imgEdit"), ImageButton)
+
+                Dim sql As String = "SELECT O.OutcomeID, O.Description FROM tblOutcomes O inner join tblObjectiveOutcomes OO on OO.OutcomeID = O.OutcomeID "
+                sql &= " inner join tblObjectives Ob on Ob.ObjectiveID = OO.ObjectiveID where OO.ObjectiveID = " & cboObjectives.SelectedValue
+
+                ds = db.ExecuteDataSet(CommandType.Text, sql)
 
                 If ds.Tables(0).Select("OutcomeID = " & gridItem("OutcomeID").Text).Length > 0 Then
 

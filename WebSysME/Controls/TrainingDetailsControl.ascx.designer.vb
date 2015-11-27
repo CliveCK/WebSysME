@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class TrainingDetailsControl
 
     '''<summary>
+    '''cboOrganization control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboOrganization As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
     '''cboTrainingType control.
     '''</summary>
     '''<remarks>
@@ -57,6 +66,24 @@ Partial Public Class TrainingDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtFacilitator As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''radDate control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents radDate As Global.Telerik.Web.UI.RadDatePicker
+
+    '''<summary>
+    '''radToDate control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents radToDate As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
     '''pnlError control.
@@ -129,4 +156,13 @@ Partial Public Class TrainingDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lnkFiles As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''lnkMarks control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkMarks As Global.System.Web.UI.WebControls.LinkButton
 End Class

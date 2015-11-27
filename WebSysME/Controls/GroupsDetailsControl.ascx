@@ -5,10 +5,10 @@
 	</tr> 
     <tr> 
 		<td >Province</td> 
-        	<td ><asp:dropdownlist id="cboProvince" runat="server" CssClass="form-control"></asp:dropdownlist> </td> 
+        	<td ><asp:dropdownlist id="cboProvince" runat="server" CssClass="form-control" AutoPostBack="true"></asp:dropdownlist> </td> 
 	</tr> <tr> 
 		<td >District</td> 
-        	<td ><asp:dropdownlist id="cboDistrict" runat="server" CssClass="form-control"></asp:dropdownlist> </td> 
+        	<td ><asp:dropdownlist id="cboDistrict" runat="server" CssClass="form-control" AutoPostBack="true"></asp:dropdownlist> </td> 
 	</tr> 
 	<tr> 
 		<td >Ward</td> 
@@ -32,9 +32,12 @@
      </td> 
 	</tr> 
 	<tr> 
-		<td colspan="4"> 
+		<td colspan="2"> 
             		<asp:button id="cmdSave" runat="server" Text="Save" CssClass="btn btn-default"></asp:button> 
-     </td> 
+     </td>
+        <td>
+                    <asp:button id="cmdDelete" runat="server" Text="Delete" CssClass="btn btn-default"></asp:button>
+        </td> 
 	</tr> 
 	<tr> 
 		<td colspan="4"> 
@@ -45,9 +48,9 @@
         <td><br />Group Membership</td>
     </tr> 
     <tr>
-        <td>
+        <td colspan="4">
             <telerik:RadGrid ID="radGroupMembership" runat="server" GridLines="None" Height="100%" AllowMultiRowSelection="True"
-                      CellPadding="0" Width="100%">
+                      CellPadding="0" Width="90%">
                         <ClientSettings>
                             <Selecting AllowRowSelect="True" />
                         </ClientSettings>

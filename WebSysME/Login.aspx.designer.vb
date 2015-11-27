@@ -41,6 +41,15 @@ Partial Public Class Login1
     Protected WithEvents Image1 As Global.System.Web.UI.WebControls.Image
 
     '''<summary>
+    '''cboOrganisation control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboOrganisation As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
     '''txtUserName control.
     '''</summary>
     '''<remarks>

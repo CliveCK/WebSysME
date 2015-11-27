@@ -14,7 +14,7 @@
 	</tr> 
         <tr>
             <td>
-                <asp:Button runat="server" ID="cmdNew" Text="Add New" />
+                <asp:Button runat="server" ID="cmdNew" Text="Add New" CssClass="btn btn-default"/>
             </td>
         </tr>
         <tr>
@@ -33,6 +33,10 @@
                             </telerik:GridButtonColumn>
                              <telerik:GridBoundColumn DataField="Name" UniqueName="Name" HeaderText="Name" >
                             </telerik:GridBoundColumn>
+                              <telerik:GridBoundColumn DataField="Province" UniqueName="Province" HeaderText="Province">
+                            </telerik:GridBoundColumn>
+                             <telerik:GridBoundColumn DataField="District" UniqueName="District" HeaderText="District">
+                            </telerik:GridBoundColumn>   
                             <telerik:GridBoundColumn DataField="Description" UniqueName="Description" HeaderText="Description">
                             </telerik:GridBoundColumn>
                             <telerik:GridBoundColumn DataField="NoOfDoctors" UniqueName="NoOfDoctors" HeaderText="NoOfDoctors">
@@ -43,7 +47,7 @@
                             </telerik:GridBoundColumn>
                             <telerik:GridTemplateColumn UniqueName="HasAmbulance" HeaderText="HasAmbulance">
                                  <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblHasAmbulance" Text='<%# IIf(Not IsNothing(Eval("HasAmbulance")) AndAlso Convert.ToString(Eval("HasAmbulance")) = "1", "Yes", "No")%>'></asp:Label>
+                                    <asp:Label runat="server" ID="lblHasAmbulance" Text='<%# IIf(Eval("HasAmbulance") = "1", "Yes", "No")%>'></asp:Label>
                              </ItemTemplate>
                             </telerik:GridTemplateColumn>
                             <telerik:GridTemplateColumn UniqueName="Delete">

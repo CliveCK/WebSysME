@@ -43,7 +43,7 @@ Public Class PasswordPolicyManagementConsole
 
     Protected Sub LoadSecurityPolicies()
 
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim dsPolicies As DataSet = objSecurityPolicy.RetrieveAll()
 
         With lstPasswordPolicies
@@ -71,7 +71,7 @@ Public Class PasswordPolicyManagementConsole
 
     Private Sub LoadPasswordPolicy(ByVal PasswordPolicyID As Long)
 
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objSecurityPolicy
 
@@ -119,7 +119,7 @@ Public Class PasswordPolicyManagementConsole
 
         If IsNumeric(lstPasswordPolicies.SelectedValue) AndAlso lstPasswordPolicies.SelectedValue > 0 Then
 
-            Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+            Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objSecurityPolicy
 
@@ -195,7 +195,7 @@ Public Class PasswordPolicyManagementConsole
             End If
         End If
 
-        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With objSecurityPolicy
 

@@ -18,7 +18,7 @@ Public Class TrainingList
 
     Private Sub LoadGrid()
 
-        Dim objTraining As New BusinessLogic.Training("Demo", 1)
+        Dim objTraining As New BusinessLogic.Training(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
         Dim sql As String = "SELECT TT.Description AS TrainingType ,T.* FROM tblTrainings T inner join luTrainingTypes TT on T.TrainingTypeID = TT.TrainingTypeID"
 
         With radTraining
@@ -47,7 +47,7 @@ Public Class TrainingList
             Dim item1 As GridDataItem = radTraining.Items(index1)
             Dim TrainingID As Integer
 
-            TrainingID = Server.HtmlDecode(item1("FileID").Text)
+            TrainingID = Server.HtmlDecode(item1("TrainingID").Text)
 
             Response.Redirect("~/TrainingDetails?id=" & objUrlEncoder.Encrypt(TrainingID))
 

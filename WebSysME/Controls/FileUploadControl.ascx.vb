@@ -7,6 +7,7 @@ Public Class FileUploadControl
 
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
+    Private PermissionMsg As String = "?"
 
 #Region "Status Messages"
 
@@ -33,14 +34,13 @@ Public Class FileUploadControl
 
 #End Region
 
-
     Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         If Not Page.IsPostBack Then
 
             Session("Files") = Nothing
 
-            Dim objFiles As New BusinessLogic.Files("Demo", 1)
+            Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             LoadGrid(objFiles:=objFiles)
 
@@ -58,9 +58,23 @@ Public Class FileUploadControl
 
             End With
 
+
+            ucComplementaryListboxes.SelectedOptionsCaption = "Authorized"
+
+            ucComplementaryListboxes.AvailableOptionsCaption = "UnAuthorised"
+
+
             If Not IsNothing(Request.QueryString("id")) Then
 
                 LoadFiles(objUrlEncoder.Decrypt(Request.QueryString("id")))
+
+                LoadAvailableUserPermmisions(objUrlEncoder.Decrypt(Request.QueryString("id")), 1)
+                LoadAssignedUserPermmisions(objUrlEncoder.Decrypt(Request.QueryString("id")), 1)
+
+            Else
+
+                LoadAvailableUserPermmisions(0, 1)
+                LoadAssignedUserPermmisions(0, 1)
 
             End If
 
@@ -108,7 +122,7 @@ Public Class FileUploadControl
 
         Try
 
-            Dim objFiles As New BusinessLogic.Files("Demo", 1)
+            Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objFiles
 
@@ -122,6 +136,13 @@ Public Class FileUploadControl
                     txtDescription.Text = .Description
                     txtFilePath.Text = .FilePath
                     txtAuthorOrg.Text = .AuthorOrganization
+                    cbxApplySecurity.Checked = .ApplySecurity
+
+                    If .ApplySecurity Then
+
+                        pnlPermissions.Visible = True
+
+                    End If
 
                     ShowMessage("Files details loaded successfully...", MessageTypeEnum.Information)
                     Return True
@@ -148,7 +169,7 @@ Public Class FileUploadControl
 
         Try
 
-            Dim objFiles As New BusinessLogic.Files("Demo", 1)
+            Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objFiles
 
@@ -161,12 +182,28 @@ Public Class FileUploadControl
                 .FilePath = FilePath
                 .FileExtension = FileExt
                 .AuthorOrganization = txtAuthorOrg.Text
+                .ApplySecurity = cbxApplySecurity.Checked
 
                 If .Save Then
 
                     If Not IsNumeric(txtFileID.Text) OrElse Trim(txtFileID.Text) = 0 Then txtFileID.Text = .FileID
+
+                    If cbxApplySecurity.Checked Then
+
+                        If SavePermissions(ucComplementaryListboxes, .FileID, cboLevelOfSecurity.SelectedValue) Then
+
+                            PermissionMsg = "?File permissions applied successfully..."
+
+                        Else
+
+                            PermissionMsg = "!However permissions failed to apply..."
+
+                        End If
+
+                    End If
+
                     LoadGrid(objFiles)
-                    ShowMessage("Files uploaded successfully...", MessageTypeEnum.Information)
+                    ShowMessage("Files uploaded successfully..." & Replace(Replace(PermissionMsg, "?", ""), "!", ""), IIf(PermissionMsg.Contains("?"), MessageTypeEnum.Information, MessageTypeEnum.Warning))
 
                     Return True
 
@@ -190,8 +227,6 @@ Public Class FileUploadControl
     End Function
 
     Private Sub LoadGrid(ByVal objFiles As BusinessLogic.Files)
-
-        Session("Files") = Nothing
 
         With radFileListing
 
@@ -307,6 +342,130 @@ Public Class FileUploadControl
     Private Sub cmdClear_Click(sender As Object, e As EventArgs) Handles cmdClear.Click
 
         Clear()
+
+    End Sub
+
+    Private Sub cmdDelete_Click(sender As Object, e As EventArgs) Handles cmdDelete.Click
+
+        Try
+
+            If IsNumeric(txtFileID) Then
+
+                File.Delete(txtFilePath.Text)
+
+                If Not File.Exists(txtFilePath.Text) Then
+
+                    Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+                    With objFiles
+
+                        .FileID = txtFileID.Text
+
+                        If .Delete Then
+
+                            ShowMessage("File deleted successfully...", MessageTypeEnum.Information)
+
+                        End If
+
+                    End With
+
+                End If
+
+            End If
+
+        Catch ex As Exception
+
+            ShowMessage("An error occured! Contact your administrator. Error: " & ex.Message, MessageTypeEnum.Error)
+
+        End Try
+
+    End Sub
+
+    Sub LoadAvailableUserPermmisions(ByVal FileID As Long, ByVal LevelOfSecurity As Long)
+
+        Dim objPermmisions As New Global.SysPermissionsManager.FilePermissions(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+        If IsNumeric(FileID) Then
+
+            If FileID > 0 Then
+
+                Dim ds As DataSet = objPermmisions.GetForbiddenUsersOrOrganizations(FileID, LevelOfSecurity)
+
+                ucComplementaryListboxes.AvailableOptions.DataSource = ds
+
+                ucComplementaryListboxes.AvailableOptions.DataTextField = "Name"
+
+                ucComplementaryListboxes.AvailableOptions.DataValueField = "ObjectID"
+
+                ucComplementaryListboxes.AvailableOptions.DataBind()
+
+            End If
+
+        End If
+
+    End Sub
+
+    Sub LoadAssignedUserPermmisions(ByVal FileID As Long, ByVal LevelOfSecurity As Long)
+
+        Dim objPermmisions As New Global.SysPermissionsManager.FilePermissions(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+        If IsNumeric(FileID) Then
+
+            If FileID > 0 Then
+
+                Dim ds As DataSet = objPermmisions.GetPermittedUsersOrOrganizations(FileID, LevelOfSecurity)
+
+                ucComplementaryListboxes.SelectedOptions.DataSource = ds
+
+                ucComplementaryListboxes.SelectedOptions.DataTextField = "Name"
+
+                ucComplementaryListboxes.SelectedOptions.DataValueField = "ObjectID"
+
+                ucComplementaryListboxes.SelectedOptions.DataBind()
+
+            End If
+
+        End If
+
+    End Sub
+
+    Private Function SavePermissions(ByVal ucComplementaryListBox As ComplementaryListboxes, ByVal FileID As Long, ByVal LevelOfSecurity As Long) As Boolean
+
+        Dim objPermissions As New Global.SysPermissionsManager.FilePermissions(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+        Try
+            objPermissions.Revoke(FileID, LevelOfSecurity)
+
+            'save selected
+            For i As Integer = 0 To ucComplementaryListBox.SelectedOptions.Items.Count - 1
+
+                ucComplementaryListBox.SelectedOptions.SelectedIndex = i
+
+                If ucComplementaryListBox.SelectedOptions.SelectedValue <> 0 Then
+
+                    objPermissions.SaveDetail(ucComplementaryListBox.SelectedOptions.SelectedValue, FileID, LevelOfSecurity)
+
+                End If
+
+            Next
+
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+
+    End Function
+
+    Private Sub cboLevelOfSecurity_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboLevelOfSecurity.SelectedIndexChanged
+
+        LoadAssignedUserPermmisions(IIf(IsNumeric(txtFileID.Text), txtFileID.Text, 0), cboLevelOfSecurity.SelectedValue)
+        LoadAvailableUserPermmisions(IIf(IsNumeric(txtFileID.Text), txtFileID.Text, 0), cboLevelOfSecurity.SelectedValue)
+
+    End Sub
+
+    Private Sub cbxApplySecurity_CheckedChanged(sender As Object, e As EventArgs) Handles cbxApplySecurity.CheckedChanged
+
+        pnlPermissions.Visible = cbxApplySecurity.Checked
 
     End Sub
 End Class

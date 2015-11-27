@@ -4,7 +4,60 @@
 <%@ Register Src="~/Controls/ComplementaryListboxes.ascx" TagName="ComplementaryListboxes"
     TagPrefix="uc1" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <div style="margin-left: 2%;margin-right: 1%">
+    <style type="text/css">
+        body {
+    font-family: "Segoe UI Web Regular","Segoe UI","Helvetica Neue",Arial;
+    font-size: 11px;
+    font-weight: 100;
+    line-height: 16px;
+    margin: 0;
+}
+
+.PageHeader, .PageHeader span {
+    background-color: #0072C6;
+    background-image: none;
+    color: #FFF;
+    font-family: "Segoe UI Web Light","Segoe UI Light","Segoe UI Web Regular","Segoe UI","Helvetica Neue",Arial!important;
+    font-size: 16px!important;
+    font-weight: 100!important;
+    padding: 6px;
+    vertical-align: middle;
+}
+
+    .PageHeader img, span label {
+        vertical-align: middle;
+    }
+
+.PageHeader2 {
+    background-color: #CCC;
+    background-image: none;
+    border-bottom: 1px solid #696969;
+    border-top: 1px solid #696969;
+}
+
+.PageHeader3 {
+    background-color: #DCDCDC;
+    background-image: none;
+    border-bottom: 1px solid #696969;
+    border-top: 1px solid #696969;
+}
+
+.HiddenControl {
+    display: none;
+    height: 0;
+    visibility: hidden;
+    width: 0;
+}
+
+input:hover, input:active {
+    background-color: #ff9;
+    background-image: none;
+    border-style: 1 solid;
+}
+    </style>
     <script language="javascript" type="text/javascript">
 
         function EnsureUniqueFieldName(source, args) {
@@ -32,8 +85,6 @@
         }
 
     </script>
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <table width="100%">
         <tr>
             <td class="PageHeader">Templates
@@ -46,7 +97,7 @@
         </tr>
         <tr>
             <td>
-                <WebSys:LogMessageLabel ID="lblError" runat="server" EnableViewState="False"></WebSys:LogMessageLabel>
+               <asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 
             </td>
         </tr>
     </table>
@@ -57,7 +108,7 @@
             <td colspan="2">&nbsp;<table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
                 <tr>
                     <td>
-                        <asp:DropDownList ID="cboTemplates" runat="server" AutoPostBack="True">
+                        <asp:DropDownList ID="cboTemplates" runat="server" AutoPostBack="True" CssClass="form-control">
                         </asp:DropDownList>
                     </td>
                     <td align="right">&nbsp;
@@ -79,7 +130,7 @@
                             <td>Rename to:
                             </td>
                             <td>
-                                <asp:TextBox ID="txtRenameTemplate" runat="server" Width="50%"></asp:TextBox>
+                                <asp:TextBox ID="txtRenameTemplate" runat="server" Width="50%" CssClass="form-control"></asp:TextBox>
                             </td>
                         </tr>
                         <tr>
@@ -143,12 +194,12 @@
                             <telerik:GridTemplateColumn DataField="FieldName" HeaderText="Field Name" UniqueName="FieldName">
                                 <ItemTemplate>
                                     <asp:TextBox ID="FieldNameTextBox" runat="server" Text='<%# Bind("FieldName") %>'
-                                        Width="95%"></asp:TextBox>
+                                        Width="95%" CssClass="form-control"></asp:TextBox>
                                     <asp:CustomValidator ID="cvalUniqueFieldName" ControlToValidate="FieldNameTextBox"
                                         runat="server" ClientValidationFunction="EnsureUniqueFieldName" Text="*" ErrorMessage="The field name must be unique and must not be one of the reserved words."></asp:CustomValidator>
                                 </ItemTemplate>
                                 <FooterTemplate>
-                                    <asp:Button ID="cmdSaveFields" runat="server" Text="Save" CommandName="SaveFields" Font-Bold="True" ForeColor="DarkBlue"/>
+                                    <asp:Button ID="cmdSaveFields" runat="server" Text="Save" CommandName="SaveFields" Font-Bold="True" ForeColor="DarkBlue" CssClass="btn btn-default"/>
                                 </FooterTemplate>
                             </telerik:GridTemplateColumn>
                             <telerik:GridTemplateColumn DataField="FieldType" HeaderText="Field Type" UniqueName="FieldType">
@@ -184,7 +235,7 @@
                                             <telerik:RadComboBoxItem runat="server" Text="" Value=""></telerik:RadComboBoxItem>
                                         </Items>
                                     </telerik:RadComboBox>
-                                    <asp:Button ID="cmdDataLookup" runat="server" Text="Lookup" OnClick="cmdDataLookup_Click" />
+                                    <asp:Button ID="cmdDataLookup" runat="server" Text="Lookup" OnClick="cmdDataLookup_Click" CssClass="btn btn-default"/>
                                 </ItemTemplate>
                             </telerik:GridTemplateColumn>
                             <telerik:GridTemplateColumn DataField="Search" HeaderText="Show in Search" UniqueName="Search">
@@ -217,22 +268,22 @@
                             <telerik:GridTemplateColumn DataField="DisplayIndex" HeaderText="Order" UniqueName="DisplayIndex">
                                 <ItemTemplate>
                                     <asp:TextBox ID="DisplayIndexTextBox" runat="server" Text='<%# Bind("DisplayIndex")%>'
-                                        Columns="5" MaxLength="5"></asp:TextBox>
+                                        Columns="5" MaxLength="5" CssClass="form-control"></asp:TextBox>
                                 </ItemTemplate>
                             </telerik:GridTemplateColumn>
                             <telerik:GridTemplateColumn DataField="HelpNotes" HeaderText="Help Notes" UniqueName="HelpNotes">
                                 <ItemTemplate>
                                     <asp:TextBox ID="HelpNotesTextBox" runat="server" Text='<%# Bind("HelpNotes")%>'
-                                        Width="95%"></asp:TextBox>
+                                        Width="95%" CssClass="form-control"></asp:TextBox>
                                 </ItemTemplate>
                             </telerik:GridTemplateColumn>
 
                             <telerik:GridTemplateColumn UniqueName="DeleteCustomField" HeaderText="Delete">
                                 <FooterTemplate>
-                                    <asp:Button ID="cmdDeleteALLFields" runat="server" CommandName="DeleteTemplate" Font-Bold="True" ForeColor="DarkBlue" OnClientClick="return confirm(&quot;Are you sure you want to delete all the fields in this template?\nNOTE: This will also delete the template.&quot;)" Text="Delete ALL Fields" />
+                                    <asp:Button ID="cmdDeleteALLFields" runat="server" CommandName="DeleteTemplate" CssClass="btn btn-default" Font-Bold="True" ForeColor="DarkBlue" OnClientClick="return confirm(&quot;Are you sure you want to delete all the fields in this template?\nNOTE: This will also delete the template.&quot;)" Text="Delete ALL Fields" />
                                 </FooterTemplate>
                                 <ItemTemplate>
-                                    <asp:Button ID="cmdDeleteCustomField" runat="server" Text="Delete Field" CausesValidation="false"
+                                    <asp:Button ID="cmdDeleteCustomField" runat="server" Text="Delete Field" CausesValidation="false" CssClass="btn btn-default"
                                         CommandName="Delete" OnClientClick="return confirm('Are you sure you want to delete this custom field?');"
                                         CommandArgument='<%# Eval("CustomFieldID")%>' Visible='<%# Eval("CustomFieldID") > 0%>'></asp:Button>
                                 </ItemTemplate>
@@ -261,13 +312,13 @@
         <tr>
             <td>New Template
             </td>
-            <td colspan="2">
-                <asp:TextBox ID="txtTemplate" runat="server"></asp:TextBox>
-                &nbsp;<asp:DropDownList ID="cboTemplateType" runat="server">
+            <td colspan="2"><br />
+                <asp:TextBox ID="txtTemplate" runat="server" CssClass="form-control"></asp:TextBox>
+                &nbsp;<asp:DropDownList ID="cboTemplateType" runat="server" CssClass="form-control">
                     <asp:ListItem Selected="True">Standard</asp:ListItem>
                     <asp:ListItem>Grid</asp:ListItem>
                 </asp:DropDownList>
-                &nbsp;<asp:Button ID="cmdAdd" runat="server" Text="Add" />
+                &nbsp;<asp:Button ID="cmdAdd" runat="server" Text="Add" CssClass="btn btn-default"/>
             </td>
         </tr>
         <tr>
@@ -282,7 +333,7 @@
         </tr>
         <tr>
             <td colspan="3">
-                <asp:Button ID="cmdUpdateMissingTemplateFields" runat="server" Text="Update" />
+                <asp:Button ID="cmdUpdateMissingTemplateFields" runat="server" Text="Update" CssClass="btn btn-default"/>
             </td>
         </tr>
         <tr>
@@ -299,11 +350,13 @@
             <td>Item:
             </td>
             <td>
-                <asp:DropDownList ID="cboApplyTo" runat="server" AutoPostBack="True">
-                    <asp:ListItem Value="PS">Project Status</asp:ListItem>
-                    <asp:ListItem Value="PT">Project Type</asp:ListItem>
-                    <asp:ListItem Value="CS">Client Status</asp:ListItem>
-                    <asp:ListItem Value="CT">Client Business Type</asp:ListItem>
+                <asp:DropDownList ID="cboApplyTo" runat="server" AutoPostBack="True" CssClass="form-control">
+                    <asp:ListItem Value="P">Projects</asp:ListItem>
+                    <asp:ListItem Value="H">HealthCenter</asp:ListItem>
+                    <asp:ListItem Value="S">Schools</asp:ListItem>
+                    <asp:ListItem Value="O">Organization</asp:ListItem>
+                    <asp:ListItem Value="C">Community</asp:ListItem>
+                    <asp:ListItem Value="G">Groups</asp:ListItem>
                     <asp:ListItem Selected="True"></asp:ListItem>
                 </asp:DropDownList>
             </td>
@@ -322,10 +375,10 @@
         <tr>
             <td></td>
             <td>
-                <asp:Button ID="cmdSaveAppliesTo" runat="server" Text="Save Changes" />
+                <asp:Button ID="cmdSaveAppliesTo" runat="server" Text="Save Changes" CssClass="btn btn-default"/>
             </td>
             <td align="right">&nbsp;<asp:Button ID="cmdApplyTemplateToExisting" runat="server" Text="Apply Template to Existing Entries"
-                Visible="False" Enabled="False" />
+                Visible="False" Enabled="False" CssClass="btn btn-default"/>
             </td>
         </tr>
         <tr>
@@ -340,7 +393,7 @@
         </tr>
         <tr>
             <td colspan="3">
-                <asp:Button ID="cmdDeleteOrphanTemplates" runat="server" Text="Delete Orphan Templates" />
+                <asp:Button ID="cmdDeleteOrphanTemplates" runat="server" Text="Delete Orphan Templates" CssClass="btn btn-default" />
             </td>
         </tr>
         <tr>
@@ -349,15 +402,16 @@
         </tr>
         <tr>
             <td colspan="3">
-                <asp:Button ID="cmdRefreshCFView_Projects" runat="server" Text="Refresh Projects View" />
+                <asp:Button ID="cmdRefreshCFView_Projects" runat="server" Text="Refresh Projects View" CssClass="btn btn-default"/>
                 &nbsp;
-                <asp:Button ID="cmdRefreshCFView_Contacts" runat="server" Text="Refresh Contacts View" />
+                <asp:Button ID="cmdRefreshCFView_Contacts" runat="server" Text="Refresh Contacts View" CssClass="btn btn-default"/>
                 &nbsp;
-                <asp:Button ID="cmdRefreshCFView_Documents" runat="server" Text="Refresh Documents View" />
+                <asp:Button ID="cmdRefreshCFView_Documents" runat="server" Text="Refresh Documents View" CssClass="btn btn-default"/>
             </td>
         </tr>
     </table>
     <asp:TextBox ID="txtNewFields" runat="server" TextMode="MultiLine" CssClass="HiddenControl"></asp:TextBox>
     <asp:TextBox ID="txtTemplateFields" runat="server" TextMode="MultiLine" CssClass="HiddenControl"></asp:TextBox>
     <asp:TextBox ID="txtTemplateNames" runat="server" TextMode="MultiLine" CssClass="HiddenControl"></asp:TextBox>
+    </div>
 </asp:Content>

@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class DistributionsDetailsControl
 
     '''<summary>
+    '''cboOrganization control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboOrganization As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
     '''cboDistributionType control.
     '''</summary>
     '''<remarks>
@@ -48,6 +57,15 @@ Partial Public Class DistributionsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtLocation As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''radDate control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents radDate As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
     '''pnlError control.

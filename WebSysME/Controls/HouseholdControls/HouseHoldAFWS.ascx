@@ -6,20 +6,21 @@
      padding-left:2%;
      margin: 2%;
      display: block;
-     position:fixed;
-}
+     display: block;
+     float: left;}
+
 
 .rightcolumn {
      width: 600px;
      padding-left:32%;
-     display: block;
-     float: left;
      border: 1px solid white;
 }
     </style> 
      <div><asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 
      </div> <br /><br />
-<div class="leftcolumn">
+<table cellpadding="4" style="margin-left:2%">
+    <tr>
+        <td valign="top">
     <table cellpadding="4">
         <tr>
             <td>&nbsp;</td>
@@ -72,8 +73,8 @@
      </td> 
 	</tr> 
     </table>
-</div>
-<div class="rightcolumn">
+</td>
+<td valign="top">
 <table style="width: 550px">
     <tr> 
 		<td colspan="8" class="PageTitle"><h3>Household Asset Details</h3></td> 
@@ -95,7 +96,7 @@
         <td colspan="8">
 		<telerik:RadGrid ID="radAsset" runat="server" GridLines="None" Height="100%" 
                     AllowPaging="True" AllowFilteringByColumn="True" CellPadding="0" >
-                    <MasterTableView AutoGenerateColumns="False"  PagerStyle-Mode="NextPrevNumericAndAdvanced" DataKeyNames="Project">
+                    <MasterTableView AutoGenerateColumns="False"  PagerStyle-Mode="NextPrevNumericAndAdvanced" >
                         <CommandItemSettings ExportToPdfText="Export to Pdf"></CommandItemSettings>
                         <Columns>
                             <telerik:GridBoundColumn DataField="HouseHoldAssetDetailsID" UniqueName="HouseHoldAssetDetailsID" HeaderText="HouseHoldAssetDetailsID"
@@ -126,4 +127,6 @@
                 </telerik:RadGrid></td>		
 	</tr>
 </table>
-</div>
+</td>
+</tr>
+</table>

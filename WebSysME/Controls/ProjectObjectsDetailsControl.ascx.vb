@@ -6,7 +6,7 @@ Public Class ProjectObjectsDetailsControl
     Inherits System.Web.UI.UserControl
 
     Private dsDocuments As DataSet
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
 #Region "Status Messages"
@@ -103,6 +103,10 @@ Public Class ProjectObjectsDetailsControl
             Case "Organization"
                 sql = "SELECT OrganizationID As ObjectID, Name FROM tblOrganization"
 
+            Case "Donor"
+                sql = "SELECT OrganizationID As ObjectID, Name FROM tblOrganization O inner join luOrganizationTypes T on O.OrganizationTypeID = T.OrganizationTypeID "
+                sql &= " T.Description = 'Donor'"
+
             Case "School"
                 sql = "SELECT SchoolID As ObjectID, Name FROM tblSchools"
 
@@ -156,7 +160,7 @@ Public Class ProjectObjectsDetailsControl
 
             For i As Long = 0 To mObject.Length - 1
 
-                Dim objObjects As New BusinessLogic.ProjectObjects("Demo", 1)
+                Dim objObjects As New BusinessLogic.ProjectObjects(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objObjects
 

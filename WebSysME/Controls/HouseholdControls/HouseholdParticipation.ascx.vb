@@ -4,7 +4,7 @@ Imports Telerik.Web.UI
 Public Class HouseholdParticipation
     Inherits System.Web.UI.UserControl
 
-    Private db As Database = New DatabaseProviderFactory().Create("Demo")
+    Private db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
     Private dsGroups As DataSet
     Private dsInterventions As DataSet
 
@@ -46,19 +46,21 @@ Public Class HouseholdParticipation
 
         If Not Page.IsPostBack Then
 
-            LoadGrid()
+            If CookiesWrapper.BeneficiaryID > 0 Then
+                LoadGrid()
+            End If
 
         End If
 
-        dsGroups = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblGroups G inner join tblHouseHoldGroups HG on G.GroupID = HG.GroupID WHERE HouseholdID = " & HouseholdID)
-        dsInterventions = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblInterventions I inner join tblBeneficiaryIntervention BI on I.InterventionID = BI.InterventionID WHERE BeneficiaryID = " & HouseholdID)
+        dsGroups = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblGroups G inner join tblHouseHoldGroups HG on G.GroupID = HG.GroupID WHERE HouseholdID = " & CookiesWrapper.BeneficiaryID)
+        dsInterventions = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblInterventions I inner join tblBeneficiaryIntervention BI on I.InterventionID = BI.InterventionID WHERE BeneficiaryID = " & CookiesWrapper.BeneficiaryID)
 
     End Sub
 
     Public Sub LoadGrid()
 
-        ViewState("Interventions") = Nothing
-        ViewState("Groups") = Nothing
+        dsGroups = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblGroups G inner join tblHouseHoldGroups HG on G.GroupID = HG.GroupID WHERE HouseholdID = " & CookiesWrapper.BeneficiaryID)
+        dsInterventions = db.ExecuteDataSet(CommandType.Text, "SELECT * FROM tblInterventions I inner join tblBeneficiaryIntervention BI on I.InterventionID = BI.InterventionID WHERE BeneficiaryID = " & CookiesWrapper.BeneficiaryID)
 
         With radInterventions
 
@@ -152,7 +154,7 @@ Public Class HouseholdParticipation
 
                     Return True
 
-                ElseIf Not db.ExecuteNonQuery(CommandType.Text, "INSERT INTO tblHouseHoldGroups (HouseholdID, GroupID) VALUES (" & HouseholdID & "," & Group(i) & ")") > 0 Then
+                ElseIf Not db.ExecuteNonQuery(CommandType.Text, "INSERT INTO tblHouseHoldGroups (HouseholdID, GroupID) VALUES (" & CookiesWrapper.BeneficiaryID & "," & Group(i) & ")") > 0 Then
 
                     Return False
 
@@ -178,7 +180,7 @@ Public Class HouseholdParticipation
 
                     Continue For
 
-                ElseIf Not db.ExecuteNonQuery(CommandType.Text, "INSERT INTO tblBeneficiaryInterventions (BeneficiaryID, InterventionID) VALUES (" & HouseholdID & "," & Intervention(i) & ")") > 0 Then
+                ElseIf Not db.ExecuteNonQuery(CommandType.Text, "INSERT INTO tblBeneficiaryInterventions (BeneficiaryID, InterventionID) VALUES (" & CookiesWrapper.BeneficiaryID & "," & Intervention(i) & ")") > 0 Then
 
                     Return False
 
@@ -194,7 +196,7 @@ Public Class HouseholdParticipation
 
     Private Sub cmdMapIntervention_Click(sender As Object, e As EventArgs) Handles cmdMapIntervention.Click
 
-        If HouseholdID > 0 Then
+        If CookiesWrapper.BeneficiaryID > 0 Then
 
             If MapInterventions() Then
 
@@ -212,7 +214,7 @@ Public Class HouseholdParticipation
 
     Private Sub cmdSaveGroups_Click(sender As Object, e As EventArgs) Handles cmdSaveGroups.Click
 
-        If HouseholdID > 0 Then
+        If CookiesWrapper.BeneficiaryID > 0 Then
 
             If MapGroups() Then
 

@@ -13,7 +13,10 @@
                         <Columns>
                             <telerik:GridBoundColumn DataField="OrganizationID" UniqueName="OrganizationID" HeaderText="OrganizationID"
                                 Display="false">
-                            </telerik:GridBoundColumn>
+                            </telerik:GridBoundColumn>                            
+                            <telerik:GridButtonColumn ButtonType="LinkButton" Text="Edit Details" UniqueName="column"
+                                CommandName="View">
+                            </telerik:GridButtonColumn>
                             <telerik:GridBoundColumn DataField="OrganizationType" UniqueName="OrganizationType" HeaderText="OrganizationType">
                             </telerik:GridBoundColumn> 
                              <telerik:GridBoundColumn DataField="Name" UniqueName="Name" HeaderText="Name"  >

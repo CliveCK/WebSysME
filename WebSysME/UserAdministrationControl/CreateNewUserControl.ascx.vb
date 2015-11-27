@@ -29,11 +29,11 @@ Partial Public Class CreateNewUserControl
             End With
 
             lblStatus.Text = ""
-            Dim myAdmin As New AdminSettings("Demo", CookiesWrapper.UserID)
+            Dim myAdmin As New AdminSettings(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With myAdmin
 
-                If .Retrieve(CookiesWrapper.UserID) Then
+                If .Retrieve(CookiesWrapper.thisUserID) Then
                     txtMinLength.Text = .MinPasswordLength
                     txtPasswordTemplateID.Text = .PasswordTemplateID
                 Else
@@ -55,15 +55,17 @@ Partial Public Class CreateNewUserControl
 
             End With
 
+            If Request.QueryString("op") = "new" Then
 
+                Clear()
 
-
+            End If
 
             If Request.QueryString("op") = "eu" Then
 
                 'we need to load the user details
                 EditMode = True
-                Dim objUser As New SecurityPolicy.UserManager("Demo", CookiesWrapper.UserID)
+                Dim objUser As New SecurityPolicy.UserManager(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 Dim objUserID As Long = Session("UserID")
 
@@ -97,6 +99,21 @@ Partial Public Class CreateNewUserControl
 
                     End If
 
+                    With lstStaffMembers
+
+                        .DataSource = objLookup.Lookup2("tblStaffMembers", "StaffID", "ISNULL(FirstName, '') + ' ' + ISNULL(Surname,'') As Name", "ISNULL(FirstName, '') + ' ' + ISNULL(Surname,'')").Tables(0)
+                        .DataTextField = "Name"
+                        .DataValueField = "StaffID"
+
+                        .DataBind()
+
+                        .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                        .SelectedIndex = 0
+
+                    End With
+
+                    LoadLinkAccountsPanel(objUserID)
+
                 End If
 
             End If
@@ -105,24 +122,86 @@ Partial Public Class CreateNewUserControl
 
     End Sub
 
+    Private Sub LoadLinkAccountsPanel(ByVal objUserID As Long)
+
+        Dim objAccountLink As New UserAccountProfileLink(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+        Dim ds2 As DataSet
+
+        pnlLinkAccounts.Visible = True
+
+        With objAccountLink
+
+            If .CheckUserAccountProfileLink(objUserID) Then
+
+                lblLinkStatus.Text = "Account is already Linked"
+                lblLinkStatus.ForeColor = Drawing.Color.OliveDrab
+
+            Else
+
+                lblLinkStatus.Text = "This account has not been linked to Staff Profile. Please link now..."
+                lblLinkStatus.ForeColor = Drawing.Color.Red
+
+            End If
+
+            ds2 = .GetUserAccountProfileLink(objUserID)
+
+            If Not IsNothing(ds2) AndAlso ds2.Tables.Count > 0 AndAlso ds2.Tables(0).Rows.Count Then
+
+                lstStaffMembers.SelectedValue = ds2.Tables(0).Rows(0)("StaffID")
+
+            End If
+
+        End With
+
+    End Sub
+
     Private Function isValidPassword() As Boolean
 
         Dim result As Boolean
+        Dim sbPasswordRegx As New StringBuilder(String.Empty)
 
-        If txtPasswordTemplateID.Text = 1 Then
-            result = PasswordValidator.isAphaNumeric(txtPassword.Text, txtMinLength.Text, 20)
-        ElseIf txtPasswordTemplateID.Text = 2 Then
-            result = PasswordValidator.isAphaNumericWithSpecialChar(txtPassword.Text, txtMinLength.Text, 20)
-        ElseIf txtPasswordTemplateID.Text = 3 Then
-            result = PasswordValidator.isAphaNumericStartEndSpecialChar(txtPassword.Text, txtMinLength.Text, 20)
+        Dim objSecurityPolicy As New SecurityPolicy.SecurityPolicy(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+        With objSecurityPolicy
+
+            If .RetrieveActiveSecurityPolicy Then
+
+                'min and max
+                sbPasswordRegx.Append("(?=^.{" & .MinPasswordLength & "," & .MaxPasswordLength & "}$)")
+
+                'numbers length
+                sbPasswordRegx.Append("(?=(?:.*?\d){" & .NumericLength & "})")
+
+                'a-z characters
+                sbPasswordRegx.Append("(?=.*[a-z])")
+
+                'A-Z length
+                sbPasswordRegx.Append("(?=(?:.*?[A-Z]){" & .UpperCaseLength & "})")
+
+                'special characters length
+                'sbPasswordRegx.Append("(?=(?:.*?[" & Catchnull(.SpecialCharacters, "") & "]) {" & .SpecialCharacterLength & "})")
+
+                '(?!.*\s) - no spaces
+                '[0-9a-zA-Z!@#$%*()_+^&] -- valid characters
+                'sbPasswordRegx.Append("(?!.*\s)[0-9a-zA-Z" & Catchnull(.SpecialCharacters, "") & "]*$")
+
+            End If
+
+        End With
+
+        If Regex.IsMatch(txtPassword.Text, sbPasswordRegx.ToString) Then
+
+            result = True
+
         End If
 
         isValidPassword = result
 
     End Function
+
     Protected Sub cmdSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdSave.Click
 
-        Dim myUser As New SecurityPolicy.UserManager("Demo", CookiesWrapper.UserID)
+        Dim myUser As New SecurityPolicy.UserManager(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         lblStatus.Text = ""
 
@@ -205,12 +284,14 @@ Partial Public Class CreateNewUserControl
                     SecurityLog.Info(txtUsername.Text.ToUpper() & "New User created:")
 
                     lblStatus.Text = "Details Saved.."
+                    lblStatus.CssClass = "msgInformation"
+                    LoadLinkAccountsPanel(.UserID)
 
                 End If
 
             Catch ex As Exception
 
-                lblStatus.CssClass = "Error"
+                lblStatus.CssClass = "msgError"
                 lblStatus.Text = "Username already exists. User has not been created!"
 
             End Try
@@ -249,11 +330,11 @@ Partial Public Class CreateNewUserControl
 
     'Private Sub cvMinLength_ServerValidate(source As Object, args As ServerValidateEventArgs) Handles cvMinLength.ServerValidate
     '    Dim strDesc As String = Me.txtPassword.Text
-    '    Dim myAdmin As New AdminSettings(CookiesWrapper.ConnectionName, CookiesWrapper.UserID)
+    '    Dim myAdmin As New AdminSettings(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
     '    With myAdmin
 
-    '        If .Retrieve(CookiesWrapper.UserID) Then
+    '        If .Retrieve(CookiesWrapper.thisUserID) Then
     '            txtMinLength.Text = .MinPasswordLength
     '            If Len(strDesc) > txtMinLength.Text Then
     '                args.IsValid = False
@@ -271,6 +352,37 @@ Partial Public Class CreateNewUserControl
     End Sub
 
     Protected Sub chkIsLockedOut_CheckedChanged(sender As Object, e As EventArgs) Handles chkIsLockedOut.CheckedChanged
+
+    End Sub
+
+    Private Sub cmdLink_Click(sender As Object, e As EventArgs) Handles cmdLink.Click
+
+        If lstStaffMembers.SelectedValue > 0 Then
+
+            Dim objAccountsLink As New UserAccountProfileLink(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+            With objAccountsLink
+
+                .UserID = Session("UserID")
+                .StaffID = lstStaffMembers.SelectedValue
+
+                If .Save Then
+
+                    lblStatus.Text = "Accounts linked successfully..."
+                    lblStatus.CssClass = "msgInformation"
+
+                Else
+
+                    lblStatus.Text = "Accounts failed to link..."
+                    lblStatus.CssClass = "msgError"
+
+                End If
+
+                LoadLinkAccountsPanel(.UserID)
+
+            End With
+
+        End If
 
     End Sub
 End Class

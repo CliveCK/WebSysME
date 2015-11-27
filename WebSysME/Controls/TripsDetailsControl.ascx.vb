@@ -58,7 +58,7 @@ Partial Class TripsDetailsControl
 
         Try
 
-            Dim objTrips As New Trips("Demo", 1)
+            Dim objTrips As New Trips(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objTrips
 
@@ -101,7 +101,7 @@ Partial Class TripsDetailsControl
 
         Try
 
-            Dim objTrips As New Trips("Demo", 1)
+            Dim objTrips As New Trips(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
             With objTrips
 
@@ -156,7 +156,7 @@ Partial Class TripsDetailsControl
 
         If IsNumeric(txtProjectID.Text) Then
 
-            Dim objTrip As New BusinessLogic.Trips("Demo", 1)
+            Dim objTrip As New BusinessLogic.Trips(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
             Dim ds As DataSet = objTrip.GetTrips("SELECT * FROM tblTrips WHERE ProjectID = " & txtProjectID.Text)
 
             With radTripListing
