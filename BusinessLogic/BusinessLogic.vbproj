@@ -109,6 +109,7 @@
     <Compile Include="GeneralActivityAttendants.vb" />
     <Compile Include="GeneralActivityInputs.vb" />
     <Compile Include="Genogram.vb" />
+    <Compile Include="GroupMaturityIndex.vb" />
     <Compile Include="Groups.vb" />
     <Compile Include="HealthCenter.vb" />
     <Compile Include="HealthCenterStaff.vb" />
@@ -121,6 +122,7 @@
     <Compile Include="InterventionImplementingPartner.vb" />
     <Compile Include="InterventionObjects.vb" />
     <Compile Include="Interventions.vb" />
+    <Compile Include="KeyAreaIndicators.vb" />
     <Compile Include="KeyChangePromiseDescription.vb" />
     <Compile Include="KeyChangePromises.vb" />
     <Compile Include="KindDonation.vb" />

@@ -189,6 +189,7 @@
     <Content Include="Controls\HouseholdControls\HouseholdParticipation.ascx" />
     <Content Include="Controls\IndiactorDetailsControl.ascx" />
     <Content Include="Controls\IndicatorActivityDetailsControl.ascx" />
+    <Content Include="Controls\KeyAreaIndicatorControl.ascx" />
     <Content Include="Controls\PatientControls\MedicalHistoryDetailsControl.ascx" />
     <Content Include="Controls\PatientControls\PatientDocumentsDetailsControl.ascx" />
     <Content Include="Controls\SchoolStaffDetailsControl.ascx" />
@@ -1418,6 +1419,13 @@
     </Compile>
     <Compile Include="Controls\IndicatorActivityDetailsControl.ascx.vb">
       <DependentUpon>IndicatorActivityDetailsControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\KeyAreaIndicatorControl.ascx.designer.vb">
+      <DependentUpon>KeyAreaIndicatorControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\KeyAreaIndicatorControl.ascx.vb">
+      <DependentUpon>KeyAreaIndicatorControl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\PatientControls\MedicalHistoryDetailsControl.ascx.designer.vb">

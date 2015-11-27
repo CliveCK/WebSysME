@@ -12,7 +12,7 @@ Option Explicit On
 
 
 Partial Public Class GroupsDetailsControl
-
+    
     '''<summary>
     '''cboProvince control.
     '''</summary>
@@ -21,7 +21,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents cboProvince As Global.System.Web.UI.WebControls.DropDownList
-
+    
     '''<summary>
     '''cboDistrict control.
     '''</summary>
@@ -30,7 +30,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents cboDistrict As Global.System.Web.UI.WebControls.DropDownList
-
+    
     '''<summary>
     '''cboWard control.
     '''</summary>
@@ -39,7 +39,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents cboWard As Global.System.Web.UI.WebControls.DropDownList
-
+    
     '''<summary>
     '''cboGroupType control.
     '''</summary>
@@ -48,7 +48,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents cboGroupType As Global.System.Web.UI.WebControls.DropDownList
-
+    
     '''<summary>
     '''txtDescription control.
     '''</summary>
@@ -57,7 +57,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtDescription As Global.System.Web.UI.WebControls.TextBox
-
+    
     '''<summary>
     '''txtGroupSize control.
     '''</summary>
@@ -66,7 +66,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtGroupSize As Global.System.Web.UI.WebControls.TextBox
-
+    
     '''<summary>
     '''txtGroupName control.
     '''</summary>
@@ -75,7 +75,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtGroupName As Global.System.Web.UI.WebControls.TextBox
-
+    
     '''<summary>
     '''pnlError control.
     '''</summary>
@@ -84,7 +84,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents pnlError As Global.System.Web.UI.WebControls.Panel
-
+    
     '''<summary>
     '''lblError control.
     '''</summary>
@@ -93,7 +93,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
-
+    
     '''<summary>
     '''cmdSave control.
     '''</summary>
@@ -102,7 +102,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents cmdSave As Global.System.Web.UI.WebControls.Button
-
+    
     '''<summary>
     '''cmdDelete control.
     '''</summary>
@@ -111,7 +111,7 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents cmdDelete As Global.System.Web.UI.WebControls.Button
-
+    
     '''<summary>
     '''txtGroupID control.
     '''</summary>
@@ -120,7 +120,61 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtGroupID As Global.System.Web.UI.WebControls.TextBox
-
+    
+    '''<summary>
+    '''cboMonth control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboMonth As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''cboYear control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboYear As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''cboKeyArea control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboKeyArea As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''txtScore control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtScore As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''cmdPlus control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cmdPlus As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''radMaturityIndexListing control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents radMaturityIndexListing As Global.Telerik.Web.UI.RadGrid
+    
     '''<summary>
     '''radGroupMembership control.
     '''</summary>
