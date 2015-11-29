@@ -68,6 +68,33 @@ Partial Public Class DistributionsDetailsControl
     Protected WithEvents radDate As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
+    '''cboCommodity control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboCommodity As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''txtQuantity control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtQuantity As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''txtQuantityPerBen control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtQuantityPerBen As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
     '''pnlError control.
     '''</summary>
     '''<remarks>

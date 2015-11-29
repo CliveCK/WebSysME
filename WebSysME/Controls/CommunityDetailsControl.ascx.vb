@@ -48,9 +48,34 @@
 
             End With
 
+            With cboThermaticArea
+
+                .DataSource = objLookup.Lookup("luThermaticArea", "ThermaticAreaID", "Description").Tables(0)
+                .DataValueField = "ThermaticAreaID"
+                .DataTextField = "Description"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
+            End With
+
+            With cboProvince
+
+                .DataSource = objLookup.Lookup("tblIndicators", "IndicatorID", "Name").Tables(0)
+                .DataValueField = "IndicatorID"
+                .DataTextField = "Name"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
+            End With
+
             If Not IsNothing(Request.QueryString("id")) Then
 
                 LoadCommunity(objUrlEncoder.Decrypt(Request.QueryString("id")))
+                LoadGrid(objUrlEncoder.Decrypt(Request.QueryString("id")))
 
             End If
 
@@ -242,5 +267,57 @@
 
             End If
 
-        End Sub
-    End Class
+    End Sub
+
+    Private Sub LoadGrid(ByVal CommunityID As Long)
+
+        Dim objCommunityScore As New CommunityScoreCard(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+        With radCommunityScoreListing
+
+            .DataSource = objCommunityScore.GetCommunityScoreCard(CommunityID).Tables(0)
+            .DataBind()
+
+            ViewState("CommunityScore") = .DataSource
+
+        End With
+
+    End Sub
+
+    Private Sub cmdPlus_Click(sender As Object, e As EventArgs) Handles cmdPlus.Click
+
+        If IsNumeric(txtCommunityID.Text) Then
+
+            Dim objMaturityIndex As New CommunityScoreCard(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+
+            With objMaturityIndex
+
+                .CommunityID = txtCommunityID.Text
+                .ThermaticAreaID = cboThermaticArea.SelectedValue
+                .IndicatorID = cboIndicator.SelectedValue
+                .Score = txtScore.Text
+                If radDate.SelectedDate.HasValue Then .Date1 = radDate.SelectedDate
+
+                If .Save Then
+
+                    LoadGrid(.CommunityID)
+                    ShowMessage("Entry Saved successfully", MessageTypeEnum.Information)
+
+                Else
+
+                    ShowMessage("Some details have not been saved", MessageTypeEnum.Error)
+
+                End If
+
+            End With
+
+        End If
+
+    End Sub
+
+    Private Sub radCommunityScoreListing_NeedDataSource(sender As Object, e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles radCommunityScoreListing.NeedDataSource
+
+        radCommunityScoreListing.DataSource = DirectCast(ViewState("CommunityScore"), DataTable)
+
+    End Sub
+End Class

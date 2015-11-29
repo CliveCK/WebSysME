@@ -63,6 +63,59 @@
 		<td colspan="4"> 
 			<asp:TextBox id="txtCommunityID" runat="server" CssClass="HiddenControl"></asp:TextBox> 
 		</td> 
-	</tr> 
+	</tr>
+        <tr>
+        <td>Date<telerik:RadDatePicker ID="radDate" runat="server" MinDate="1900-01-01"
+                    Width="150px">
+                    <Calendar ID="Calendar1" runat="server" UseColumnHeadersAsSelectors="False" UseRowHeadersAsSelectors="False"
+                        ViewSelectorText="x">
+                    </Calendar>
+                    <DateInput ID="Dateinput1" runat="server" DateFormat="dd/MMM/yyyy" DisplayDateFormat="dd/MMM/yyyy">
+                    </DateInput>
+                </telerik:RadDatePicker></td>
+        <td>Thematic Area<asp:DropDownList ID="cboThermaticArea" runat="server" CssClass="form-control"></asp:DropDownList></td>
+        <td>Indicator<asp:DropDownList ID="cboIndicator" runat="server" CssClass="form-control"></asp:DropDownList></td>
+        <td>Score<asp:TextBox ID="txtScore" runat="server" CssClass="form-control"></asp:TextBox>        
+        </td>
+        <td style="text-align:left;padding:0"><asp:Button ID="cmdPlus" runat="server" Text="+" CssClass="btn btn-default" /></td>
+    </tr>
+    <tr>
+        <td colspan="5">
+             <telerik:RadGrid ID="radCommunityScoreListing" runat="server" GridLines="None" Height="80%" 
+                    CellPadding="0" Width="90%">
+                    <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" PageSize="5"
+                       AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced">
+                        <Columns>
+                            <telerik:GridBoundColumn DataField="CommunityScoreCardID" UniqueName="CommunityScoreCardID" HeaderText="CommunityScoreCardID"
+                                Display="false">
+                            </telerik:GridBoundColumn>
+                             <telerik:GridBoundColumn DataField="Date" UniqueName="Date" HeaderText="Date"  >
+                            </telerik:GridBoundColumn>
+                             <telerik:GridBoundColumn DataField="Area" UniqueName="Area" HeaderText="Area"  >
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn DataField="Indicator" UniqueName="Indicator" HeaderText="Indicator">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn DataField="Score" UniqueName="Score" HeaderText="Score">
+                            </telerik:GridBoundColumn>
+                        </Columns>
+                        <RowIndicatorColumn>
+                            <HeaderStyle Width="20px"></HeaderStyle>
+                        </RowIndicatorColumn>
+                        <ExpandCollapseColumn>
+                            <HeaderStyle Width="20px"></HeaderStyle>
+                        </ExpandCollapseColumn>
+                        <EditFormSettings>
+                            <EditColumn FilterControlAltText="Filter EditCommandColumn column">
+                            </EditColumn>
+                        </EditFormSettings>
+                        <PagerStyle Position="Bottom"/>
+                    </MasterTableView>
+                    <ClientSettings EnablePostBackOnRowClick="false">
+                    </ClientSettings>
+                    <FilterMenu EnableImageSprites="False">
+                    </FilterMenu>
+                </telerik:RadGrid><br />
+        </td>
+    </tr> 
 </table> 
 </div>

@@ -92,6 +92,7 @@
     <Compile Include="CashDonation.vb" />
     <Compile Include="CommonFunctions.vb" />
     <Compile Include="Community.vb" />
+    <Compile Include="CommunityScoreCard.vb" />
     <Compile Include="CookiesWrapper.vb" />
     <Compile Include="DepartmentalPlan.vb" />
     <Compile Include="DischargeSummary.vb" />

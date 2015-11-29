@@ -61,6 +61,18 @@ Partial Class DistributionsDetailsControl
 
             End With
 
+            With cboCommodity 
+
+                .DataSource = objLookup.Lookup("luCommodities", "CommodityID", "Description").Tables(0)
+                .DataValueField = "CommodityID"
+                .DataTextField = "Description"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
+            End With
+
             If Not IsNothing(Request.QueryString("id")) Then
 
                 LoadDistributions(objUrlEncoder.Decrypt(Request.QueryString("id")))
@@ -90,10 +102,14 @@ Partial Class DistributionsDetailsControl
                     txtDistributionID1.Text = .DistributionID
                     If Not IsNothing(cboDistributionType.Items.FindByValue(.DistributionTypeID)) Then cboDistributionType.SelectedValue = .DistributionTypeID
                     If Not IsNothing(cboOrganization.Items.FindByValue(.OrganizationID)) Then cboOrganization.SelectedValue = .OrganizationID
+                    If Not IsNothing(cboCommodity.Items.FindByValue(.OrganizationID)) Then cboCommodity.SelectedValue = .CommodityID
                     txtName.Text = .Name
                     If Not .DistributionDate = "" Then radDate.SelectedDate = .DistributionDate
                     txtDescription.Text = .Description
                     txtLocation.Text = .Location
+                    txtQuantity.Text = .Quantity
+                    txtQuantityPerBen.Text = .QuantityPerBeneficiary
+
 
                     ShowMessage("Distributions loaded successfully...", MessageTypeEnum.Information)
                     Return True
@@ -127,10 +143,13 @@ Partial Class DistributionsDetailsControl
                 .DistributionID = IIf(IsNumeric(txtDistributionID1.Text), txtDistributionID1.Text, 0)
                 If cboDistributionType.SelectedIndex > -1 Then .DistributionTypeID = cboDistributionType.SelectedValue
                 If cboOrganization.SelectedIndex > -1 Then .OrganizationID = cboOrganization.SelectedValue
+                If cboCommodity.SelectedIndex > -1 Then .CommodityID = cboCommodity.SelectedValue
                 .Name = txtName.Text
                 If radDate.SelectedDate.HasValue Then .DistributionDate = radDate.SelectedDate
                 .Description = txtDescription.Text
                 .Location = txtLocation.Text
+                .Quantity = txtQuantity.Text
+                .QuantityPerBeneficiary = txtQuantityPerBen.Text
 
                 If .Save Then
 
@@ -176,10 +195,19 @@ Partial Class DistributionsDetailsControl
         Else
             cboOrganization.SelectedIndex = -1
         End If
+        If Not IsNothing(cboCommodity.Items.FindByValue("")) Then
+            cboCommodity.SelectedValue = ""
+        ElseIf Not IsNothing(cboCommodity.Items.FindByValue(0)) Then
+            cboCommodity.SelectedValue = 0
+        Else
+            cboCommodity.SelectedIndex = -1
+        End If
         txtName.Text = ""
         radDate.Clear()
         txtDescription.Text = ""
         txtLocation.Text = ""
+        txtQuantity.Text = ""
+        txtQuantityPerBen.Text = ""
 
     End Sub
 

@@ -147,4 +147,58 @@ Partial Public Class CommunityDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtCommunityID As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''radDate control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents radDate As Global.Telerik.Web.UI.RadDatePicker
+
+    '''<summary>
+    '''cboThermaticArea control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboThermaticArea As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''cboIndicator control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cboIndicator As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''txtScore control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtScore As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''cmdPlus control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cmdPlus As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''radCommunityScoreListing control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents radCommunityScoreListing As Global.Telerik.Web.UI.RadGrid
 End Class

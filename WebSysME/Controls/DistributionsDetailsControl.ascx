@@ -31,6 +31,17 @@
                     </DateInput>
                 </telerik:RadDatePicker>
         </td>
+        </tr> 
+    <tr>
+            <td >Commodity</td> 
+        	<td ><asp:DropDownList id="cboCommodity" runat="server" CssClass="form-control"></asp:DropDownList> </td> 
+            <td>Quantity</td>
+        <td ><asp:textbox id="txtQuantity" runat="server" TextMode="Number" CssClass="form-control"></asp:textbox> 
+        </td>
+		<td >Quantity per Beneficiary</td> 
+        	<td ><asp:textbox id="txtQuantityPerBen" runat="server" TextMode="Number" CssClass="form-control"></asp:textbox> 
+        </td>
+    </tr>
 	<tr> 
 		<td colspan="4"> 
             		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 

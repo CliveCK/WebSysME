@@ -15,7 +15,10 @@ Public Class Distributions
     Protected mName As String
     Protected mOrganizationID As Long
     Protected mDescription As string
-    Protected mLocation As string
+    Protected mLocation As String
+    Protected mCommodityID As Long
+    Protected mQuantity As Long
+    Protected mQuantityPerBeneficiary As Long
 
     Protected db As Database 
     Protected mConnectionName As String 
@@ -144,6 +147,33 @@ Public Class Distributions
         End Set
     End Property
 
+    Public Property CommodityID() As Long
+        Get
+            Return mCommodityID
+        End Get
+        Set(ByVal value As Long)
+            mCommodityID = value
+        End Set
+    End Property
+
+    Public Property Quantity() As Long
+        Get
+            Return mQuantity
+        End Get
+        Set(ByVal value As Long)
+            mQuantity = value
+        End Set
+    End Property
+
+    Public Property QuantityPerBeneficiary() As Long
+        Get
+            Return mQuantityPerBeneficiary
+        End Get
+        Set(ByVal value As Long)
+            mQuantityPerBeneficiary = value
+        End Set
+    End Property
+
 #end region
 
 #region "Methods"
@@ -172,7 +202,10 @@ Public Sub Clear()
     mUpdatedDate = ""
     mName = ""
     mDescription = ""
-    mLocation = ""
+        mLocation = ""
+        mCommodityID = 0
+        mQuantity = 0
+        mQuantityPerBeneficiary = 0
 
 End Sub
 
@@ -271,6 +304,9 @@ End Sub
             mDistributionDate = Catchnull(.Item("DistributionDate"), "")
             mDescription = Catchnull(.Item("Description"), "")
             mLocation = Catchnull(.Item("Location"), "")
+            mCommodityID = Catchnull(.Item("CommodityID"), 0)
+            mQuantity = Catchnull(.Item("Quantity"), 0)
+            mQuantityPerBeneficiary = Catchnull(.Item("QuantityPerBeneficiary"), 0)
 
         End With
 
@@ -287,7 +323,10 @@ End Sub
         db.AddInParameter(cmd, "@Name", DbType.String, mName)
         db.AddInParameter(cmd, "@DistributionDate", DbType.String, mName)
         db.AddInParameter(cmd, "@Description", DBType.String, mDescription)
-        db.AddInParameter(cmd, "@Location", DBType.String, mLocation)
+        db.AddInParameter(cmd, "@Location", DbType.String, mLocation)
+        db.AddInParameter(cmd, "@Commodity", DbType.Int32, mCommodityID)
+        db.AddInParameter(cmd, "@Quantity", DbType.Int32, mQuantity)
+        db.AddInParameter(cmd, "@QuantityPerBeneficiary", DbType.Int32, mQuantityPerBeneficiary)
 
     End Sub
 
