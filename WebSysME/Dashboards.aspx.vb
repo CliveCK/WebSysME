@@ -7,10 +7,29 @@ Public Class Dashboards
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not Page.IsPostBack Then
-            Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
-            LoadGrid(objFiles)
+
+            Dim objLookup As New BusinessLogic.CommonFunctions
+
+            With cboFileType
+
+                .DataSource = objLookup.Lookup("luFileTypes", "FileTypeID", "Description")
+                .DataTextField = "Description"
+                .DataValueField = "FileTypeID"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
+            End With
 
         End If
+
+    End Sub
+
+    Private Sub cboFileType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboFileType.SelectedIndexChanged
+
+        Dim objFiles As New BusinessLogic.Files(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+        LoadGrid(objFiles)
 
     End Sub
 
@@ -20,7 +39,7 @@ Public Class Dashboards
 
         With radFileListing
 
-            .DataSource = objFiles.GetFiles("SELECT * FROM tblFiles F Inner join luFileTypes FT on F.FileTypeID = FT.FileTypeID WHERE FT.Description = 'Dashboard'")
+            .DataSource = objFiles.GetFiles("SELECT * FROM tblFiles F Inner join luFileTypes FT on F.FileTypeID = FT.FileTypeID WHERE FT.Description = '" & IIf(Not String.IsNullOrEmpty(cboFileType.SelectedItem.Text), cboFileType.SelectedItem.Text, "") & "'")
             .DataBind()
 
             Session("Files") = .DataSource

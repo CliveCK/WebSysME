@@ -40,6 +40,12 @@ Public Class GroupAssociationListing
 
     End Sub
 
+    Private Sub cmNew_Click(sender As Object, e As EventArgs) Handles cmNew.Click
+
+        Response.Redirect("~/GroupAssociationsPage.aspx")
+
+    End Sub
+
     Private Sub LoadGrid()
 
         Dim objGroupAssociation As New BusinessLogic.GroupAssociations(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)

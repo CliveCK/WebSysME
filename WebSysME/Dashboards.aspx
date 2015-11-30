@@ -7,8 +7,16 @@
             <td>Dashboard</td>
         </tr>
         <tr>
-             <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Document Type</td>
             <td>
+                <asp:DropDownList ID="cboFileType" runat="server" CssClass="form-control" AutoPostBack="true"></asp:DropDownList><br />
+            </td>
+        </tr>
+             <tr>
+            <td colspan="2">
                 <telerik:RadGrid ID="radFileListing" runat="server" GridLines="None" Height="100%" 
                     CellPadding="0" Width="100%">
                     <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" 
@@ -58,7 +66,5 @@
             </td>
         </tr>
 </table>
-        </tr>
-    </table>
 </asp:Content>
 

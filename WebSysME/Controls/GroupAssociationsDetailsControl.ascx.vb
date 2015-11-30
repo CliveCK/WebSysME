@@ -134,5 +134,10 @@ Partial Class GroupAssociationsDetailsControl
 
     End Sub
 
+    Private Sub cmdNew_Click(sender As Object, e As EventArgs) Handles cmdNew.Click
+
+        Clear()
+
+    End Sub
 End Class
 

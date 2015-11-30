@@ -939,7 +939,7 @@
     <Content Include="Messaging\Confirmation.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Messaging\Mail.aspx" />
+    <Content Include="Messaging\InAppMail.aspx" />
     <Content Include="Messaging\ReadMail.aspx" />
     <Content Include="Messaging\ReadMail.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -2292,11 +2292,11 @@
       <DependentUpon>MapLocationsPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Messaging\Mail.aspx.designer.vb">
-      <DependentUpon>Mail.aspx</DependentUpon>
+    <Compile Include="Messaging\InAppMail.aspx.designer.vb">
+      <DependentUpon>InAppMail.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Messaging\Mail.aspx.vb">
-      <DependentUpon>Mail.aspx</DependentUpon>
+    <Compile Include="Messaging\InAppMail.aspx.vb">
+      <DependentUpon>InAppMail.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Messaging\ReadMailControl.ascx.designer.vb">

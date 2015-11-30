@@ -3,22 +3,22 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <table style="margin-left:2%">
         <tr>
-            <td>
+            <td style="width: 1235px">
                 <h4>Communities</h4><br />
             </td> 
         </tr>
         <tr> 
-		<td >
+		<td style="width: 1235px" >
             		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> <br />
      </td> 
 	</tr> 
         <tr>
-            <td>
+            <td style="width: 1235px">
                 <asp:Button ID="cmNew" runat="server" Text="Add New"  CssClass="btn btn-default"/>
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="width: 1235px">
                 <telerik:RadGrid ID="radGroupAssociationListing" runat="server" GridLines="None" Height="100%" 
                     CellPadding="0" Width="100%">
                     <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" 

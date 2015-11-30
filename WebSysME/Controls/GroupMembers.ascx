@@ -60,8 +60,6 @@
      </td> 
 	</tr>
     <tr>
-        <td>
-            <td><asp:LinkButton ID="lnkBack" runat="server" Text="<< Back to Groups" ></asp:LinkButton></td>
-        </td>
+        <td><asp:LinkButton ID="lnkBack" runat="server" Text="<< Back to Groups" ></asp:LinkButton></td>
     </tr>
 </table> 

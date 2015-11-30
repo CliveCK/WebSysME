@@ -298,7 +298,7 @@ End Sub
 
     Public Function DeleteBeneficiaryEntries() As Boolean
 
-        Return Delete("DELETE FROM tblHouseholdGroups WHERE GroupID = " & mGroupID & " AND BeneficiaryID = " & mAttendantID)
+        Return Delete("DELETE FROM tblHouseholdGroups WHERE GroupID = " & mGroupID & " AND HouseholdID = " & mAttendantID)
 
     End Function
 

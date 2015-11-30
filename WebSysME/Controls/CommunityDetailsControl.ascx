@@ -1,20 +1,5 @@
 ﻿<%@ Control Language="vb" AutoEventWireup="false" CodeBehind="CommunityDetailsControl.ascx.vb" Inherits="WebSysME.CommunityDetailsControl" %>
 
-<style type="text/css">
-    .auto-style3 {
-        height: 28px;
-    }
-    .auto-style4 {
-        height: 25px;
-    }
-    .auto-style5 {
-        height: 28px;
-        width: 275px;
-    }
-    .auto-style6 {
-        width: 275px;
-    }
-</style>
 <div style="margin-left:2%">
 <table cellpadding="3" cellspacing="0" border="0" style="width:90%;margin-left:2%"> 
 	<tr> 
@@ -22,7 +7,7 @@
 	</tr> 
     <tr> 
 		<td class="auto-style5" >Province</td> 
-        	<td class="auto-style3" ><asp:dropdownlist id="cboProvince" runat="server" AutoPostBack="true" CssClass="form-control" Width="210px"></asp:dropdownlist> </td> 
+        	<td class="auto-style3" ><asp:dropdownlist id="cboProvince" runat="server" AutoPostBack="true" CssClass="form-control" Width="200px"></asp:dropdownlist> </td> 
 	</tr> 
     <tr> 
 		<td class="auto-style6" >District</td> 
@@ -83,8 +68,8 @@
                     <DateInput ID="Dateinput1" runat="server" DateFormat="dd/MMM/yyyy" DisplayDateFormat="dd/MMM/yyyy">
                     </DateInput>
                 </telerik:RadDatePicker></td>
-        <td>Thematic Area<asp:DropDownList ID="cboThermaticArea" runat="server" CssClass="form-control"></asp:DropDownList></td>
-        <td>Indicator<asp:DropDownList ID="cboIndicator" runat="server" CssClass="form-control"></asp:DropDownList></td>
+        <td>Thematic Area<asp:DropDownList ID="cboThermaticArea" runat="server" CssClass="form-control" ></asp:DropDownList></td>
+        <td>Indicator<asp:DropDownList ID="cboIndicator" runat="server" CssClass="form-control" Width="250px"></asp:DropDownList></td>
         <td>Score<asp:TextBox ID="txtScore" runat="server" CssClass="form-control"></asp:TextBox>        
         </td>
         <td style="text-align:left;padding:0"><asp:Button ID="cmdPlus" runat="server" Text="+" CssClass="btn btn-default" /></td>

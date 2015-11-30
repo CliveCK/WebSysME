@@ -1,6 +1,7 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="GroupAssociationsMapping.aspx.vb" Inherits="WebSysME.GroupAssociationsMapping" MasterPageFile="~/Site.Master"%>
 
-<table cellpadding="4" cellspacing="0" border="0" style="width:100%;margin-left:2%"> 
+<asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server" >
+<table cellpadding="4" cellspacing="0" border="0" style="width:90%;margin-left:2%"> 
 	<tr> 
 		<td colspan="4" class="PageTitle"><h4>Group Associations Mapping</h4></td> 
 	</tr> 
@@ -18,7 +19,7 @@
     <tr>
         <td colspan="2">
             <telerik:RadGrid ID="radGroups" runat="server" GridLines="None" Height="100%" 
-                    AllowFilteringByColumn="True" AllowMultiRowSelection="true" CellPadding="0" Width="100%">
+                    AllowFilteringByColumn="True" AllowMultiRowSelection="true" CellPadding="0" Width="90%">
                     <MasterTableView AutoGenerateColumns="True" AllowPaging="True"  PagerStyle-Mode="NextPrevNumericAndAdvanced"
                         AlternatingItemStyle-BackColor="#66ccff">
                         <PagerStyle AlwaysVisible ="true" Position="Top"/>
@@ -67,4 +68,5 @@
      </td> 
 	</tr>
 </table> 
+</asp:Content>
 

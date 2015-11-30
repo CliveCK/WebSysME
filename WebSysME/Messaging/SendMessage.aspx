@@ -10,7 +10,7 @@
     <telerik:RadScriptBlock ID="RadScriptBlock1" runat="server">
         <script language="javascript" type="text/javascript">
             function CloseAndRebind(args) {
-                GetRadWindow().close("Mail.aspx?status=true");
+                GetRadWindow().close("InAppMail.aspx?status=true");
             }
 
             function ReCenter() {
@@ -30,7 +30,7 @@
                 return oWindow;
             }
             function CancelEdit() {
-                GetRadWindow().close();
+                GetRadWindow().close("InAppMail.aspx?status=true");
             }
 
         </script>

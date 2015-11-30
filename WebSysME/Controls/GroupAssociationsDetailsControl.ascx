@@ -18,6 +18,7 @@
 	<tr> 
 		<td colspan="4"> 
             		<asp:button id="cmdSave" runat="server" Text="Save" CssClass="btn btn-default"></asp:button> 
+                    <asp:button id="cmdNew" runat="server" Text="New" CssClass="btn btn-default"></asp:button> 
      </td> 
 	</tr> 
 	<tr> 

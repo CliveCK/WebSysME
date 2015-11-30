@@ -119,7 +119,9 @@
             return false;
         }
         function OnClientClose(sender, args) {
-            window.location.href = args.get_argument();
+            if (args.get_argument() != null) {
+                window.location.href = args.get_argument();
+            }
         }
     </script>
  

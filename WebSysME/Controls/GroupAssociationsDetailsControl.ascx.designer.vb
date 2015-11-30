@@ -59,6 +59,15 @@ Partial Public Class GroupAssociationsDetailsControl
     Protected WithEvents cmdSave As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
+    '''cmdNew control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cmdNew As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
     '''txtGroupAssociationID control.
     '''</summary>
     '''<remarks>

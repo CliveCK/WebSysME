@@ -39,32 +39,28 @@ Public Class GroupAssociationsMapping
 
         If Not Page.IsPostBack Then
 
-            If Not IsNothing(Request.QueryString("id")) Then
+            Dim objLookup As New BusinessLogic.CommonFunctions
 
-                Dim objLookup As New BusinessLogic.CommonFunctions
+            With cboGroupAssociation
 
-                With cboGroupAssociation
+                .DataSource = objLookup.Lookup("tblGroupAssociations", "GroupAssociationID", "Association").Tables(0)
+                .DataValueField = "GroupAssociationID"
+                .DataTextField = "Association"
+                .DataBind()
 
-                    .DataSource = objLookup.Lookup("tblGroupAssociations", "GroupAssociationID", "Association").Tables(0)
-                    .DataValueField = "GroupAssociationID"
-                    .DataTextField = "Association"
-                    .DataBind()
+            End With
 
-                End With
+            With cboGroupType
 
-                With cboGroupType
+                .DataSource = objLookup.Lookup("luGroupTypes", "GroupTypeID", "Description").Tables(0)
+                .DataValueField = "GroupTypeID"
+                .DataTextField = "Description"
+                .DataBind()
 
-                    .DataSource = objLookup.Lookup("luGroupTypes", "GroupTypeID", "Description").Tables(0)
-                    .DataValueField = "GroupTypeID"
-                    .DataTextField = "Description"
-                    .DataBind()
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
-                    .Items.Insert(0, New ListItem(String.Empty, String.Empty))
-                    .SelectedIndex = 0
-
-                End With
-
-            End If
+            End With
 
         End If
 
@@ -131,24 +127,21 @@ Public Class GroupAssociationsMapping
 
     Private Sub LoadGrid()
 
-        Dim sql As String = "SELECT * FROM tblGroupAssociationGroups WHERE AssociationID = " & cboGroupAssociation.SelectedValue & " AND GroupTypeID =" & cboGroupType.SelectedValue
+        Dim sql As String = "SELECT * FROM tblGroupAssociationGroups WHERE GroupAssociationID = " & cboGroupAssociation.SelectedValue
 
         ds = db.ExecuteDataSet(CommandType.Text, sql)
 
-        Dim sql1 As String = "SELECT GroupID as ObjectID, * FROM tblGroups WHERE GroupTypeID = " & cboGroupType.SelectedValue
+        Dim sql1 As String = "SELECT GroupID as ObjectID, GroupName, GT.Description as GroupType, G.Description, GroupSize "
+        sql1 &= "from tblGroups G inner join luGroupTypes GT On GT.GroupTypeID = G.GroupTypeID WHERE G.GroupTypeID = " & cboGroupType.SelectedValue
 
-        If sql <> "" Then
+        With radGroups
 
-            With radGroups
+            .DataSource = db.ExecuteDataSet(CommandType.Text, sql1).Tables(0)
+            .DataBind()
 
-                .DataSource = db.ExecuteDataSet(CommandType.Text, sql1).Tables(0)
-                .DataBind()
+            ViewState("tGroups1") = .DataSource
 
-                ViewState("tGroups1") = .DataSource
-
-            End With
-
-        End If
+        End With
 
     End Sub
 

@@ -197,6 +197,7 @@ Public Class GroupMembers
 
                             If .DeleteEntries() Then
 
+                                LoadGrid()
                                 ShowMessage("entry deselected successfully...", MessageTypeEnum.Information)
 
                             End If
@@ -214,6 +215,7 @@ Public Class GroupMembers
 
                             If .DeleteBeneficiaryEntries() Then
 
+                                LoadGrid()
                                 ShowMessage("entry deselected successfully...", MessageTypeEnum.Information)
 
                             End If
