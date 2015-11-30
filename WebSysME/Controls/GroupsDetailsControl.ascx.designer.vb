@@ -183,4 +183,13 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents radGroupMembership As Global.Telerik.Web.UI.RadGrid
+    
+    '''<summary>
+    '''lnkGroupMembership control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkGroupMembership As Global.System.Web.UI.WebControls.LinkButton
 End Class

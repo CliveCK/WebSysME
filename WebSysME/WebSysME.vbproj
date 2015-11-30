@@ -70,6 +70,10 @@
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
       <HintPath>..\BusinessLogic\Components\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -177,6 +181,8 @@
     <Content Include="Controls\GeneralActivityAttendantsDetailsControl.ascx" />
     <Content Include="Controls\GeneralActivityDetailsControl.ascx" />
     <Content Include="Controls\GeneralActivityInputsDetailsControl.ascx" />
+    <Content Include="Controls\GroupAssociationsDetailsControl.ascx" />
+    <Content Include="Controls\GroupMembers.ascx" />
     <Content Include="Controls\GroupsDetailsControl.ascx" />
     <Content Include="Controls\HealthCenterDetailsControl.ascx" />
     <Content Include="Controls\HealthCenterStaffDetailsControl.ascx" />
@@ -201,6 +207,10 @@
     <Content Include="GeneralActivityInputsPage.aspx" />
     <Content Include="GeneralActivityList.aspx" />
     <Content Include="GeneralActivityPage.aspx" />
+    <Content Include="GroupAssociationListing.aspx" />
+    <Content Include="GroupAssociationsMapping.aspx" />
+    <Content Include="GroupAssociationsPage.aspx" />
+    <Content Include="GroupMembersPage.aspx" />
     <Content Include="HealthCenterStaffPage.aspx" />
     <Content Include="HealthStaffMembers.aspx" />
     <Content Include="images\AAx.jpg" />
@@ -1337,6 +1347,20 @@
       <DependentUpon>GeneralActivityInputsDetailsControl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Controls\GroupAssociationsDetailsControl.ascx.designer.vb">
+      <DependentUpon>GroupAssociationsDetailsControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GroupAssociationsDetailsControl.ascx.vb">
+      <DependentUpon>GroupAssociationsDetailsControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\GroupMembers.ascx.designer.vb">
+      <DependentUpon>GroupMembers.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GroupMembers.ascx.vb">
+      <DependentUpon>GroupMembers.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Controls\GroupsDetailsControl.ascx.designer.vb">
       <DependentUpon>GroupsDetailsControl.ascx</DependentUpon>
     </Compile>
@@ -1503,6 +1527,34 @@
     </Compile>
     <Compile Include="GeneralActivityPage.aspx.vb">
       <DependentUpon>GeneralActivityPage.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="GroupAssociationListing.aspx.designer.vb">
+      <DependentUpon>GroupAssociationListing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GroupAssociationListing.aspx.vb">
+      <DependentUpon>GroupAssociationListing.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="GroupAssociationsMapping.aspx.designer.vb">
+      <DependentUpon>GroupAssociationsMapping.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GroupAssociationsMapping.aspx.vb">
+      <DependentUpon>GroupAssociationsMapping.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="GroupAssociationsPage.aspx.designer.vb">
+      <DependentUpon>GroupAssociationsPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GroupAssociationsPage.aspx.vb">
+      <DependentUpon>GroupAssociationsPage.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="GroupMembersPage.aspx.designer.vb">
+      <DependentUpon>GroupMembersPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GroupMembersPage.aspx.vb">
+      <DependentUpon>GroupMembersPage.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="HealthCenterStaffPage.aspx.designer.vb">

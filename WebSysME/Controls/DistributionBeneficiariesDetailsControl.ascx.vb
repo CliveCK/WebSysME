@@ -65,7 +65,7 @@ Partial Class DistributionBeneficiariesDetailsControl
 
                 End With
 
-                With cboBeneficiaryType
+                With cboUnit
 
                     .DataSource = objLookup.Lookup("luCommodityUnits", "CommodityUnitID", "Description").Tables(0)
                     .DataValueField = "CommodityUnitID"
@@ -77,7 +77,7 @@ Partial Class DistributionBeneficiariesDetailsControl
 
                 End With
 
-                With cboBeneficiaryType
+                With cboCommodity
 
                     .DataSource = objLookup.Lookup("luCommodities", "CommodityID", "Description").Tables(0)
                     .DataValueField = "CommodityID"

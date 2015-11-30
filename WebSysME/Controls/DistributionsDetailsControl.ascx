@@ -34,10 +34,7 @@
         </tr> 
     <tr>
             <td >Commodity</td> 
-        	<td ><asp:DropDownList id="cboCommodity" runat="server" CssClass="form-control"></asp:DropDownList> </td> 
-            <td>Quantity</td>
-        <td ><asp:textbox id="txtQuantity" runat="server" TextMode="Number" CssClass="form-control"></asp:textbox> 
-        </td>
+        	<td ><asp:DropDownList id="cboCommodity" runat="server" CssClass="form-control"></asp:DropDownList> </td>             
 		<td >Quantity per Beneficiary</td> 
         	<td ><asp:textbox id="txtQuantityPerBen" runat="server" TextMode="Number" CssClass="form-control"></asp:textbox> 
         </td>

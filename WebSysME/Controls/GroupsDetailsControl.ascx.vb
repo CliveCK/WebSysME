@@ -356,6 +356,12 @@ Partial Class GroupsDetailsControl
         End If
 
     End Sub
+
+    Private Sub lnkGroupMembership_Click(sender As Object, e As EventArgs) Handles lnkGroupMembership.Click
+
+        Response.Redirect("~/GroupMembersPage.aspx?id=" & objUrlEncoder.Encrypt(txtGroupID.Text) & "&type=" & cboGroupType.SelectedItem.Text)
+
+    End Sub
 End Class
 
 

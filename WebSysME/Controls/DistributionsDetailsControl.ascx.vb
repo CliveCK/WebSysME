@@ -107,7 +107,6 @@ Partial Class DistributionsDetailsControl
                     If Not .DistributionDate = "" Then radDate.SelectedDate = .DistributionDate
                     txtDescription.Text = .Description
                     txtLocation.Text = .Location
-                    txtQuantity.Text = .Quantity
                     txtQuantityPerBen.Text = .QuantityPerBeneficiary
 
 
@@ -148,7 +147,6 @@ Partial Class DistributionsDetailsControl
                 If radDate.SelectedDate.HasValue Then .DistributionDate = radDate.SelectedDate
                 .Description = txtDescription.Text
                 .Location = txtLocation.Text
-                .Quantity = txtQuantity.Text
                 .QuantityPerBeneficiary = txtQuantityPerBen.Text
 
                 If .Save Then
@@ -206,7 +204,6 @@ Partial Class DistributionsDetailsControl
         radDate.Clear()
         txtDescription.Text = ""
         txtLocation.Text = ""
-        txtQuantity.Text = ""
         txtQuantityPerBen.Text = ""
 
     End Sub

@@ -127,4 +127,9 @@
                 </telerik:RadGrid>
         </td>
     </tr>
+    <tr>
+       <td>
+           <asp:LinkButton ID="lnkGroupMembership" runat="server" Text="Add Group Members >>"></asp:LinkButton>
+       </td>
+    </tr>
 </table> 

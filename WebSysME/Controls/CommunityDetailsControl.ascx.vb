@@ -60,7 +60,7 @@
 
             End With
 
-            With cboProvince
+            With cboIndicator
 
                 .DataSource = objLookup.Lookup("tblIndicators", "IndicatorID", "Name").Tables(0)
                 .DataValueField = "IndicatorID"

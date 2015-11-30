@@ -110,12 +110,16 @@
     <Compile Include="GeneralActivityAttendants.vb" />
     <Compile Include="GeneralActivityInputs.vb" />
     <Compile Include="Genogram.vb" />
+    <Compile Include="GroupAssociations.vb" />
+    <Compile Include="GroupAssociationsGroups.vb" />
+    <Compile Include="GroupComitteAttendants.vb" />
     <Compile Include="GroupMaturityIndex.vb" />
     <Compile Include="Groups.vb" />
     <Compile Include="HealthCenter.vb" />
     <Compile Include="HealthCenterStaff.vb" />
     <Compile Include="HouseHoldAssets.vb" />
     <Compile Include="HouseHoldAssetsDetails.vb" />
+    <Compile Include="HouseholdGroups.vb" />
     <Compile Include="HouseHoldNeeds.vb" />
     <Compile Include="Indiactor.vb" />
     <Compile Include="IndicatorActivities.vb" />
