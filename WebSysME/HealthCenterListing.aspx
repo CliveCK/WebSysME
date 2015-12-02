@@ -1,24 +1,40 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="HealthCenterListing.aspx.vb" Inherits="WebSysME.HealthCenterListing"  Title="Health Centers" MasterPageFile ="~/Site.Master"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <table style="margin-left:2%">
+    <table style="margin-left:2%;width:80%">
         <tr>
-            <td>
+            <td colspan="4">
                 <h4>Health Centers</h4><br />
             </td> 
         </tr>
         <tr> 
-		<td >
+		<td colspan="4">
             		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> <br />
      </td> 
 	</tr> 
         <tr>
-            <td>
-                <asp:Button runat="server" ID="cmdNew" Text="Add New" CssClass="btn btn-default"/>
+            <td>District</td>
+            <td><asp:DropDownList ID="cboDistrict" runat="server" CssClass="form-control"></asp:DropDownList></td>
+             <td>Ward</td>
+            <td><asp:DropDownList ID="cboWard" runat="server" CssClass="form-control"></asp:DropDownList></td><br />
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align:right">
+                <asp:Button runat="server" ID="cmdSearch" Text="Search" CssClass="btn btn-default"/><br />
             </td>
         </tr>
         <tr>
             <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <asp:Button runat="server" ID="cmdNew" Text="Add New" CssClass="btn btn-default"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
                 <telerik:RadGrid ID="radHealthCenterListing" runat="server" GridLines="None" Height="100%" 
                     CellPadding="0" Width="100%">
                     <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" 

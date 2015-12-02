@@ -268,7 +268,8 @@ Public Class Address
             sql = "SELECT A.*, W.WardID, D.DistrictID, C.CityID, S1.SuburbID FROM tblAddresses A left outer join tblVillages V on V.VillageID = A.VillageID "
             sql &= "left outer join tblWards W on W.WardID = V.WardID "
             sql &= "left outer join tblDistricts D on D.DistrictID = W.DistrictID "
-            sql &= "left outer join tblSection S on S.SectionID = A.SectionID "
+            sql &= "left outer join tblStreets SR on SR.StreetID = A.StreetID"
+            sql &= "left outer join tblSection S on S.SectionID = SR.SectionID "
             sql &= "left outer join tblSuburbs S1 on S1.SuburbID = S.SuburbID "
             sql &= "left outer join tblCities C on C.CityID = S1.CityID WHERE OwnerID = " & PatientID
         Else

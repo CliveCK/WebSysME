@@ -43,7 +43,7 @@
 
         With radBenListing
 
-            .DataSource = objBeneficiaries.GetAllBeneficiaries().Tables(0)
+            .DataSource = objBeneficiaries.GetAllBeneficiaries("").Tables(0)
             .DataBind()
 
             ViewState("Beneficiaries") = .DataSource

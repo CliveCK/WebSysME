@@ -324,6 +324,8 @@ Public Class CustomFieldsManager
                     AutomatorTypeIdentifier = "C"
                 Case AutomatorTypes.Group
                     AutomatorTypeIdentifier = "G"
+                Case AutomatorTypes.Household
+                    AutomatorTypeIdentifier = "HH"
             End Select
 
             sql.AppendLine("INSERT INTO [CustomField_ObjectTemplates] (TemplateID, ObjectID, ObjectType, CreatedBy)")
@@ -376,7 +378,7 @@ Public Class CustomFieldsManager
         'TODOL: Implement ObjectType
 
         Select Case ObjectType.Trim
-            Case "P", "C", "S", "H", "O", "G"
+            Case "P", "C", "S", "H", "O", "G", "HH"
                 ObjectType = ObjectType.Trim
             Case Else
                 'invalid entity type. we'll clear and just do for everything
@@ -417,6 +419,23 @@ Public Class CustomFieldsManager
                 sql.AppendLine("		INNER JOIN CustomField_Fields T ON F.CustomFieldID = T.CustomFieldID AND U.TemplateID = T.TemplateID")
                 sql.AppendLine("	WHERE CFT.TemplateName IS NOT NULL")
                 If ObjectID > 0 Then sql.AppendLine("	AND L.HealthCenterID = " & ObjectID)
+                sql.AppendLine("")
+
+            End If
+
+            If String.IsNullOrEmpty(ObjectType) OrElse ObjectType.Equals("HH") Then
+
+                If String.IsNullOrEmpty(ObjectType) Then sql.AppendLine("	UNION")
+
+                sql.AppendLine("")
+                sql.AppendLine("	SELECT DISTINCT T.CustomFieldID, CFT.TemplateName, F.ObjectID, F.FieldName, T.FieldType, T.DisplayIndex, F.ObjectType ")
+                sql.AppendLine("	FROM CustomField_ObjectTemplates U")
+                sql.AppendLine("		INNER JOIN CustomField_Templates CFT ON U.TemplateID = CFT.TemplateID AND CFT.TemplateType != 'Grid'")
+                sql.AppendLine("		INNER JOIN tblBeneficiaries L ON U.ObjectID = CASE WHEN L.ParentID IS NULL THEN L.BeneficiaryID ELSE L.ParentID END AND U.ObjectType = 'H'")
+                sql.AppendLine("		INNER JOIN CustomField_ObjectData F ON F.ObjectID = CASE WHEN L.ParentID IS NULL THEN L.BeneficiaryID ELSE L.ParentID END AND F.ObjectType = 'H'")
+                sql.AppendLine("		INNER JOIN CustomField_Fields T ON F.CustomFieldID = T.CustomFieldID AND U.TemplateID = T.TemplateID")
+                sql.AppendLine("	WHERE CFT.TemplateName IS NOT NULL")
+                If ObjectID > 0 Then sql.AppendLine("	AND CASE WHEN L.ParentID IS NULL THEN L.BeneficiaryID ELSE L.ParentID END = " & ObjectID)
                 sql.AppendLine("")
 
             End If
@@ -468,6 +487,23 @@ Public Class CustomFieldsManager
                 sql.AppendLine("		INNER JOIN CustomField_Fields T ON F.CustomFieldID = T.CustomFieldID AND U.TemplateID = T.TemplateID")
                 sql.AppendLine("	WHERE CFT.TemplateName IS NOT NULL")
                 If ObjectID > 0 Then sql.AppendLine("	AND L.SchoolID = " & ObjectID)
+                sql.AppendLine("")
+
+            End If
+
+            If String.IsNullOrEmpty(ObjectType) OrElse ObjectType.Equals("G") Then
+
+                If String.IsNullOrEmpty(ObjectType) Then sql.AppendLine("	UNION")
+
+                sql.AppendLine("")
+                sql.AppendLine("	SELECT DISTINCT T.CustomFieldID, CFT.TemplateName, F.ObjectID, F.FieldName, T.FieldType, T.DisplayIndex, F.ObjectType ")
+                sql.AppendLine("	FROM CustomField_ObjectTemplates U")
+                sql.AppendLine("		INNER JOIN CustomField_Templates CFT ON U.TemplateID = CFT.TemplateID AND CFT.TemplateType != 'Grid'")
+                sql.AppendLine("		INNER JOIN tblGroups L ON U.ObjectID = L.GroupID AND U.ObjectType = 'S'")
+                sql.AppendLine("		INNER JOIN CustomField_ObjectData F ON F.ObjectID = L.GroupID AND F.ObjectType = 'S'")
+                sql.AppendLine("		INNER JOIN CustomField_Fields T ON F.CustomFieldID = T.CustomFieldID AND U.TemplateID = T.TemplateID")
+                sql.AppendLine("	WHERE CFT.TemplateName IS NOT NULL")
+                If ObjectID > 0 Then sql.AppendLine("	AND L.GroupID = " & ObjectID)
                 sql.AppendLine("")
 
             End If

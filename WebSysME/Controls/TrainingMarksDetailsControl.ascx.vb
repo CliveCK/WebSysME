@@ -245,6 +245,7 @@ Public Class TrainingMarksDetailsControl
                 sql &= " AND ISNULL(M.PeriodID, 0) = CASE WHEN ISNULL(M.TrainingMarkID, 0) > 0 THEN " & cboPeriod.SelectedValue & " ELSE ISNULL(M.PeriodID, 0) END"
                 sql &= " AND ISNULL(M.BlockID, 0) = CASE WHEN ISNULL(M.TrainingMarkID, 0) > 0 THEN " & cboBlock.SelectedValue & " ELSE ISNULL(M.BlockID, 0) END"
                 sql &= " AND ISNULL(M.PaperID, 0) = CASE WHEN ISNULL(M.TrainingMarkID, 0) > 0 THEN " & cboPaper.SelectedValue & " ELSE ISNULL(M.PaperID, 0) END"
+
             Case "Individual"
                 sql = "SELECT ISNULL(M.TrainingMarkID, 0) As TrainingMarkID, B.BeneficiaryID as ObjectID, ISNULL(FirstName, '') + ' ' + ISNULL(Surname,'') As Name, '' As Description, M.Mark, M.Comments FROM tblBeneficiaries B inner join tblTrainingAttendants TA on TA.BeneficiaryID = B.BeneficiaryID "
                 sql &= " left outer join tblTrainingMarks M on M.BeneficiaryID = TA.BeneficiaryID  "
@@ -271,7 +272,7 @@ Public Class TrainingMarksDetailsControl
         sql &= "inner join tblWards W on W.WardID = HC.WardID "
         sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
         sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID  "
-        sql &= "WHERE H.HealthCenterStaffID IN (Select BeneficiaryID from tblTrainingAttendants WHERE TrainingID = " & cboTraining.SelectedValue & " AND BeneficiaryType = " & cboBeneficiaryType.SelectedValue & ") "
+        sql &= "WHERE H.HealthCenterStaffID IN (Select BeneficiaryID from tblTrainingAttendants WHERE TrainingID = " & cboTraining.SelectedValue & " AND BeneficiaryTypeID = " & cboBeneficiaryType.SelectedValue & ") "
         sql &= "AND HealthCenterStaffID Not IN "
         sql &= "(SELECT BeneficiaryID FROM tblTrainingMarks WHERE BlockID = " & cboBlock.SelectedValue & " AND PaperID = " & cboPaper.SelectedValue & " AND"
         sql &= " PeriodID = " & cboPeriod.SelectedValue & " AND BeneficiaryTypeID = " & cboBeneficiaryType.SelectedValue & " AND TrainingID = " & cboTraining.SelectedValue & ")"

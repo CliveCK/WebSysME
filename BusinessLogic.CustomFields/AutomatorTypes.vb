@@ -5,6 +5,7 @@
     Organization
     Community
     Group
+    Household
 End Enum
 
 

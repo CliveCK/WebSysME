@@ -1,20 +1,17 @@
 ﻿Imports Microsoft.Practices.EnterpriseLibrary.Data 
 Imports Universal.CommonFunctions 
 
-Public Class GroupMaturityIndex
+Public Class ObjectiveDevelopmentLevel
 
 #region "Variables"
 
-    Protected mGroupMaturityIndexID As long
-    Protected mGroupID As long
-    Protected mKeyAreaID As long
-    Protected mMonthID As long
-    Protected mYear As long
+    Protected mObjectiveDevelopmentLevelID As long
+    Protected mDevelopmentLevelID As long
+    Protected mObjectiveID As long
     Protected mCreatedBy As long
     Protected mUpdatedBy As long
     Protected mCreatedDate As string
     Protected mUpdatedDate As string
-    Protected mScore As string
 
     Protected db As Database 
     Protected mConnectionName As String
@@ -44,48 +41,30 @@ Public Class GroupMaturityIndex
         End Get 
     End Property 
 
-    Public  Property GroupMaturityIndexID() As long
+    Public  Property ObjectiveDevelopmentLevelID() As long
         Get
-		return mGroupMaturityIndexID
+		return mObjectiveDevelopmentLevelID
         End Get
         Set(ByVal value As long)
-		mGroupMaturityIndexID = value
+		mObjectiveDevelopmentLevelID = value
         End Set
     End Property
 
-    Public  Property GroupID() As long
+    Public  Property DevelopmentLevelID() As long
         Get
-		return mGroupID
+		return mDevelopmentLevelID
         End Get
         Set(ByVal value As long)
-		mGroupID = value
+		mDevelopmentLevelID = value
         End Set
     End Property
 
-    Public  Property KeyAreaID() As long
+    Public  Property ObjectiveID() As long
         Get
-		return mKeyAreaID
+		return mObjectiveID
         End Get
         Set(ByVal value As long)
-		mKeyAreaID = value
-        End Set
-    End Property
-
-    Public  Property MonthID() As long
-        Get
-		return mMonthID
-        End Get
-        Set(ByVal value As long)
-		mMonthID = value
-        End Set
-    End Property
-
-    Public  Property Year() As long
-        Get
-		return mYear
-        End Get
-        Set(ByVal value As long)
-		mYear = value
+		mObjectiveID = value
         End Set
     End Property
 
@@ -125,15 +104,6 @@ Public Class GroupMaturityIndex
         End Set
     End Property
 
-    Public  Property Score() As string
-        Get
-		return mScore
-        End Get
-        Set(ByVal value As string)
-		mScore = value
-        End Set
-    End Property
-
 #end region
 
 #region "Methods"
@@ -143,8 +113,8 @@ Public Class GroupMaturityIndex
     Public Sub New(ByVal ConnectionName As String, ByVal ObjectUserID As Long) 
 
         mObjectUserID = ObjectUserID 
-        mConnectionName = ConnectionName
-        db = New DatabaseProviderFactory().Create(ConnectionName)
+        mConnectionName = ConnectionName 
+        db = DatabaseFactory.CreateDatabase(ConnectionName) 
 
     End Sub 
 
@@ -152,16 +122,13 @@ Public Class GroupMaturityIndex
 
 Public Sub Clear()  
 
-    GroupMaturityIndexID = 0
-    mGroupID = 0
-    mKeyAreaID = 0
-    mMonthID = 0
-    mYear = 0
+    ObjectiveDevelopmentLevelID = 0
+    mDevelopmentLevelID = 0
+    mObjectiveID = 0
     mCreatedBy = mObjectUserID
     mUpdatedBy = 0
     mCreatedDate = ""
     mUpdatedDate = ""
-    mScore = ""
 
 End Sub
 
@@ -169,18 +136,18 @@ End Sub
 
     Public Overridable Function Retrieve() As Boolean 
 
-        Return Me.Retrieve(mGroupMaturityIndexID) 
+        Return Me.Retrieve(mObjectiveDevelopmentLevelID) 
 
     End Function 
 
-    Public Overridable Function Retrieve(ByVal GroupMaturityIndexID As Long) As Boolean 
+    Public Overridable Function Retrieve(ByVal ObjectiveDevelopmentLevelID As Long) As Boolean 
 
         Dim sql As String 
 
-        If GroupMaturityIndexID > 0 Then 
-            sql = "SELECT * FROM tblGroupMaturityIndex WHERE GroupMaturityIndexID = " & GroupMaturityIndexID
+        If ObjectiveDevelopmentLevelID > 0 Then 
+            sql = "SELECT * FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & ObjectiveDevelopmentLevelID
         Else 
-            sql = "SELECT * FROM tblGroupMaturityIndex WHERE GroupMaturityIndexID = " & mGroupMaturityIndexID
+            sql = "SELECT * FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID
         End If 
 
         Return Retrieve(sql) 
@@ -202,7 +169,7 @@ End Sub
 
             Else
 
-                log.Error("GroupMaturityIndex not found.")
+                log.Error("ObjectiveDevelopmentLevel not found.")
 
                 Return False
 
@@ -217,31 +184,27 @@ End Sub
 
     End Function
 
-    Public Overridable Function GetGroupMaturityIndex() As System.Data.DataSet
+    Public Overridable Function GetObjectiveDevelopmentLevel() As System.Data.DataSet
 
-        Return GetGroupMaturityIndex(mGroupMaturityIndexID)
+        Return GetObjectiveDevelopmentLevel(mObjectiveDevelopmentLevelID)
 
     End Function
 
-    Public Overridable Function GetGroupMaturityIndex(ByVal GroupID As Long) As DataSet
+    Public Overridable Function GetObjectiveDevelopmentLevel(ByVal ObjectiveDevelopmentLevelID As Long) As DataSet
 
         Dim sql As String
 
-        If GroupID > 0 Then
-            sql = "SELECT G.GroupMaturityIndexID, M.Description as [Month], [Year], A.Description as MaturityArea, Score FROM tblGroupMaturityIndex G "
-            sql &= "left outer join luMaturityArea A On G.KeyAreaID = A.MaturityAreaID "
-            sql &= "left outer join luMonths M on M.MonthID = G.MonthID WHERE GroupID = " & GroupID
+        If ObjectiveDevelopmentLevelID > 0 Then
+            sql = "SELECT * FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & ObjectiveDevelopmentLevelID
         Else
-            sql = "SELECT G.GroupMaturityIndexID, M.Description as [Month], [Year], A.Description as MaturityArea, Score FROM tblGroupMaturityIndex G "
-            sql &= "left outer join luMaturityArea A On G.KeyAreaID = A.MaturityAreaID "
-            sql &= "left outer join luMonths M on M.MonthID = G.MonthID WHERE GroupID = " & mGroupID
+            sql = "SELECT * FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID
         End If
 
-        Return GetGroupMaturityIndex(sql)
+        Return GetObjectiveDevelopmentLevel(sql)
 
     End Function
 
-    Protected Overridable Function GetGroupMaturityIndex(ByVal sql As String) As DataSet
+    Protected Overridable Function GetObjectiveDevelopmentLevel(ByVal sql As String) As DataSet
 
         Return db.ExecuteDataSet(CommandType.Text, sql)
 
@@ -253,16 +216,13 @@ End Sub
 
         With Record
 
-            mGroupMaturityIndexID = Catchnull(.Item("GroupMaturityIndexID"), 0)
-            mGroupID = Catchnull(.Item("GroupID"), 0)
-            mKeyAreaID = Catchnull(.Item("KeyAreaID"), 0)
-            mMonthID = Catchnull(.Item("MonthID"), 0)
-            mYear = Catchnull(.Item("Year"), 0)
+            mObjectiveDevelopmentLevelID = Catchnull(.Item("ObjectiveDevelopmentLevelID"), 0)
+            mDevelopmentLevelID = Catchnull(.Item("DevelopmentLevelID"), 0)
+            mObjectiveID = Catchnull(.Item("ObjectiveID"), 0)
             mCreatedBy = Catchnull(.Item("CreatedBy"), 0)
             mUpdatedBy = Catchnull(.Item("UpdatedBy"), 0)
             mCreatedDate = Catchnull(.Item("CreatedDate"), "")
             mUpdatedDate = Catchnull(.Item("UpdatedDate"), "")
-            mScore = Catchnull(.Item("Score"), "")
 
         End With
 
@@ -272,19 +232,16 @@ End Sub
 
     Public Overridable Sub GenerateSaveParameters(ByRef db As Database, ByRef cmd As System.Data.Common.DbCommand)
 
-        db.AddInParameter(cmd, "@GroupMaturityIndexID", DbType.Int32, mGroupMaturityIndexID)
-        db.AddInParameter(cmd, "@GroupID", DbType.Int32, mGroupID)
-        db.AddInParameter(cmd, "@KeyAreaID", DbType.Int32, mKeyAreaID)
-        db.AddInParameter(cmd, "@MonthID", DbType.Int32, mMonthID)
-        db.AddInParameter(cmd, "@Year", DbType.Int32, mYear)
+        db.AddInParameter(cmd, "@ObjectiveDevelopmentLevelID", DbType.Int32, mObjectiveDevelopmentLevelID)
+        db.AddInParameter(cmd, "@DevelopmentLevelID", DbType.Int32, mDevelopmentLevelID)
+        db.AddInParameter(cmd, "@ObjectiveID", DbType.Int32, mObjectiveID)
         db.AddInParameter(cmd, "@UpdatedBy", DbType.Int32, mObjectUserID)
-        db.AddInParameter(cmd, "@Score", DbType.String, mScore)
 
     End Sub
 
     Public Overridable Function Save() As Boolean
 
-        Dim cmd As System.Data.Common.DbCommand = db.GetStoredProcCommand("sp_Save_GroupMaturityIndex")
+        Dim cmd As System.Data.Common.DbCommand = db.GetStoredProcCommand("sp_Save_ObjectiveDevelopmentLevel")
 
         GenerateSaveParameters(db, cmd)
 
@@ -294,7 +251,7 @@ End Sub
 
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
 
-                mGroupMaturityIndexID = ds.Tables(0).Rows(0)(0)
+                mObjectiveDevelopmentLevelID = ds.Tables(0).Rows(0)(0)
 
             End If
 
@@ -315,8 +272,15 @@ End Sub
 
     Public Overridable Function Delete() As Boolean
 
-        'Return Delete("UPDATE tblGroupMaturityIndex SET Deleted = 1 WHERE GroupMaturityIndexID = " & mGroupMaturityIndexID) 
-        Return Delete("DELETE FROM tblGroupMaturityIndex WHERE GroupMaturityIndexID = " & mGroupMaturityIndexID)
+        'Return Delete("UPDATE tblObjectiveDevelopmentLevel SET Deleted = 1 WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID) 
+        Return Delete("DELETE FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID)
+
+    End Function
+
+    Public Overridable Function DeleteEntries() As Boolean
+
+        'Return Delete("UPDATE tblObjectiveDevelopmentLevel SET Deleted = 1 WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID) 
+        Return Delete("DELETE FROM tblObjectiveDevelopmentLevel WHERE ObjectiveID = " & mObjectiveID & " AND DevelopmentLevelID = " & mDevelopmentLevelID)
 
     End Function
 

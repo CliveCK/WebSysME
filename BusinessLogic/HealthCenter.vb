@@ -265,12 +265,12 @@ End Sub
 
     End Function
 
-    Public Function RetrieveAll() As DataSet
+    Public Function RetrieveAll(ByVal Criteria As String) As DataSet
 
-        Dim sql As String = "SELECT H.*, P.Name As Province, D.Name as District FROM tblHealthCenters H "
+        Dim sql As String = "SELECT H.*, P.Name As Province, D.Name as District, D.DistrictID, W.WardID FROM tblHealthCenters H "
         sql &= "inner join tblWards W on W.WardID = H.WardID "
         sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
-        sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID  "
+        sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID  " & Criteria
 
         Return GetHealthCenter(sql)
 

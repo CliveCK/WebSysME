@@ -122,6 +122,15 @@ Partial Public Class GroupsDetailsControl
     Protected WithEvents txtGroupID As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
+    '''radGroupMembership control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents radGroupMembership As Global.Telerik.Web.UI.RadGrid
+    
+    '''<summary>
     '''cboMonth control.
     '''</summary>
     '''<remarks>
@@ -174,15 +183,6 @@ Partial Public Class GroupsDetailsControl
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents radMaturityIndexListing As Global.Telerik.Web.UI.RadGrid
-    
-    '''<summary>
-    '''radGroupMembership control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents radGroupMembership As Global.Telerik.Web.UI.RadGrid
     
     '''<summary>
     '''lnkGroupMembership control.

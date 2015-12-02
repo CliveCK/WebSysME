@@ -353,8 +353,8 @@ End Sub
         sql = "SELECT F.* FROM tblFiles F inner join luFileTypes T on F.FileTypeID = T.FileTypeID "
         sql &= "INNER JOIN tblDocumentObjects O on O.DocumentID = F.FileID "
         sql &= " INNER JOIN luObjectTypes OT on OT.ObjectTypeID = O.ObjectTypeID "
-        sql &= " where T.Description = '" & FileType & "' AND OT.Description = '" & ObjectType & "' AND O.ObjectID =  " & ProjectID & " AND "
-        sql &= "AND F.FileID IN (" & GetPermittedFiles() & ")"
+        sql &= " where T.Description = '" & FileType & "' AND OT.Description = '" & ObjectType & "' AND O.ObjectID =  " & ProjectID
+        sql &= " AND F.FileID IN (" & GetPermittedFiles() & ")"
 
         Return GetFiles(sql)
 

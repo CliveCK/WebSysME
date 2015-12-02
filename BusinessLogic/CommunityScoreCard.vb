@@ -227,14 +227,18 @@ End Sub
 
     End Function
 
-    Public Overridable Function GetCommunityScoreCard(ByVal CommunityScoreCardID As Long) As DataSet
+    Public Overridable Function GetCommunityScoreCard(ByVal CommunityID As Long) As DataSet
 
         Dim sql As String
 
-        If CommunityScoreCardID > 0 Then
-            sql = "SELECT * FROM tblCommunityScoreCard WHERE CommunityScoreCardID = " & CommunityScoreCardID
+        If CommunityID > 0 Then
+            sql = "SELECT SC.*, I.Name As Indicator, T.Description As Area FROM tblCommunityScoreCard SC "
+            sql &= "left outer join tblIndicators I on I.IndicatorID = SC.IndicatorID "
+            sql &= "left outer join luThermaticArea T on T.ThermaticAreaID = SC.ThermaticAreaID WHERE CommunityID = " & CommunityID
         Else
-            sql = "SELECT * FROM tblCommunityScoreCard WHERE CommunityScoreCardID = " & mCommunityScoreCardID
+            sql = "SELECT SC.*, I.Name As Indicator, T.Description As Area FROM tblCommunityScoreCard SC "
+            sql &= " left outer join tblIndicators I On I.IndicatorID = SC.IndicatorID "
+            sql &= "left outer join luThermaticArea T On T.ThermaticAreaID = SC.ThermaticAreaID WHERE CommunityID = " & mCommunityID
         End If
 
         Return GetCommunityScoreCard(sql)
@@ -315,7 +319,7 @@ End Sub
 
     Public Overridable Function Delete() As Boolean
 
-        'Return Delete("UPDATE tblCommunityScoreCard SET Deleted = 1 WHERE CommunityScoreCardID = " & mCommunityScoreCardID) 
+        'Return Delete("UPDATE tblCommunityScoreCard Set Deleted = 1 WHERE CommunityScoreCardID = " & mCommunityScoreCardID) 
         Return Delete("DELETE FROM tblCommunityScoreCard WHERE CommunityScoreCardID = " & mCommunityScoreCardID)
 
     End Function

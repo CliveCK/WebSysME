@@ -357,6 +357,7 @@ input:hover, input:active {
                     <asp:ListItem Value="O">Organization</asp:ListItem>
                     <asp:ListItem Value="C">Community</asp:ListItem>
                     <asp:ListItem Value="G">Groups</asp:ListItem>
+                    <asp:ListItem Value="HH">Households</asp:ListItem>
                     <asp:ListItem Selected="True"></asp:ListItem>
                 </asp:DropDownList>
             </td>

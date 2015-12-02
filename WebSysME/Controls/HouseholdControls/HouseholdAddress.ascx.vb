@@ -95,7 +95,7 @@
                     .Address = txtHouseNo.Text
 
                 Case "IsRural"
-                    .Address = cboVillage.SelectedValue
+                    .VillageID = cboVillage.SelectedValue
                     .SerialNo = txtSerialNo.Text
 
             End Select
@@ -123,16 +123,23 @@
 
                 If .RetrieveByPatient(CookiesWrapper.BeneficiaryID) Then
 
+                    If Not IsNothing(cboDistrict.Items.FindByValue(.DistrictID)) Then cboDistrict.SelectedValue = .DistrictID
+                    If Not IsNothing(cboWard.Items.FindByValue(.WardID)) Then cboWard.SelectedValue = .WardID
+                    If Not IsNothing(cboVillage.Items.FindByValue(.VillageID)) Then cboVillage.SelectedValue = .VillageID
+                    If Not IsNothing(cboSuburb.Items.FindByValue(.SurburbID)) Then cboSuburb.SelectedValue = .SurburbID
+                    If Not IsNothing(cboSection.Items.FindByValue(.SectionID)) Then cboSection.SelectedValue = .SectionID
+                    If Not IsNothing(cboCity.Items.FindByValue(.CityID)) Then cboCity.SelectedValue = .CityID
+                    If Not IsNothing(cboStreet.Items.FindByValue(.StreetID)) Then cboCity.SelectedValue = .StreetID
                     txtAddressID1.Text = .AddressID
-                    txtHouseNo.Text = .Address
-                    txtSerialNo.Text = .SerialNo
+                        txtHouseNo.Text = .Address
+                        txtSerialNo.Text = .SerialNo
 
-                    ShowMessage("Address loaded successfully...", MessageTypeEnum.Information)
-                    Return True
+                        ShowMessage("Address loaded successfully...", MessageTypeEnum.Information)
+                        Return True
 
-                Else
+                    Else
 
-                    ShowMessage("Failed to load Address", MessageTypeEnum.Error)
+                        ShowMessage("Failed to load Address", MessageTypeEnum.Error)
                     Return False
 
                 End If
@@ -161,6 +168,9 @@
                 .DataTextField = "Name"
                 .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
             End With
 
         End If
@@ -179,6 +189,9 @@
                 .DataValueField = "WardID"
                 .DataTextField = "Name"
                 .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
             End With
 
@@ -199,6 +212,9 @@
                 .DataTextField = "Name"
                 .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
             End With
 
         End If
@@ -218,6 +234,9 @@
                 .DataTextField = "Name"
                 .DataBind()
 
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
+
             End With
 
         End If
@@ -236,6 +255,9 @@
                 .DataValueField = "StreetID"
                 .DataTextField = "Name"
                 .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, String.Empty))
+                .SelectedIndex = 0
 
             End With
 
@@ -271,6 +293,8 @@
     End Sub
 
     Private Sub cmdSave_Click(sender As Object, e As EventArgs) Handles cmdSave.Click
+
+        If chkIsRuralUrban.SelectedValue = "" Then ShowMessage("Select between Rural or Urban before saving", MessageTypeEnum.Error) Exit Sub
 
         If CookiesWrapper.BeneficiaryID > 0 Then
 

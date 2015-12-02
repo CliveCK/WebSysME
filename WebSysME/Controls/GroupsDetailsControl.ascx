@@ -34,9 +34,7 @@
 	<tr> 
 		<td colspan="2"> 
             		<asp:button id="cmdSave" runat="server" Text="Save" CssClass="btn btn-default"></asp:button> 
-     </td>
-        <td>
-                    <asp:button id="cmdDelete" runat="server" Text="Delete" CssClass="btn btn-default"></asp:button>
+                         <asp:button id="cmdDelete" runat="server" Text="Delete" CssClass="btn btn-default"></asp:button>
         </td> 
 	</tr> 
 	<tr> 
@@ -44,55 +42,6 @@
 			<asp:TextBox  id="txtGroupID" runat="server" Visible="false"></asp:TextBox> 
 		</td> 
 	</tr>
-    <tr>
-        <td><br />Group Maturity Index</td>
-    </tr>
-    <tr>
-        <td>Month<asp:DropDownList ID="cboMonth" runat="server" CssClass="form-control"></asp:DropDownList></td>
-        <td>Year<asp:DropDownList ID="cboYear" runat="server" CssClass="form-control"></asp:DropDownList></td>
-        <td>Key Area<asp:DropDownList ID="cboKeyArea" runat="server" CssClass="form-control"></asp:DropDownList></td>
-        <td>Score<asp:TextBox ID="txtScore" runat="server" CssClass="form-control"></asp:TextBox>        
-        </td>
-        <td style="text-align:left;padding:0"><asp:Button ID="cmdPlus" runat="server" Text="+" CssClass="btn btn-default" /></td>
-    </tr>
-    <tr>
-        <td colspan="5">
-             <telerik:RadGrid ID="radMaturityIndexListing" runat="server" GridLines="None" Height="80%" 
-                    CellPadding="0" Width="90%">
-                    <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" PageSize="5"
-                       AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced">
-                        <Columns>
-                            <telerik:GridBoundColumn DataField="GroupMaturityIndexID" UniqueName="Year" HeaderText="Year"
-                                Display="false">
-                            </telerik:GridBoundColumn>
-                             <telerik:GridBoundColumn DataField="Month" UniqueName="Month" HeaderText="Month"  >
-                            </telerik:GridBoundColumn>
-                             <telerik:GridBoundColumn DataField="Year" UniqueName="Year1" HeaderText="Year"  >
-                            </telerik:GridBoundColumn>
-                            <telerik:GridBoundColumn DataField="KeyArea" UniqueName="KeyArea" HeaderText="KeyArea">
-                            </telerik:GridBoundColumn>
-                            <telerik:GridBoundColumn DataField="Score" UniqueName="Score" HeaderText="Score">
-                            </telerik:GridBoundColumn>
-                        </Columns>
-                        <RowIndicatorColumn>
-                            <HeaderStyle Width="20px"></HeaderStyle>
-                        </RowIndicatorColumn>
-                        <ExpandCollapseColumn>
-                            <HeaderStyle Width="20px"></HeaderStyle>
-                        </ExpandCollapseColumn>
-                        <EditFormSettings>
-                            <EditColumn FilterControlAltText="Filter EditCommandColumn column">
-                            </EditColumn>
-                        </EditFormSettings>
-                        <PagerStyle Position="Bottom"/>
-                    </MasterTableView>
-                    <ClientSettings EnablePostBackOnRowClick="false">
-                    </ClientSettings>
-                    <FilterMenu EnableImageSprites="False">
-                    </FilterMenu>
-                </telerik:RadGrid><br />
-        </td>
-    </tr>
     <tr>
         <td><br />Group Membership</td>
     </tr> 
@@ -125,6 +74,60 @@
                     <FilterMenu EnableImageSprites="False">
                     </FilterMenu>
                 </telerik:RadGrid>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;
+        </td>
+    </tr>
+      <tr>
+        <td><br />Group Maturity Index</td>
+    </tr>
+    <tr>
+        <td>Month<asp:DropDownList ID="cboMonth" runat="server" CssClass="form-control"></asp:DropDownList></td>
+        <td>Year<asp:DropDownList ID="cboYear" runat="server" CssClass="form-control"></asp:DropDownList></td>
+        <td>Maturity Area<asp:DropDownList ID="cboKeyArea" runat="server" CssClass="form-control"></asp:DropDownList></td>
+        <td>Score<asp:TextBox ID="txtScore" runat="server" CssClass="form-control"></asp:TextBox>        
+        </td>
+        <td style="text-align:left;padding:0"><asp:Button ID="cmdPlus" runat="server" Text="+" CssClass="btn btn-default" /></td>
+    </tr>
+    <tr>
+        <td colspan="5">
+             <telerik:RadGrid ID="radMaturityIndexListing" runat="server" GridLines="None" Height="80%" 
+                    CellPadding="0" Width="90%">
+                    <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" PageSize="5"
+                       AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced">
+                        <Columns>
+                            <telerik:GridBoundColumn DataField="GroupMaturityIndexID" UniqueName="Year" HeaderText="Year"
+                                Display="false">
+                            </telerik:GridBoundColumn>
+                             <telerik:GridBoundColumn DataField="Month" UniqueName="Month" HeaderText="Month"  >
+                            </telerik:GridBoundColumn>
+                             <telerik:GridBoundColumn DataField="Year" UniqueName="Year1" HeaderText="Year"  >
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn DataField="MaturityArea" UniqueName="MaturityArea" HeaderText="MaturityArea">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn DataField="Score" UniqueName="Score" HeaderText="Score">
+                            </telerik:GridBoundColumn>
+                        </Columns>
+                        <RowIndicatorColumn>
+                            <HeaderStyle Width="20px"></HeaderStyle>
+                        </RowIndicatorColumn>
+                        <ExpandCollapseColumn>
+                            <HeaderStyle Width="20px"></HeaderStyle>
+                        </ExpandCollapseColumn>
+                        <EditFormSettings>
+                            <EditColumn FilterControlAltText="Filter EditCommandColumn column">
+                            </EditColumn>
+                        </EditFormSettings>
+                        <PagerStyle Position="Bottom"/>
+                    </MasterTableView>
+                    <ClientSettings EnablePostBackOnRowClick="false">
+                    </ClientSettings>
+                    <FilterMenu EnableImageSprites="False">
+                    </FilterMenu>
+                </telerik:RadGrid><br />
         </td>
     </tr>
     <tr>

@@ -486,27 +486,31 @@ Partial Public Class CustomFieldTemplates
 
                 Case "P" 'PROJECT
 
-                    LoadObjects("tblProjects", "Project", "Name", "P")
+                    LoadObjects("tblProjects", "Project", "Name", "P", "")
 
                 Case "H" 'HEALTHCENTER
 
-                    LoadObjects("tblHealthCenters", "HealthCenterID", "Name", "H")
+                    LoadObjects("tblHealthCenters", "HealthCenterID", "Name", "H", "")
 
                 Case "S" 'SCHOOLS
 
-                    LoadObjects("tblSchools", "SchoolID", "Name", "S")
+                    LoadObjects("tblSchools", "SchoolID", "Name", "S", "")
 
                 Case "O" 'ORGANIZATIONS
 
-                    LoadObjects("tblOrganization", "OrganizationID", "Name", "O")
+                    LoadObjects("tblOrganization", "OrganizationID", "Name", "O", "")
 
                 Case "C" 'COMMMUNITIES
 
-                    LoadObjects("tblCommunities", "CommunityID", "Name", "O")
+                    LoadObjects("tblCommunities", "CommunityID", "Name", "O", "")
 
                 Case "G" 'GROUPS
 
-                    LoadObjects("tblGroups", "GroupID", "GroupName", "G")
+                    LoadObjects("tblGroups", "GroupID", "GroupName", "G", "")
+
+                Case "HH" 'GROUPS
+
+                    LoadObjects("tblBeneficiaries", "BeneficiaryID", "FirstName", "G", " AND Suffix = 1")
 
             End Select
 
@@ -521,21 +525,21 @@ Partial Public Class CustomFieldTemplates
 
     End Sub
 
-    Private Sub LoadObjects(ByVal TableName As String, ByVal ValueColumn As String, ByVal DescriptionColumn As String, ByVal AutomatorType As String)
+    Private Sub LoadObjects(ByVal TableName As String, ByVal ValueColumn As String, ByVal DescriptionColumn As String, ByVal AutomatorType As String, ByVal Filter As String)
 
         With ucAppliesTo
 
             With .AvailableOptions
                 .DataValueField = ValueColumn
                 .DataTextField = DescriptionColumn
-                .DataSource = DataLookup.Lookup(TableName, ValueColumn, DescriptionColumn, DescriptionColumn, ValueColumn & " NOT IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='" & AutomatorType & "' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
+                .DataSource = DataLookup.Lookup(TableName, ValueColumn, DescriptionColumn, DescriptionColumn, ValueColumn & " NOT IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='" & AutomatorType & "' AND TemplateID = " & cboTemplates.SelectedItem.Value & ") " & Filter)
                 .DataBind()
             End With
 
             With .SelectedOptions
                 .DataValueField = ValueColumn
                 .DataTextField = DescriptionColumn
-                .DataSource = DataLookup.Lookup(TableName, ValueColumn, DescriptionColumn, DescriptionColumn, ValueColumn & " IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='" & AutomatorType & "' AND TemplateID = " & cboTemplates.SelectedItem.Value & ")")
+                .DataSource = DataLookup.Lookup(TableName, ValueColumn, DescriptionColumn, DescriptionColumn, ValueColumn & " IN (SELECT AutomatorID FROM CustomField_Automation WHERE AutomatorType='" & AutomatorType & "' AND TemplateID = " & cboTemplates.SelectedItem.Value & ") " & Filter)
                 .DataBind()
             End With
 
@@ -574,7 +578,7 @@ Partial Public Class CustomFieldTemplates
                 Case "P" 'Project
 
                     sql = String.Format(sql, "Project", "tblProjects")
-                    LoadObjects("tblProjects", "Project", "Name", "P")
+                    LoadObjects("tblProjects", "Project", "Name", "P", "")
 
                 Case "H" 'Client Status
 
@@ -595,6 +599,10 @@ Partial Public Class CustomFieldTemplates
                 Case "G" 'Project Types
 
                     sql = String.Format(sql, "GroupID", "tblGroups")
+
+                Case "HH" 'Project Types
+
+                    sql = String.Format(sql, "BeneficiaryID", "tblBeneficiaries")
 
             End Select
 
@@ -668,6 +676,7 @@ Partial Public Class CustomFieldTemplates
         sql &= "delete from CustomField_ObjectData where ObjectType='c' and ObjectID not in (select CommunityID from tblCommunities) " & vbCrLf
         sql &= "delete from CustomField_ObjectData where ObjectType='s' and ObjectID not in (select SchoolID from tblSchools) " & vbCrLf
         sql &= "delete from CustomField_ObjectData where ObjectType='g' and ObjectID not in (select GroupID from tblGroups) " & vbCrLf
+        sql &= "delete from CustomField_ObjectData where ObjectType='hh' and ObjectID not in (select BeneficiaryID from tblBeneficiaries) " & vbCrLf
 
         sql &= "delete from CustomField_ObjectTemplates where ObjectType='h' and ObjectID not in (select HealthCenterID from tblHealthCenters) " & vbCrLf
         sql &= "delete from CustomField_ObjectTemplates where ObjectType='p' and ObjectID not in (select Project from tblProjects) " & vbCrLf
@@ -675,6 +684,7 @@ Partial Public Class CustomFieldTemplates
         sql &= "delete from CustomField_ObjectTemplates where ObjectType='c' and ObjectID not in (select CommunityID from tblCommunities) " & vbCrLf
         sql &= "delete from CustomField_ObjectTemplates where ObjectType='s' and ObjectID not in (select SchoolID from tblSchools) " & vbCrLf
         sql &= "delete from CustomField_ObjectTemplates where ObjectType='g' and ObjectID not in (select GroupID from tblGroups) " & vbCrLf
+        sql &= "delete from CustomField_ObjectTemplates where ObjectType='hh' and ObjectID not in (select BeneficiaryID from tblBeneficiaries) " & vbCrLf
 
         If BusinessLogic.CustomFields.DataHelper.ExecuteNonQuery(db, sql) Then
             ShowMessage("Orphan templates successfully deleted...", MessageTypeEnum.Information)
@@ -774,6 +784,13 @@ Partial Public Class CustomFieldTemplates
                     TableName = "tblGroups"
                     FilterColumn = "GroupID"
                     TableIDColumn = "GroupID"
+
+                Case "HH" 'Project Types
+
+                    ObjectType = "HH"
+                    TableName = "tblBenefciaries"
+                    FilterColumn = "BeneficiaryID"
+                    TableIDColumn = "BeneficiaryID"
 
             End Select
 

@@ -151,8 +151,10 @@
     </Compile>
     <Compile Include="Notifications.vb" />
     <Compile Include="NotificationTypes.vb" />
+    <Compile Include="ObjectiveDevelopmentLevel.vb" />
     <Compile Include="ObjectiveOutcomes.vb" />
     <Compile Include="ObjectiveOutputs.vb" />
+    <Compile Include="ObjectiveThemes.vb" />
     <Compile Include="Organization.vb" />
     <Compile Include="OrganizationalPlan.vb" />
     <Compile Include="Output.vb" />

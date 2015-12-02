@@ -87,6 +87,9 @@
             		<asp:Panel id="pnlError" width="95%" runat="server" EnableViewState="False"><asp:label id="lblError" Width="100%" runat="server" CssClass="Error" EnableViewState="False"></asp:label></asp:Panel> 
      </td> 
 	</tr> 
+      <tr>
+        <td colspan="4"><asp:PlaceHolder ID="phCustomFields" runat="server"></asp:PlaceHolder></td>
+    </tr>
 	<tr> 
 		<td colspan="4"> 
             		<asp:button id="cmdSave" runat="server" Text="Save" CssClass="btn btn-default"></asp:button> &nbsp;

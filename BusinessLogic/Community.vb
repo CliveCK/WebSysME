@@ -253,9 +253,11 @@ End Sub
 
     End Function
 
-    Public Function RetrieveAll() As DataSet
+    Public Function RetrieveAll(ByVal Criteria As String) As DataSet
 
-        Dim sql As String = "SELECT * FROM tblCommunities"
+        Dim sql As String = "SELECT C.*, D.DistrictID, P.ProvinceID, W.WardID FROM tblCommunities C inner join tblWards W on W.WardID = C.WardID "
+        sql &= "inner join tblDistricts D on D.DistrictID = W.DistrictID "
+        sql &= "inner join tblProvinces P on P.ProvinceID = D.ProvinceID " & Criteria
 
         Return GetCommunity(sql)
 

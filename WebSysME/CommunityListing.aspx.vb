@@ -34,19 +34,47 @@ Public Class CommunityListing
 
         If Not Page.IsPostBack Then
 
-            LoadGrid()
+            Dim objLookup As New BusinessLogic.CommonFunctions
+
+            With cboDistrict
+
+                .DataSource = objLookup.Lookup("tblDistricts", "DistrictID", "Name")
+                .DataTextField = "Name"
+                .DataValueField = "DistrictID"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, 0))
+                .SelectedIndex = 0
+
+
+            End With
+
+            With cboWard
+
+                .DataSource = objLookup.Lookup("tblWards", "WardID", "Name")
+                .DataTextField = "Name"
+                .DataValueField = "WardID"
+                .DataBind()
+
+                .Items.Insert(0, New ListItem(String.Empty, 0))
+                .SelectedIndex = 0
+
+
+            End With
+
+            'LoadGrid()
 
         End If
 
     End Sub
 
-    Private Sub LoadGrid()
+    Private Sub LoadGrid(ByVal Criteria As String)
 
         Dim objCommunity As New BusinessLogic.Community(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
         With radCommunityListing
 
-            .DataSource = objCommunity.RetrieveAll().Tables(0)
+            .DataSource = objCommunity.RetrieveAll(Criteria).Tables(0)
             .DataBind()
 
             ViewState("Community") = .DataSource
@@ -99,6 +127,26 @@ Public Class CommunityListing
     Private Sub cmNew_Click(sender As Object, e As EventArgs) Handles cmNew.Click
 
         Response.Redirect("~/CommunityPage.aspx")
+
+    End Sub
+
+    Private Sub cmdSearch_Click(sender As Object, e As EventArgs) Handles cmdSearch.Click
+
+        Dim Criteria As String = ""
+
+        If cboDistrict.SelectedValue > 0 Then
+
+            Criteria &= IIf(Criteria <> "", " AND D.DistrictID = " & cboDistrict.SelectedValue, " WHERE D.DistrictID = " & cboDistrict.SelectedValue)
+
+        End If
+
+        If cboWard.SelectedValue > 0 Then
+
+            Criteria &= IIf(Criteria <> "", " And W.WardID = " & cboWard.SelectedValue, " WHERE W.WardID = " & cboWard.SelectedValue)
+
+        End If
+
+        LoadGrid(Criteria)
 
     End Sub
 End Class

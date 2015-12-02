@@ -36,6 +36,11 @@ Public Class Beneficiary
     Protected mSerialNo As String
     Protected mParentID As Long
     Protected mRelationshipID As Long
+    Protected mCityID As Long
+    Protected mSurburbID As Long
+    Protected mSectionID As Long
+    Protected mDistrictID As Long
+    Protected mWardID As Long
 
     Protected db As Database 
     Protected mConnectionName As String 
@@ -335,21 +340,62 @@ Public Class Beneficiary
         End Set
     End Property
 
-    Public  Property SerialNo() As string
+    Public Property SerialNo() As String
         Get
-		return mSerialNo
+            Return mSerialNo
         End Get
-        Set(ByVal value As string)
-		mSerialNo = value
+        Set(ByVal value As String)
+            mSerialNo = value
         End Set
     End Property
 
-#end region
+    Public Property CityID As Long
+        Get
+            Return mCityID
+        End Get
+        Set(ByVal value As Long)
+            mCityID = value
+        End Set
+    End Property
+    Public Property SurburbID As Long
+        Get
+            Return mSurburbID
+        End Get
+        Set(ByVal value As Long)
+            mSurburbID = value
+        End Set
+    End Property
+    Public Property SectionID As Long
+        Get
+            Return mSectionID
+        End Get
+        Set(ByVal value As Long)
+            mSectionID = value
+        End Set
+    End Property
+    Public Property DistrictID As Long
+        Get
+            Return mDistrictID
+        End Get
+        Set(ByVal value As Long)
+            mDistrictID = value
+        End Set
+    End Property
+    Public Property WardID As Long
+        Get
+            Return mWardID
+        End Get
+        Set(ByVal value As Long)
+            mWardID = value
+        End Set
+    End Property
 
-#region "Methods"
+#End Region
 
-#Region "Constructors" 
- 
+#Region "Methods"
+
+#Region "Constructors"
+
     Public Sub New(ByVal ConnectionName As String, ByVal ObjectUserID As Long) 
 
         mObjectUserID = ObjectUserID 
@@ -363,8 +409,8 @@ Public Class Beneficiary
 Public Sub Clear()  
 
     BeneficiaryID = 0
-    mSuffix = 0
-    mMaritalStatus = 0
+        mSuffix = 0
+        mMaritalStatus = 0
     mHealthStatus = 0
     mDisabilityStatus = 0
     mLevelOfEducation = 0
@@ -408,10 +454,26 @@ Public Sub Clear()
 
         Dim sql As String 
 
-        If BeneficiaryID > 0 Then 
-            sql = "SELECT * FROM tblBeneficiaries WHERE BeneficiaryID = " & BeneficiaryID
-        Else 
-            sql = "SELECT * FROM tblBeneficiaries WHERE BeneficiaryID = " & mBeneficiaryID
+        If BeneficiaryID > 0 Then
+            sql = "Select B.*, W.WardID, D.DistrictID, C.CityID, S.SectionID, SC.SuburbID  FROM tblBeneficiaries B "
+            sql &= "left outer join tblAddresses A On B.BeneficiaryID = A.OwnerID "
+            sql &= "left outer join tblVillages V On V.VillageID = A.VillageID "
+            sql &= "left outer join tblWards W On W.WardID = V.WardID "
+            sql &= "left outer join tblDistricts D On D.DistrictID = W.DistrictID "
+            sql &= "left outer join tblStreets ST On ST.StreetID = A.StreetID "
+            sql &= "left outer join tblSection S On S.SectionID = ST.SectionID "
+            sql &= "left outer join tblSuburbs SC On SC.SuburbID = S.SuburbID "
+            sql &= "left outer join tblCities C On C.CityID = SC.CityID WHERE BeneficiaryID = " & BeneficiaryID
+        Else
+            sql = "SELECT B.*, W.WardID, D.DistrictID, C.CityID, S.SectionID, SC.SuburbID  FROM tblBeneficiaries B "
+            sql &= "left outer join tblAddresses A on B.BeneficiaryID = A.OwnerID "
+            sql &= "left outer join tblVillages V On V.VillageID = A.VillageID "
+            sql &= "left outer join tblWards W on W.WardID = V.WardID "
+            sql &= "left outer join tblDistricts D on D.DistrictID = W.DistrictID "
+            sql &= "left outer join tblStreets ST on ST.StreetID = A.StreetID "
+            sql &= "left outer join tblSection S on S.SectionID = ST.SectionID "
+            sql &= "left outer join tblSuburbs SC On SC.SuburbID = S.SuburbID "
+            sql &= "left outer join tblCities C on C.CityID = SC.CityID WHERE BeneficiaryID = " & mBeneficiaryID
         End If 
 
         Return Retrieve(sql) 
@@ -433,7 +495,7 @@ Public Sub Clear()
 
             Else 
 
-                log.Warn("Beneficiary not found.")
+                log.Warn("Beneficiary Not found.")
 
                 Return False 
 
@@ -459,18 +521,26 @@ Public Sub Clear()
         Dim sql As String 
 
         If BeneficiaryID > 0 Then 
-            sql = "SELECT * FROM tblBeneficiaries WHERE BeneficiaryID = " & BeneficiaryID
+            sql = "Select * FROM tblBeneficiaries WHERE BeneficiaryID = " & BeneficiaryID
         Else 
-            sql = "SELECT * FROM tblBeneficiaries WHERE BeneficiaryID = " & mBeneficiaryID
+            sql = "Select * FROM tblBeneficiaries WHERE BeneficiaryID = " & mBeneficiaryID
         End If 
 
         Return GetBeneficiary(sql) 
 
     End Function
 
-    Public Function GetAllBeneficiaries() As DataSet
+    Public Function GetAllBeneficiaries(ByVal Criteria As String) As DataSet
 
-        Dim sql As String = "SELECT * FROM tblBeneficiaries"
+        Dim sql As String = "Select B.*, W.WardID, D.DistrictID, C.CityID, S.SectionID, SC.SuburbID FROM tblBeneficiaries B "
+        sql &= "left outer join tblAddresses A On B.BeneficiaryID = A.OwnerID "
+        sql &= "left outer join tblVillages V On V.VillageID = A.VillageID "
+        sql &= "left outer join tblWards W On W.WardID = V.WardID "
+        sql &= "left outer join tblDistricts D On D.DistrictID = W.DistrictID "
+        sql &= "left outer join tblStreets ST On ST.StreetID = A.StreetID "
+        sql &= "left outer join tblSection S On S.SectionID = ST.SectionID "
+        sql &= "left outer join tblSuburbs SC On SC.SuburbID = S.SuburbID "
+        sql &= "left outer join tblCities C On C.CityID = SC.CityID " & Criteria
 
         Return GetBeneficiary(sql)
 
@@ -478,7 +548,7 @@ Public Sub Clear()
 
     Public Function GetBeneficiaryHousehold(ByVal BeneficiaryID As Long) As DataSet
 
-        Dim sql As String = "SELECT * FROM tblBeneficiaries WHERE ParentID = " & BeneficiaryID & " OR BeneficiaryID = " & BeneficiaryID
+        Dim sql As String = "Select * FROM tblBeneficiaries WHERE ParentID = " & BeneficiaryID & " Or BeneficiaryID = " & BeneficiaryID
 
         Return GetBeneficiary(sql)
 
@@ -527,6 +597,11 @@ Public Sub Clear()
             mSerialNo = Catchnull(.Item("SerialNo"), "")
             mParentID = Catchnull(.Item("ParentID"), 0)
             mRelationshipID = Catchnull(.Item("RelationshipID"), 0)
+            mCityID = Catchnull(.Item("CityID"), 0)
+            mSurburbID = Catchnull(.Item("SuburbID"), 0)
+            mSectionID = Catchnull(.Item("SectionID"), 0)
+            mDistrictID = Catchnull(.Item("DistrictID"), 0)
+            mWardID = Catchnull(.Item("WardID"), 0)
 
         End With 
 
@@ -600,7 +675,7 @@ Public Overridable Function Save() As Boolean
 
     Public Overridable Function Delete() As Boolean 
 
-        'Return Delete("UPDATE tblBeneficiaries SET Deleted = 1 WHERE BeneficiaryID = " & mBeneficiaryID) 
+        'Return Delete("UPDATE tblBeneficiaries Set Deleted = 1 WHERE BeneficiaryID = " & mBeneficiaryID) 
         Return Delete("DELETE FROM tblBeneficiaries WHERE BeneficiaryID = " & mBeneficiaryID) 
 
     End Function 

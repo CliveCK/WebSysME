@@ -76,7 +76,7 @@
     </tr>
     <tr>
         <td colspan="5">
-             <telerik:RadGrid ID="radCommunityScoreListing" runat="server" GridLines="None" Height="80%" 
+             <telerik:RadGrid ID="radCommunityScoreListing" runat="server" GridLines="None"  
                     CellPadding="0" Width="90%">
                     <MasterTableView AutoGenerateColumns="False" AllowFilteringByColumn="True" AllowPaging="True" PageSize="5"
                        AllowMultiColumnSorting="true" AllowSorting="true" PagerStyle-Mode="NextPrevNumericAndAdvanced">
@@ -103,7 +103,7 @@
                             <EditColumn FilterControlAltText="Filter EditCommandColumn column">
                             </EditColumn>
                         </EditFormSettings>
-                        <PagerStyle Position="Bottom"/>
+                        <PagerStyle Position="Bottom" />
                     </MasterTableView>
                     <ClientSettings EnablePostBackOnRowClick="false">
                     </ClientSettings>

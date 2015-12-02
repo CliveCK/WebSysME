@@ -127,8 +127,8 @@ Partial Class GroupsDetailsControl
 
         With cboKeyArea
 
-            .DataSource = objLookup.Lookup("luKeyAreas", "KeyAreaID", "Description").Tables(0)
-            .DataValueField = "KeyAreaID"
+            .DataSource = objLookup.Lookup("luMaturityArea", "MaturityAreaID", "Description").Tables(0)
+            .DataValueField = "MaturityAreaID"
             .DataTextField = "Description"
             .DataBind()
 
@@ -339,6 +339,7 @@ Partial Class GroupsDetailsControl
                 .KeyAreaID = cboDistrict.SelectedValue
                 .MonthID = cboMonth.SelectedValue
                 .Year = cboYear.SelectedItem.Text
+                .Score = txtScore.Text
 
                 If .Save Then
 

@@ -6,6 +6,7 @@ Partial Class BeneficiaryDetailsControl
     Inherits System.Web.UI.UserControl
 
     Private objUrlEncoder As New Security.SpecialEncryptionServices.UrlServices.EncryptDecryptQueryString
+    Private objCustomFields As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
 
     Public ReadOnly Property HouseholdID As Long
         Get
@@ -79,7 +80,7 @@ Partial Class BeneficiaryDetailsControl
 
     Protected Sub cmdSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdSave.Click
 
-        If Not SystemInitialization.EnforceUserFunctionalitySecurity(FunctionalityEnum.AddOrEditBeneficiaryDetails) Then
+        If SystemInitialization.EnforceUserFunctionalitySecurity(FunctionalityEnum.AddOrEditBeneficiaryDetails) Then
 
             Save()
 
@@ -191,6 +192,13 @@ Partial Class BeneficiaryDetailsControl
 
                         If .Save Then
 
+
+                            Dim NumberOfNewFields As Integer = UpdateCustomFieldTemplates(.BeneficiaryID)
+
+                            If (phCustomFields.Controls.Count > 0) Then
+                                objCustomFields.SaveCustomFields(DirectCast(phCustomFields.Controls(0), RadPanelBar), .BeneficiaryID, "HH")
+                            End If
+
                             LoadBeneficiary(.BeneficiaryID)
                             LoadGrid(objBeneficiary)
                             ShowMessage("Dependant saved successfully...", MessageTypeEnum.Information)
@@ -213,6 +221,12 @@ Partial Class BeneficiaryDetailsControl
                 Else
 
                     If .Save Then
+
+                        Dim NumberOfNewFields As Integer = UpdateCustomFieldTemplates(.BeneficiaryID)
+
+                        If (phCustomFields.Controls.Count > 0) Then
+                            objCustomFields.SaveCustomFields(DirectCast(phCustomFields.Controls(0), RadPanelBar), .BeneficiaryID, "HH")
+                        End If
 
                         If Not IsNumeric(txtBeneficiaryID1.Text) OrElse Trim(txtBeneficiaryID1.Text) = 0 Then txtBeneficiaryID1.Text = .BeneficiaryID
 
@@ -498,6 +512,39 @@ Partial Class BeneficiaryDetailsControl
 
     End Sub
 
+    Private Sub BeneficiaryDetailsControl_Init(sender As Object, e As EventArgs) Handles Me.Init
+
+        If Not IsNothing(Request.QueryString("id")) Then
+
+            phCustomFields.Controls.Add(objCustomFields.LoadCustomFieldsPanel(Page, objUrlEncoder.Decrypt(Request.QueryString("id")), "HH", My.Settings.DisplayDateFormat))
+
+        End If
+
+    End Sub
+
+    Public Function UpdateCustomFieldTemplates(ByVal HouseholdID As Long) As Integer
+
+        'Creating a project: 
+        '   - Now we know the type, and/or the status, so we need to 
+        '     load the relevant custom fields
+        'Updating a project: 
+        '   - We check if the type/status has changed, and if so, we 
+        '     need to load the relevant custom fields for this new 
+        '     project type/status.
+
+        Dim NewStatusTemplates As Long = 0, NewTypeTemplates As Long = 0
+
+        If HouseholdID > 0 Then
+
+            Dim objCustomFields As New BusinessLogic.CustomFields.CustomFieldsManager("ConnectionString", CookiesWrapper.thisUserID)
+
+            objCustomFields.UpdateObjectWithStatusTemplates(HouseholdID, "HH", HouseholdID, BusinessLogic.CustomFields.AutomatorTypes.HealthCenter, RowsAffected:=NewStatusTemplates)
+
+        End If
+
+        Return NewStatusTemplates + NewTypeTemplates
+
+    End Function
 End Class
 
 

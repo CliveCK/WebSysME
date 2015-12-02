@@ -955,7 +955,9 @@
       <SubType>ASPXCodeBehind</SubType>
     </Content>
     <Content Include="MyInfomation.aspx" />
+    <Content Include="ObjectiveDevelopmentLevelPage.aspx" />
     <Content Include="ObjectiveOutputs.aspx" />
+    <Content Include="ObjectiveThemes.aspx" />
     <Content Include="obj\Debug\TempPE\My Project.Resources.Designer.vb.dll" />
     <Content Include="obj\Debug\WebForms_Basic.xml" />
     <Content Include="obj\Debug\WebSysME.dll" />
@@ -1017,6 +1019,31 @@
     <Content Include="Scripts\Common.js" />
     <Content Include="Scripts\Cookies.js" />
     <Content Include="Scripts\CustomAjaxDatePicker.js" />
+    <Content Include="Scripts\Database Scripts\KidzCanUpdateScript.sql" />
+    <Content Include="Scripts\Database Scripts\p02122015_01.sql" />
+    <Content Include="Scripts\Database Scripts\p02122015_02.sql" />
+    <Content Include="Scripts\Database Scripts\p09112015_01.sql" />
+    <Content Include="Scripts\Database Scripts\p09112015_02.sql" />
+    <Content Include="Scripts\Database Scripts\p09112015_03.sql" />
+    <Content Include="Scripts\Database Scripts\p09112015_04.sql" />
+    <Content Include="Scripts\Database Scripts\p09112015_05.sql" />
+    <Content Include="Scripts\Database Scripts\p09112015_06.sql" />
+    <Content Include="Scripts\Database Scripts\p09112015_07.sql" />
+    <Content Include="Scripts\Database Scripts\p09112015_08.sql" />
+    <Content Include="Scripts\Database Scripts\p09112015_09.sql" />
+    <Content Include="Scripts\Database Scripts\p18112015_01.sql" />
+    <Content Include="Scripts\Database Scripts\p18112015_02.sql" />
+    <Content Include="Scripts\Database Scripts\p24112015_01.sql" />
+    <Content Include="Scripts\Database Scripts\p24112015_02.sql" />
+    <Content Include="Scripts\Database Scripts\p24112015_03.sql" />
+    <Content Include="Scripts\Database Scripts\p24112015_04.sql" />
+    <Content Include="Scripts\Database Scripts\p24112015_05.sql" />
+    <Content Include="Scripts\Database Scripts\p24112015_06.sql" />
+    <Content Include="Scripts\Database Scripts\p24112015_07.sql" />
+    <Content Include="Scripts\Database Scripts\p24112015_08.sql" />
+    <Content Include="Scripts\Database Scripts\p28112015_01.sql" />
+    <Content Include="Scripts\Database Scripts\p30112015_01.sql" />
+    <Content Include="Scripts\Database Scripts\p30112015_02.sql" />
     <Content Include="Scripts\DateFormat.js" />
     <Content Include="Scripts\effects.js" />
     <Content Include="Scripts\FloatingWindow.js" />
@@ -2339,12 +2366,26 @@
       <DependentUpon>MyInfomation.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="ObjectiveDevelopmentLevelPage.aspx.designer.vb">
+      <DependentUpon>ObjectiveDevelopmentLevelPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectiveDevelopmentLevelPage.aspx.vb">
+      <DependentUpon>ObjectiveDevelopmentLevelPage.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="ObjectiveOutputs.aspx.designer.vb">
       <DependentUpon>ObjectiveOutputs.aspx</DependentUpon>
     </Compile>
     <Compile Include="ObjectiveOutputs.aspx.vb">
       <DependentUpon>ObjectiveOutputs.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ObjectiveThemes.aspx.designer.vb">
+      <DependentUpon>ObjectiveThemes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectiveThemes.aspx.vb">
+      <DependentUpon>ObjectiveThemes.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="OrganizationalBeneficiaries.aspx.designer.vb">
       <DependentUpon>OrganizationalBeneficiaries.aspx</DependentUpon>
@@ -2845,7 +2886,6 @@
     <Folder Include="GenogramImages\" />
     <Folder Include="Models\" />
     <Folder Include="Reporting\images\" />
-    <Folder Include="Scripts\Database Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic.CustomFields\BusinessLogic.CustomFields.vbproj">
