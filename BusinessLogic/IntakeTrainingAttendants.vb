@@ -1,22 +1,22 @@
 ﻿Imports Microsoft.Practices.EnterpriseLibrary.Data 
 Imports Universal.CommonFunctions 
 
-Public Class ObjectiveDevelopmentLevel
+Public Class IntakeTrainingAttendants
 
 #region "Variables"
 
-    Protected mObjectiveDevelopmentLevelID As long
-    Protected mDevelopmentLevelID As long
-    Protected mObjectiveID As long
+    Protected mIntakeTrainingAttendantID As long
+    Protected mIntakeID As long
+    Protected mAttendantID As long
+    Protected mTrainingStatusID As long
     Protected mCreatedBy As long
     Protected mUpdatedBy As long
     Protected mCreatedDate As string
     Protected mUpdatedDate As string
 
     Protected db As Database 
-    Protected mConnectionName As String
+    Protected mConnectionName As String 
     Protected mObjectUserID As Long
-
     Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
 #End Region
@@ -41,30 +41,39 @@ Public Class ObjectiveDevelopmentLevel
         End Get 
     End Property 
 
-    Public  Property ObjectiveDevelopmentLevelID() As long
+    Public  Property IntakeTrainingAttendantID() As long
         Get
-		return mObjectiveDevelopmentLevelID
+		return mIntakeTrainingAttendantID
         End Get
         Set(ByVal value As long)
-		mObjectiveDevelopmentLevelID = value
+		mIntakeTrainingAttendantID = value
         End Set
     End Property
 
-    Public  Property DevelopmentLevelID() As long
+    Public  Property IntakeID() As long
         Get
-		return mDevelopmentLevelID
+		return mIntakeID
         End Get
         Set(ByVal value As long)
-		mDevelopmentLevelID = value
+		mIntakeID = value
         End Set
     End Property
 
-    Public  Property ObjectiveID() As long
+    Public  Property AttendantID() As long
         Get
-		return mObjectiveID
+		return mAttendantID
         End Get
         Set(ByVal value As long)
-		mObjectiveID = value
+		mAttendantID = value
+        End Set
+    End Property
+
+    Public  Property TrainingStatusID() As long
+        Get
+		return mTrainingStatusID
+        End Get
+        Set(ByVal value As long)
+		mTrainingStatusID = value
         End Set
     End Property
 
@@ -122,9 +131,10 @@ Public Class ObjectiveDevelopmentLevel
 
 Public Sub Clear()  
 
-    ObjectiveDevelopmentLevelID = 0
-    mDevelopmentLevelID = 0
-    mObjectiveID = 0
+    IntakeTrainingAttendantID = 0
+    mIntakeID = 0
+    mAttendantID = 0
+    mTrainingStatusID = 0
     mCreatedBy = mObjectUserID
     mUpdatedBy = 0
     mCreatedDate = ""
@@ -136,18 +146,18 @@ End Sub
 
     Public Overridable Function Retrieve() As Boolean 
 
-        Return Me.Retrieve(mObjectiveDevelopmentLevelID) 
+        Return Me.Retrieve(mIntakeTrainingAttendantID) 
 
     End Function 
 
-    Public Overridable Function Retrieve(ByVal ObjectiveDevelopmentLevelID As Long) As Boolean 
+    Public Overridable Function Retrieve(ByVal IntakeTrainingAttendantID As Long) As Boolean 
 
         Dim sql As String 
 
-        If ObjectiveDevelopmentLevelID > 0 Then 
-            sql = "SELECT * FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & ObjectiveDevelopmentLevelID
+        If IntakeTrainingAttendantID > 0 Then 
+            sql = "SELECT * FROM tblIntakeTrainingAttendants WHERE IntakeTrainingAttendantID = " & IntakeTrainingAttendantID
         Else 
-            sql = "SELECT * FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID
+            sql = "SELECT * FROM tblIntakeTrainingAttendants WHERE IntakeTrainingAttendantID = " & mIntakeTrainingAttendantID
         End If 
 
         Return Retrieve(sql) 
@@ -169,7 +179,7 @@ End Sub
 
             Else
 
-                log.Error("ObjectiveDevelopmentLevel not found.")
+                log.Error("IntakeTrainingAttendants not found.")
 
                 Return False
 
@@ -184,27 +194,27 @@ End Sub
 
     End Function
 
-    Public Overridable Function GetObjectiveDevelopmentLevel() As System.Data.DataSet
+    Public Overridable Function GetIntakeTrainingAttendants() As System.Data.DataSet
 
-        Return GetObjectiveDevelopmentLevel(mObjectiveDevelopmentLevelID)
+        Return GetIntakeTrainingAttendants(mIntakeTrainingAttendantID)
 
     End Function
 
-    Public Overridable Function GetObjectiveDevelopmentLevel(ByVal ObjectiveDevelopmentLevelID As Long) As DataSet
+    Public Overridable Function GetIntakeTrainingAttendants(ByVal IntakeTrainingAttendantID As Long) As DataSet
 
         Dim sql As String
 
-        If ObjectiveDevelopmentLevelID > 0 Then
-            sql = "SELECT * FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & ObjectiveDevelopmentLevelID
+        If IntakeTrainingAttendantID > 0 Then
+            sql = "SELECT * FROM tblIntakeTrainingAttendants WHERE IntakeTrainingAttendantID = " & IntakeTrainingAttendantID
         Else
-            sql = "SELECT * FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID
+            sql = "SELECT * FROM tblIntakeTrainingAttendants WHERE IntakeTrainingAttendantID = " & mIntakeTrainingAttendantID
         End If
 
-        Return GetObjectiveDevelopmentLevel(sql)
+        Return GetIntakeTrainingAttendants(sql)
 
     End Function
 
-    Protected Overridable Function GetObjectiveDevelopmentLevel(ByVal sql As String) As DataSet
+    Protected Overridable Function GetIntakeTrainingAttendants(ByVal sql As String) As DataSet
 
         Return db.ExecuteDataSet(CommandType.Text, sql)
 
@@ -216,9 +226,10 @@ End Sub
 
         With Record
 
-            mObjectiveDevelopmentLevelID = Catchnull(.Item("ObjectiveDevelopmentLevelID"), 0)
-            mDevelopmentLevelID = Catchnull(.Item("DevelopmentLevelID"), 0)
-            mObjectiveID = Catchnull(.Item("ObjectiveID"), 0)
+            mIntakeTrainingAttendantID = Catchnull(.Item("IntakeTrainingAttendantID"), 0)
+            mIntakeID = Catchnull(.Item("IntakeID"), 0)
+            mAttendantID = Catchnull(.Item("AttendantID"), 0)
+            mTrainingStatusID = Catchnull(.Item("TrainingStatusID"), 0)
             mCreatedBy = Catchnull(.Item("CreatedBy"), 0)
             mUpdatedBy = Catchnull(.Item("UpdatedBy"), 0)
             mCreatedDate = Catchnull(.Item("CreatedDate"), "")
@@ -232,16 +243,17 @@ End Sub
 
     Public Overridable Sub GenerateSaveParameters(ByRef db As Database, ByRef cmd As System.Data.Common.DbCommand)
 
-        db.AddInParameter(cmd, "@ObjectiveDevelopmentLevelID", DbType.Int32, mObjectiveDevelopmentLevelID)
-        db.AddInParameter(cmd, "@DevelopmentLevelID", DbType.Int32, mDevelopmentLevelID)
-        db.AddInParameter(cmd, "@ObjectiveID", DbType.Int32, mObjectiveID)
+        db.AddInParameter(cmd, "@IntakeTrainingAttendantID", DbType.Int32, mIntakeTrainingAttendantID)
+        db.AddInParameter(cmd, "@IntakeID", DbType.Int32, mIntakeID)
+        db.AddInParameter(cmd, "@AttendantID", DbType.Int32, mAttendantID)
+        db.AddInParameter(cmd, "@TrainingStatusID", DbType.Int32, mTrainingStatusID)
         db.AddInParameter(cmd, "@UpdatedBy", DbType.Int32, mObjectUserID)
 
     End Sub
 
     Public Overridable Function Save() As Boolean
 
-        Dim cmd As System.Data.Common.DbCommand = db.GetStoredProcCommand("sp_Save_ObjectiveDevelopmentLevel")
+        Dim cmd As System.Data.Common.DbCommand = db.GetStoredProcCommand("sp_Save_IntakeTrainingAttendants")
 
         GenerateSaveParameters(db, cmd)
 
@@ -251,7 +263,7 @@ End Sub
 
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
 
-                mObjectiveDevelopmentLevelID = ds.Tables(0).Rows(0)(0)
+                mIntakeTrainingAttendantID = ds.Tables(0).Rows(0)(0)
 
             End If
 
@@ -272,15 +284,15 @@ End Sub
 
     Public Overridable Function Delete() As Boolean
 
-        'Return Delete("UPDATE tblObjectiveDevelopmentLevel SET Deleted = 1 WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID) 
-        Return Delete("DELETE FROM tblObjectiveDevelopmentLevel WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID)
+        'Return Delete("UPDATE tblIntakeTrainingAttendants SET Deleted = 1 WHERE IntakeTrainingAttendantID = " & mIntakeTrainingAttendantID) 
+        Return Delete("DELETE FROM tblIntakeTrainingAttendants WHERE IntakeTrainingAttendantID = " & mIntakeTrainingAttendantID)
 
     End Function
 
     Public Overridable Function DeleteEntries() As Boolean
 
-        'Return Delete("UPDATE tblObjectiveDevelopmentLevel SET Deleted = 1 WHERE ObjectiveDevelopmentLevelID = " & mObjectiveDevelopmentLevelID) 
-        Return Delete("DELETE FROM tblObjectiveDevelopmentLevel WHERE ObjectiveID = " & mObjectiveID & " AND DevelopmentLevelID = " & mDevelopmentLevelID)
+        'Return Delete("UPDATE tblIntakeTrainingAttendants SET Deleted = 1 WHERE IntakeTrainingAttendantID = " & mIntakeTrainingAttendantID) 
+        Return Delete("DELETE FROM tblIntakeTrainingAttendants WHERE IntakeID = " & mIntakeID & " AND AttendantID = " & mAttendantID)
 
     End Function
 

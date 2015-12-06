@@ -1,7 +1,7 @@
 ﻿Imports Microsoft.Practices.EnterpriseLibrary.Data
 Imports Telerik.Web.UI
 
-Public Class ObjectiveThemes
+Public Class IntakeTrainingsPage
     Inherits System.Web.UI.Page
 
 
@@ -40,10 +40,10 @@ Public Class ObjectiveThemes
 
             Dim objLookup As New BusinessLogic.CommonFunctions
 
-            With cboTheme
+            With cboIntake
 
-                .DataSource = objLookup.Lookup("luTheme", "ThemeID", "Description").Tables(0)
-                .DataValueField = "ThemeID"
+                .DataSource = objLookup.Lookup("tblIntake", "IntakeID", "Description").Tables(0)
+                .DataValueField = "IntakeID"
                 .DataTextField = "Description"
                 .DataBind()
 
@@ -58,19 +58,19 @@ Public Class ObjectiveThemes
 
     Private Sub LoadGrid()
 
-        Dim sql As String = "SELECT O.ObjectiveID, O.Description FROM tblObjectives O inner join tblObjectiveThemes OO on OO.ObjectiveID = O.ObjectiveID "
-        sql &= " inner join luTheme Ob on Ob.ThemeID = OO.ThemeID where OO.ThemeID = " & cboTheme.SelectedValue
+        Dim sql As String = "SELECT O.TrainingID, O.Name FROM tblTrainings O inner join tblIntakeTrainings OO on OO.TrainingID = O.TrainingID "
+        sql &= " inner join tblIntake Ob on Ob.IntakeID = OO.IntakeID where OO.IntakeID = " & cboIntake.SelectedValue
 
         ds = db.ExecuteDataSet(CommandType.Text, sql)
 
         Try
             Dim db As Database = New DatabaseProviderFactory().Create(CookiesWrapper.thisConnectionName)
 
-            With radObjectives
+            With radTrainings
 
-                Dim ds As DataSet = db.ExecuteDataSet(CommandType.Text, "SELECT ObjectiveID, Description FROM tblObjectives")
+                Dim ds As DataSet = db.ExecuteDataSet(CommandType.Text, "SELECT TrainingID, Name FROM tblTrainings")
 
-                Session("mtObjectives") = ds
+                Session("mtIbntake") = ds
                 .DataSource = ds
 
                 .DataBind()
@@ -87,8 +87,8 @@ Public Class ObjectiveThemes
 
         Dim ObjectiveIDArray As New List(Of String)
 
-        For Each gridRow As Telerik.Web.UI.GridDataItem In radObjectives.SelectedItems
-            ObjectiveIDArray.Add(gridRow.Item("ObjectiveID").Text.ToString())
+        For Each gridRow As Telerik.Web.UI.GridDataItem In radTrainings.SelectedItems
+            ObjectiveIDArray.Add(gridRow.Item("TrainingID").Text.ToString())
         Next
 
         Return String.Join(",", ObjectiveIDArray.ToArray())
@@ -103,12 +103,12 @@ Public Class ObjectiveThemes
 
             For i As Long = 0 To Objectives.Length - 1
 
-                Dim objObjectiveOutcomes As New BusinessLogic.ObjectiveThemes(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+                Dim objObjectiveOutcomes As New BusinessLogic.IntakeTrainings(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                 With objObjectiveOutcomes
 
-                    .ThemeID = cboTheme.SelectedValue
-                    .ObjectiveID = Objectives(i)
+                    .IntakeID = cboIntake.SelectedValue
+                    .TrainingID = Objectives(i)
 
                     If Not .Save Then
 
@@ -127,23 +127,23 @@ Public Class ObjectiveThemes
 
     End Function
 
-    Private Sub radObjectives_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles radObjectives.ItemCommand
+    Private Sub radTrainings_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles radTrainings.ItemCommand
 
         If TypeOf e.Item Is GridDataItem Then
 
             Dim index As Integer = Convert.ToInt32(e.Item.ItemIndex.ToString)
-            Dim item As GridDataItem = radObjectives.Items(index)
+            Dim item As GridDataItem = radTrainings.Items(index)
 
             Select Case e.CommandName
 
                 Case "Delete"
 
-                    Dim objObjectiveThemes As New BusinessLogic.ObjectiveThemes(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
+                    Dim objObjectiveThemes As New BusinessLogic.IntakeTrainings(CookiesWrapper.thisConnectionName, CookiesWrapper.thisUserID)
 
                     With objObjectiveThemes
 
-                        .ThemeID = cboTheme.SelectedValue
-                        .ObjectiveID = Server.HtmlDecode(e.CommandArgument)
+                        .IntakeID = cboIntake.SelectedValue
+                        .TrainingID = Server.HtmlDecode(e.CommandArgument)
 
                         If .DeleteEntries() Then
 
@@ -160,9 +160,9 @@ Public Class ObjectiveThemes
 
     End Sub
 
-    Private Sub radOutputs_ItemDataBound(sender As Object, e As Telerik.Web.UI.GridItemEventArgs) Handles radObjectives.ItemDataBound
+    Private Sub radTrainings_ItemDataBound(sender As Object, e As Telerik.Web.UI.GridItemEventArgs) Handles radTrainings.ItemDataBound
 
-        If cboTheme.SelectedIndex > 0 Then
+        If cboIntake.SelectedIndex > 0 Then
 
             If TypeOf e.Item Is GridDataItem Then
 
@@ -170,7 +170,7 @@ Public Class ObjectiveThemes
 
                 Dim btnImage As ImageButton = DirectCast(gridItem.FindControl("imgEdit"), ImageButton)
 
-                If ds.Tables(0).Select("ObjectiveID = " & gridItem("ObjectiveID").Text).Length > 0 Then
+                If ds.Tables(0).Select("TrainingID = " & gridItem("TrainingID").Text).Length > 0 Then
 
                     Dim chkbx As CheckBox = DirectCast(gridItem("chkRowSelect").Controls(0), CheckBox)
 
@@ -186,18 +186,18 @@ Public Class ObjectiveThemes
 
     End Sub
 
-    Private Sub radObjectives_NeedDataSource(sender As Object, e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles radObjectives.NeedDataSource
+    Private Sub radTrainings_NeedDataSource(sender As Object, e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles radTrainings.NeedDataSource
 
-        If cboTheme.SelectedIndex > 0 Then
+        If cboIntake.SelectedIndex > 0 Then
 
-            Dim sql As String = "SELECT O.ObjectiveID, O.Description FROM tblObjectives O inner join tblObjectiveThemes OO on OO.ObjectiveID = O.ObjectiveID "
-            sql &= " inner join luTheme Ob on Ob.ThemeID = OO.ThemeID where OO.ThemeID = " & cboTheme.SelectedValue
+            Dim sql As String = "SELECT O.TrainingID, O.Name FROM tblTrainings O inner join tblIntakeTrainings OO on OO.TrainingID = O.TrainingID "
+            sql &= " inner join tblIntake Ob on Ob.IntakeID = OO.IntakeID where OO.IntakeID = " & cboIntake.SelectedValue
 
             ds = db.ExecuteDataSet(CommandType.Text, sql)
 
         End If
 
-        radObjectives.DataSource = Session("mtObjectives")
+        radTrainings.DataSource = Session("mtIbntake")
 
     End Sub
 
@@ -216,7 +216,7 @@ Public Class ObjectiveThemes
 
     End Sub
 
-    Private Sub cboTheme_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboTheme.SelectedIndexChanged
+    Private Sub cboIntake_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboIntake.SelectedIndexChanged
 
         LoadGrid()
 

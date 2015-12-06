@@ -510,7 +510,7 @@ Partial Public Class CustomFieldTemplates
 
                 Case "HH" 'GROUPS
 
-                    LoadObjects("tblBeneficiaries", "BeneficiaryID", "FirstName", "G", " AND Suffix = 1")
+                    LoadObjects("tblBeneficiaries", "BeneficiaryID", "FirstName", "HH", " AND Suffix = 1")
 
             End Select
 
@@ -788,7 +788,7 @@ Partial Public Class CustomFieldTemplates
                 Case "HH" 'Project Types
 
                     ObjectType = "HH"
-                    TableName = "tblBenefciaries"
+                    TableName = "tblBeneficiaries"
                     FilterColumn = "BeneficiaryID"
                     TableIDColumn = "BeneficiaryID"
 

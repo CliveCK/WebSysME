@@ -124,6 +124,9 @@
     <Compile Include="Indiactor.vb" />
     <Compile Include="IndicatorActivities.vb" />
     <Compile Include="IndicatorCategory.vb" />
+    <Compile Include="Intake.vb" />
+    <Compile Include="IntakeTrainingAttendants.vb" />
+    <Compile Include="IntakeTrainings.vb" />
     <Compile Include="InterventionImplementingPartner.vb" />
     <Compile Include="InterventionObjects.vb" />
     <Compile Include="Interventions.vb" />

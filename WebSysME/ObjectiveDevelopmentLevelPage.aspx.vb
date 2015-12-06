@@ -59,7 +59,7 @@ Public Class ObjectiveDevelopmentLevelPage
     Private Sub LoadGrid()
 
         Dim sql As String = "SELECT O.ObjectiveID, O.Description FROM tblObjectives O inner join tblObjectiveDevelopmentLevel OO on OO.ObjectiveID = O.ObjectiveID "
-        sql &= " inner join luDevelopmentLevel Ob on Ob.DevelopmentLevelID = OO.DevelopmentLevelID where OO.ThemeID = " & cboDevelopmentLevel.SelectedValue
+        sql &= " inner join luDevelopmentLevel Ob on Ob.DevelopmentLevelID = OO.DevelopmentLevelID where OO.DevelopmentLevelID = " & cboDevelopmentLevel.SelectedValue
 
         ds = db.ExecuteDataSet(CommandType.Text, sql)
 
@@ -191,7 +191,7 @@ Public Class ObjectiveDevelopmentLevelPage
         If cboDevelopmentLevel.SelectedIndex > 0 Then
 
             Dim sql As String = "SELECT O.ObjectiveID, O.Description FROM tblObjectives O inner join tblObjectiveDevelopmentLevel OO on OO.ObjectiveID = O.ObjectiveID "
-            sql &= " inner join luDevelopmentLevel Ob on Ob.DevelopmentLevelID = OO.DevelopmentLevelID where OO.ThemeID = " & cboDevelopmentLevel.SelectedValue
+            sql &= " inner join luDevelopmentLevel Ob on Ob.DevelopmentLevelID = OO.DevelopmentLevelID where OO.DevelopmentLevelID = " & cboDevelopmentLevel.SelectedValue
 
             ds = db.ExecuteDataSet(CommandType.Text, sql)
 

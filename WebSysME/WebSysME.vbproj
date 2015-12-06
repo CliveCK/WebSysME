@@ -195,6 +195,7 @@
     <Content Include="Controls\HouseholdControls\HouseholdParticipation.ascx" />
     <Content Include="Controls\IndiactorDetailsControl.ascx" />
     <Content Include="Controls\IndicatorActivityDetailsControl.ascx" />
+    <Content Include="Controls\IntakeDetailsControl.ascx" />
     <Content Include="Controls\KeyAreaIndicatorControl.ascx" />
     <Content Include="Controls\PatientControls\MedicalHistoryDetailsControl.ascx" />
     <Content Include="Controls\PatientControls\PatientDocumentsDetailsControl.ascx" />
@@ -924,6 +925,8 @@
     <Content Include="Indicators.aspx" />
     <Content Include="IndicatorTrackingListing.aspx" />
     <Content Include="IndividualContacts.aspx" />
+    <Content Include="IntakePage.aspx" />
+    <Content Include="IntakeTrainingsPage.aspx" />
     <Content Include="InterventionsMapping.aspx" />
     <Content Include="InterventionsPage.aspx" />
     <Content Include="KeyChangePromise.aspx" />
@@ -1107,6 +1110,7 @@
     <Content Include="TrainingInputsPage.aspx" />
     <Content Include="TrainingList.aspx" />
     <Content Include="TrainingMarksPage.aspx" />
+    <Content Include="TrainingStatus.aspx" />
     <Content Include="UserAdministration.aspx" />
     <Content Include="UserAdministrationControl\CreateNewUserControl.ascx" />
     <Content Include="UserAdministrationControl\DeleteUser.ascx" />
@@ -1470,6 +1474,13 @@
     </Compile>
     <Compile Include="Controls\IndicatorActivityDetailsControl.ascx.vb">
       <DependentUpon>IndicatorActivityDetailsControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\IntakeDetailsControl.ascx.designer.vb">
+      <DependentUpon>IntakeDetailsControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\IntakeDetailsControl.ascx.vb">
+      <DependentUpon>IntakeDetailsControl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\KeyAreaIndicatorControl.ascx.designer.vb">
@@ -2249,6 +2260,20 @@
       <DependentUpon>IndividualContacts.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="IntakePage.aspx.designer.vb">
+      <DependentUpon>IntakePage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="IntakePage.aspx.vb">
+      <DependentUpon>IntakePage.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="IntakeTrainingsPage.aspx.designer.vb">
+      <DependentUpon>IntakeTrainingsPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="IntakeTrainingsPage.aspx.vb">
+      <DependentUpon>IntakeTrainingsPage.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="InterventionsMapping.aspx.designer.vb">
       <DependentUpon>InterventionsMapping.aspx</DependentUpon>
     </Compile>
@@ -2750,6 +2775,13 @@
     </Compile>
     <Compile Include="TrainingMarksPage.aspx.vb">
       <DependentUpon>TrainingMarksPage.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="TrainingStatus.aspx.designer.vb">
+      <DependentUpon>TrainingStatus.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TrainingStatus.aspx.vb">
+      <DependentUpon>TrainingStatus.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="UserAdministration.aspx.designer.vb">
